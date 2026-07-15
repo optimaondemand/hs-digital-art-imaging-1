@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Digital Art Imaging &mdash; Week 7: Capstone Project Planning</title>
+<style>
+    body { margin: 0; padding: 0; font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #f4f6fa; }
+    .canvas-frame { max-width: 1100px; margin: 0 auto; background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+
+    /* ===== WIDGET CSS — from optima-lesson-format/assets/lesson-interactive-template.html (byte-consistent) ===== */
+    .optima-widget { background: linear-gradient(135deg, #E8F6FB 0%, #F4F9FC 100%); border: 1px solid #C5DCE5; border-left: 5px solid #2196D0; border-radius: 8px; padding: 18px 22px; margin: 18px 0; }
+    .widget-kicker { font-size: 11px; color: #1B6A94; margin-bottom: 10px; letter-spacing: 0.4px; }
+    .widget-question { font-size: 17px; color: #0E1C42; margin-bottom: 14px; line-height: 1.55; }
+    .widget-row { background: #FFFFFF; border: 1px solid #D0D9E8; border-radius: 6px; padding: 12px 14px; margin-bottom: 10px; }
+    .widget-row-prompt { font-size: 15px; color: #0E1C42; margin-bottom: 8px; line-height: 1.5; font-style: italic; }
+    .widget-options { display: flex; flex-wrap: wrap; gap: 8px; }
+    .widget-options button { background: #FFFFFF; border: 1.5px solid #D0D9E8; border-radius: 8px; padding: 8px 14px; font-size: 14px; color: #0E1C42; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+    .widget-options button:hover { background: #F4F6FA; border-color: #55C8E8; }
+    .widget-options button.selected { background: #0E1C42; color: #FFFFFF; border-color: #0E1C42; }
+    .widget-options button.correct { background: #D8F0DD; border-color: #2A9D5C; color: #1A6B3D; }
+    .widget-options button.incorrect { background: #FDECEC; border-color: #C0392B; color: #8A1F16; }
+    .widget-feedback { background: #FFFFFF; border-left: 3px solid #C7922C; padding: 10px 14px; font-size: 15px; color: #1a2340; line-height: 1.55; margin: 10px 0; display: none; border-radius: 4px; }
+    .widget-feedback.show { display: block; }
+    .row-feedback { padding: 8px 12px; margin-top: 8px; font-size: 14px; border-radius: 4px; line-height: 1.5; }
+    .row-feedback.correct { background: #D8F0DD; border-left: 3px solid #2A9D5C; color: #1A6B3D; }
+    .row-feedback.incorrect { background: #FDECEC; border-left: 3px solid #C0392B; color: #8A1F16; }
+    .widget-reset { background: transparent; border: 1px solid #C7922C; color: #C7922C; border-radius: 6px; padding: 6px 12px; font-size: 12px; cursor: pointer; font-family: inherit; margin-top: 6px; }
+    .widget-reset:hover { background: #FDF3E3; }
+
+    /* ===== Art-course components (layered on the brand; teal/coral are activity accents only) ===== */
+    .art-fig { margin: 14px 0; text-align: center; }
+    .art-fig img { max-width: 100%; height: auto; border-radius: 6px; border: 1px solid #D0D9E8; }
+    .art-fig figcaption { font-size: 13px; color: #666; margin-top: 8px; line-height: 1.5; }
+    .art-fig figcaption a { color: #1B6A94; }
+    .el-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin: 16px 0; }
+    .el-card { border: 1px solid #D0D9E8; border-radius: 8px; overflow: hidden; }
+    .el-demo { height: 80px; display: flex; align-items: center; justify-content: center; }
+    .el-text { padding: 10px 13px; }
+    .el-text strong { color: #167567; display: block; margin-bottom: 3px; font-size: 16px; }
+    .el-text span { font-size: 14px; color: #1a2340; }
+    .callout { border-radius: 6px; padding: 14px 20px; margin: 16px 0; }
+    .callout .ck { font-size: 11px; margin-bottom: 8px; letter-spacing: 0.5px; }
+    .callout .cb { font-size: 16px; line-height: 1.6; color: #0E1C42; }
+    .c-help { background: #E8F6FB; border-left: 5px solid #2196D0; border-top: 3px solid #55C8E8; }
+    .c-help .ck { color: #1B6A94; }
+    .c-warn { background: #FDECEC; border-left: 5px solid #C0392B; border-top: 3px solid #E74C3C; }
+    .c-warn .ck { color: #8A1F16; }
+    .c-art { background: #E6F4F1; border-left: 5px solid #1B8A7A; }
+    .c-art .ck { color: #167567; }
+    .next-item { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+    .next-item .num { min-width: 30px; height: 30px; border-radius: 50%; color: #fff; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .num.learn { background: #1B8A7A; }
+    .num.create { background: #D9583B; }
+    .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+    .vocab-card { background: #EEF1F8; border-radius: 6px; padding: 10px 13px; font-size: 14px; color: #1a2340; }
+    .vocab-card strong { color: #0E1C42; display: block; margin-bottom: 2px; }
+    details { background: #FFFFFF; border: 1px solid #D0D9E8; border-left: 4px solid #C7922C; border-radius: 6px; padding: 12px 18px; margin: 14px 0; }
+    details summary { font-size: 16px; color: #0E1C42; cursor: pointer; }
+    details .ac-body { font-size: 16px; color: #1a2340; margin-top: 10px; padding-top: 10px; border-top: 1px solid #EEF1F8; line-height: 1.6; }
+    /* Pixel vs. smooth concept visual */
+    .pix-wrap { display: flex; flex-wrap: wrap; gap: 22px; align-items: center; justify-content: center; margin: 16px 0 6px; }
+    .pix-panel { text-align: center; }
+    .pix-label { font-size: 12px; color: #6b7a99; margin-top: 8px; }
+    .rvv { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+    .rvv > div { border: 1px solid #D0D9E8; border-radius: 8px; padding: 14px 16px; }
+    .rvv h4 { margin: 0 0 6px 0; font-size: 16px; }
+    .rvv p { margin: 0; font-size: 14px; color: #1a2340; line-height: 1.55; }
+    @media (max-width: 560px){ .rvv { grid-template-columns: 1fr; } }
+    /* Capstone series-mockup visual */
+    .series-wrap { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; margin: 16px 0 6px; }
+    .series-panel { text-align: center; }
+    .series-caption { font-size: 12px; color: #6b7a99; margin-top: 8px; max-width: 150px; }
+    .plan-steps { counter-reset: plan; margin: 16px 0; }
+    .plan-step { position: relative; padding: 4px 0 4px 46px; margin-bottom: 14px; }
+    .plan-step::before { counter-increment: plan; content: counter(plan); position: absolute; left: 0; top: 2px; width: 32px; height: 32px; border-radius: 50%; background: #0E1C42; color: #fff; font-size: 15px; display: flex; align-items: center; justify-content: center; }
+    .plan-step h4 { margin: 0 0 4px 0; font-size: 17px; color: #0e1c42; }
+    .plan-step p { margin: 0; font-size: 16px; color: #1a2340; line-height: 1.6; }
+    .rubric-table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14px; }
+    .rubric-table th, .rubric-table td { border: 1px solid #D0D9E8; padding: 10px 12px; text-align: left; vertical-align: top; line-height: 1.5; }
+    .rubric-table th { background: #0E1C42; color: #ffffff; font-size: 13px; }
+    .rubric-table td:first-child { color: #0e1c42; font-weight: 600; background: #EEF1F8; }
+</style>
+</head>
+<body>
+<div class="canvas-frame">
+
+<!-- ===== HEADER ===== -->
+<div style="background: #0E1C42; border-bottom: 5px solid #55C8E8; padding: 22px 34px;">
+    <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 10px;">
+        <div style="width: 52px; height: 52px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><img src="https://raw.githubusercontent.com/optimaondemand/optima-assets/eeb0b335630058906d52f478028361d352253a93/images/Optima%20Final%20Circle%20-%20Owl%20Only.png" alt="Optima Academy" style="width: 50px; height: 40px; object-fit: contain;" /></div>
+        <div>
+            <div style="font-size: 28px; color: #ffffff; line-height: 1.2;">Optima Academy Online</div>
+            <div style="font-size: 12px; color: #55c8e8;">An Education Experience Company</div>
+        </div>
+    </div>
+    <div style="font-size: 36px; color: #ffffff; margin-bottom: 6px;">DIGITAL ART IMAGING</div>
+</div>
+
+<!-- ===== METADATA STRIP ===== -->
+<div style="background: #FFFFFF; border-bottom: 2px solid #D0D9E8; display: flex; flex-wrap: wrap;">
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Quarter / Week</div>
+        <div style="font-size: 17px; color: #0e1c42;">Q2 &middot; Module 2, Week 7</div>
+        <div style="font-size: 12px; color: #666;">Module 2: Capturing Light &amp; Editing</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Focus</div>
+        <div style="font-size: 17px; color: #0e1c42;">Planning Your Capstone Photo Series</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">This Week's Project</div>
+        <div style="font-size: 17px; color: #0e1c42; font-style: italic;">End-of-Semester Project: Edited Photo Series</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Software</div>
+        <div style="font-size: 16px; color: #0e1c42;">Pixlr E (free, browser)</div>
+    </div>
+</div>
+
+<!-- ===== BODY WRAPPER ===== -->
+<div style="padding: 24px 34px;">
+
+    <!-- Lavender title strip -->
+    <div style="background: #EEF1F8; border-left: 5px solid #0E1C42; border-radius: 7px; padding: 18px 22px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #0e1c42; margin-bottom: 6px;">MODULE 2 &middot; WEEK 7</div>
+        <div style="font-size: 22px; color: #0e1c42; margin-bottom: 4px;">Planning Your Capstone Photo Series</div>
+        <div style="font-size: 16px; color: #666;">Lesson</div>
+    </div>
+
+    <!-- Essential Question -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128214; ESSENTIAL QUESTION</div>
+        <div style="font-size: 20px; color: #0e1c42; font-style: italic; margin-bottom: 10px;">How do you bring photography and editing together into one finished body of work?</div>
+        <div style="font-size: 18px; color: #1a2340; line-height: 1.65;">You have spent this semester learning to see light and to shape an image after you capture it. This week you do not learn a new tool. You plan the project that pulls everything together: a three-photo series, lit with intention and edited with intention, introduced by your own words. This is the halfway point of the year, and this project is your proof of everything you have learned so far.</div>
+    </div>
+
+    <!-- PART 1 · LOOK FIRST -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128064; PART 1 &middot; LOOK FIRST</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">A strong photo series is not three random pictures. It is three photos that feel like they belong together, a "mini-exhibit" built around one idea. The mockup below is not a real photo series; it is a diagram showing how three panels can share one theme through color and shape while each panel still does something different with light and texture.</p>
+
+        <div class="series-wrap">
+            <div class="series-panel">
+                <svg width="140" height="170" viewBox="0 0 140 170" role="img" aria-label="Panel one: a teal circle lit brightly from the left with a soft highlight, representing side lighting.">
+                    <rect width="140" height="170" fill="#0e1c42"/>
+                    <circle cx="60" cy="85" r="46" fill="#1B8A7A"/>
+                    <ellipse cx="42" cy="70" rx="18" ry="26" fill="#ffffff" opacity="0.35"/>
+                </svg>
+                <div class="series-caption">Photo 1: side lighting brings out one edge, dark background</div>
+            </div>
+            <div class="series-panel">
+                <svg width="140" height="170" viewBox="0 0 140 170" role="img" aria-label="Panel two: a teal square backlit with a glowing rim, representing backlighting.">
+                    <rect width="140" height="170" fill="#0e1c42"/>
+                    <rect x="30" y="45" width="80" height="80" fill="#0e1c42" stroke="#1B8A7A" stroke-width="6"/>
+                    <rect x="24" y="39" width="92" height="6" fill="#55C8E8" opacity="0.7"/>
+                    <rect x="24" y="119" width="92" height="6" fill="#55C8E8" opacity="0.7"/>
+                </svg>
+                <div class="series-caption">Photo 2: backlighting creates a glowing rim around the shape</div>
+            </div>
+            <div class="series-panel">
+                <svg width="140" height="170" viewBox="0 0 140 170" role="img" aria-label="Panel three: a teal textured grid of small bumps lit softly from above, representing diffused light on texture.">
+                    <rect width="140" height="170" fill="#0e1c42"/>
+                    <g fill="#1B8A7A">
+                        <circle cx="45" cy="65" r="9"/><circle cx="70" cy="65" r="9"/><circle cx="95" cy="65" r="9"/>
+                        <circle cx="45" cy="90" r="9"/><circle cx="70" cy="90" r="9"/><circle cx="95" cy="90" r="9"/>
+                        <circle cx="45" cy="115" r="9"/><circle cx="70" cy="115" r="9"/><circle cx="95" cy="115" r="9"/>
+                    </g>
+                </svg>
+                <div class="series-caption">Photo 3: soft diffused light shows the texture of a bumpy surface</div>
+            </div>
+        </div>
+        <p style="font-size: 14px; color: #6b7a99; margin: 0;">Concept diagram, not a real photo series. The same dark background and teal shape unify all three panels (the theme), while each one uses a different lighting technique, and the third shows clear texture.</p>
+
+        <div class="optima-widget ow-reflect">
+            <div class="widget-kicker">&#128173; QUICK CHECK-IN &middot; NO WRONG ANSWER</div>
+            <div class="widget-question">Looking back over the semester, which part of a photo series do you feel most ready for right now?</div>
+            <div class="widget-options">
+                <button data-response="Good starting point. A clear theme makes every other decision in this project easier, from where you shoot to how you edit.">Picking a theme</button>
+                <button data-response="You have practiced side, back, and diffused lighting already. Planning shots around what each one does will make your series feel intentional.">Using lighting on purpose</button>
+                <button data-response="You already know crop, exposure, color adjustment, and filters from the last two weeks. This week is about choosing which tool fits which photo.">Editing in Pixlr E</button>
+                <button data-response="Plenty of students feel this way. The planning steps below break the statement into three short answers you can write once your photos are ready.">Writing the artist statement</button>
+            </div>
+            <div class="widget-feedback"></div>
+            <button class="widget-reset">Reset</button>
+        </div>
+    </div>
+
+    <!-- PART 2 · THE SEMESTER SO FAR -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128218; PART 2 &middot; THE SEMESTER SO FAR</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">This capstone draws on everything you have built since Week 1. Here is the short version.</p>
+
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 16px 0 6px 0;">Module 1: Digital Imaging Foundations</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">You learned what digital art is, practiced the elements and principles of design, worked with color and shape tools, and moved into photography: line and space in a frame, a short look at photography's history, how to take an intentional photograph, and where to find inspiration.</p>
+
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 16px 0 6px 0;">Module 2 so far: Capturing Light &amp; Editing</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">You studied lighting techniques (side, back, diffused, and more) and built a three-photo series unified by a theme. Then you moved into editing in Pixlr E: correcting exposure with Brightness/Contrast, Exposure, and Shadows/Highlights; adjusting color with Hue/Saturation, Color Balance, and Vibrance; and using filters to direct attention. Every one of those skills is a tool you now choose from, rather than a step you follow in order.</p>
+
+        <div class="callout c-help">
+            <div class="ck">&#128161; WHY THIS WEEK HAS NO NEW TOOL</div>
+            <div class="cb">This week you do not learn anything new. You plan how to use what you already know. Planning before you shoot and edit is itself part of the craft: a photographer who plans a shot list gets better results than one who starts shooting and hopes for the best.</div>
+        </div>
+    </div>
+
+    <!-- PART 3 · THE CAPSTONE PROJECT -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#127912; PART 3 &middot; THE CAPSTONE PROJECT</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Your End-of-Semester Project is an <strong>edited photo series</strong>. It has three parts: the photos, the edits, and the artist statement.</p>
+
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 16px 0 6px 0;">1. Three original photos, one theme</h3>
+        <ul style="font-size: 17px; color: #1a2340; line-height: 1.7; margin: 0 0 12px 0; padding-left: 22px;">
+            <li>Take three original digital photos of your own. Use any camera or device that takes digital photos.</li>
+            <li>Unify them with one theme: subject-based, a compositional technique, movement, texture, or color. Pick the theme approach that felt strongest in your Week 5 series, or try a new one.</li>
+            <li>Use at least <strong>two different lighting techniques</strong> across the three photos (for example, side lighting on one and backlighting on another).</li>
+            <li>At least <strong>one photo must show texture</strong> clearly.</li>
+        </ul>
+
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 16px 0 6px 0;">2. Edit each photo in Pixlr E</h3>
+        <ul style="font-size: 17px; color: #1a2340; line-height: 1.7; margin: 0 0 12px 0; padding-left: 22px;">
+            <li>On <strong>at least one photo</strong>, apply a crop and/or an exposure correction (Brightness/Contrast, Exposure, or Shadows/Highlights).</li>
+            <li>On <strong>at least one photo</strong>, apply a color adjustment (Hue/Saturation, Color Balance, or Vibrance) or a filter.</li>
+            <li>A single photo can carry more than one edit. Every photo should show a deliberate improvement over the original, not an overedited or unnatural result.</li>
+        </ul>
+
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 16px 0 6px 0;">3. A short artist statement</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Type a statement of 100 to 150 words in Word. In it, explain your theme, the lighting choices you made and why, and the specific editing decisions you made in Pixlr E on each photo. Save it as a Word document in your portfolio folder.</p>
+
+        <div class="callout c-help">
+            <div class="ck">&#128161; ALWAYS KEEP YOUR ORIGINALS</div>
+            <div class="cb">Before you edit, duplicate each photo so your original is untouched. Save each edited version under a new file name. This way you always have the "before" to compare against the "after," and you can start over if an edit does not work out.</div>
+        </div>
+    </div>
+
+    <!-- PART 4 · THE PLANNING PROCESS -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128203; PART 4 &middot; PLAN BEFORE YOU SHOOT</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Work through these steps in order this week. Each one sets up the next.</p>
+
+        <div class="plan-steps">
+            <div class="plan-step">
+                <h4>Choose your theme</h4>
+                <p>Decide what will unify your three photos: subject, composition, movement, texture, or color. Write it in one sentence you could say out loud to someone looking at your series.</p>
+            </div>
+            <div class="plan-step">
+                <h4>Build a shot list</h4>
+                <p>For each of the three photos, note the subject, the location, and which lighting technique you plan to use there. Make sure at least two different techniques appear across the list, and mark which photo will show texture.</p>
+            </div>
+            <div class="plan-step">
+                <h4>Make an editing plan</h4>
+                <p>Before you shoot, decide roughly how you expect to edit each photo: will one need a crop or exposure fix, will another need a color adjustment or filter? You can adjust this plan once you see your actual photos, but planning now helps you shoot with editing in mind.</p>
+            </div>
+            <div class="plan-step">
+                <h4>Shoot, then edit</h4>
+                <p>Take your three photos following your shot list. Open each one in Pixlr E, duplicate the layer, and apply your planned edits. Compare each edited version to its original before you export.</p>
+            </div>
+            <div class="plan-step">
+                <h4>Write your artist statement</h4>
+                <p>With your finished photos in front of you, write your 100 to 150 word statement: name your theme, explain your lighting choices, and describe your editing decisions on each photo.</p>
+            </div>
+        </div>
+
+        <details>
+            <summary>Do this now in your notebook: write one sentence naming your theme and one sentence for each of your three planned photos (subject, location, lighting technique). Then click to compare with a model plan.</summary>
+            <div class="ac-body"><strong>Model plan.</strong> Theme: "Texture in everyday objects, tied together by warm color." Photo 1: a woven basket on the porch, side lighting to bring out the weave. Photo 2: tree bark in the backyard, diffused light on an overcast afternoon to show rough texture evenly. Photo 3: a folded wool blanket near a window, backlighting to outline its edge while the weave still reads as texture. Notice this plan already names two lighting techniques and one clear texture photo before a single picture is taken.</div>
+        </details>
+
+        <div class="optima-widget ow-select">
+            <div class="widget-kicker">&#9889; TRY IT &middot; DOES THIS PLAN MEET THE REQUIREMENTS?</div>
+            <div class="widget-question">Read each shot-list plan below and decide whether it meets the project requirements as written.</div>
+            <div class="widget-row" data-correct="no" data-hint="Count the lighting techniques used across the series again.">
+                <div class="widget-row-prompt">Plan: three photos of houseplants, all shot with the same side lighting setup. One plant photo shows the rough texture of a terra cotta pot.</div>
+                <div class="widget-options">
+                    <button data-choice="yes">Meets requirements</button>
+                    <button data-choice="no" data-fb="Correct, this plan does not meet requirements yet. The series needs at least two different lighting techniques, and this plan only uses one (side lighting) across all three photos.">Does not meet requirements</button>
+                </div>
+            </div>
+            <div class="widget-row" data-correct="yes" data-hint="Check the three requirements again: theme, two lighting techniques, one texture photo.">
+                <div class="widget-row-prompt">Plan: three photos of bicycles around the neighborhood (subject-based theme). Photo A uses backlighting, Photo B uses diffused light and shows the texture of a rusted chain, Photo C uses side lighting.</div>
+                <div class="widget-options">
+                    <button data-choice="yes" data-fb="Correct. This plan has a clear subject-based theme, two different lighting techniques (backlighting and diffused light, plus side lighting makes a third), and one photo with clear texture.">Meets requirements</button>
+                    <button data-choice="no">Does not meet requirements</button>
+                </div>
+            </div>
+            <button class="widget-reset">Reset</button>
+        </div>
+    </div>
+
+    <!-- PART 5 · SAVING TO YOUR PORTFOLIO -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128193; PART 5 &middot; SAVING TO YOUR PORTFOLIO</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">This project is the first full body of work in your <code>DigitalArt_Portfolio_LastName</code> folder. Save these four files there:</p>
+        <ul style="font-size: 17px; color: #1a2340; line-height: 1.7; margin: 0 0 10px 0; padding-left: 22px;">
+            <li><code>DAI_W16_Series1_LastName</code>, <code>DAI_W16_Series2_LastName</code>, <code>DAI_W16_Series3_LastName</code>: your three edited photos, exported from Pixlr E</li>
+            <li><code>DAI_W16_ArtistStatement_LastName</code>: your typed statement</li>
+        </ul>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0;">Keep your original, unedited photos too. You do not submit them, but a finished portfolio that shows your process is worth more to you later than one that only shows the final result.</p>
+    </div>
+
+    <!-- AI AWARENESS (factual) -->
+    <div class="callout c-warn">
+        <div class="ck">&#9888;&#65039; WORTH KNOWING &middot; AI IMAGE GENERATORS VS. YOUR OWN PHOTOGRAPHS</div>
+        <div class="cb">AI image generators can produce a picture of almost anything from a text prompt, but they do not take a photograph of the real world and they cannot capture the specific light, texture, or subject in front of you at a specific moment. This project is graded on your own original photography and your own editing decisions in Pixlr E. A generated image cannot substitute for any of the three required photos.</div>
+    </div>
+
+    <!-- VOCABULARY -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128221; VOCABULARY</div>
+        <div class="vocab-grid">
+            <div class="vocab-card"><strong>Photo Series</strong>A collection of images that share a common theme, idea, or visual style.</div>
+            <div class="vocab-card"><strong>Theme</strong>The idea or quality that connects the photos in a series, such as subject, composition, movement, texture, or color.</div>
+            <div class="vocab-card"><strong>Cohesion</strong>The sense that separate images belong together as one body of work.</div>
+            <div class="vocab-card"><strong>Shot List</strong>A written plan of what to photograph, where, and how, made before shooting begins.</div>
+            <div class="vocab-card"><strong>Artist Statement</strong>A short written explanation of an artwork's theme, choices, and process, written by the artist.</div>
+            <div class="vocab-card"><strong>Lighting Technique</strong>A specific way of using light on a subject, such as side lighting, backlighting, or diffused lighting.</div>
+            <div class="vocab-card"><strong>Texture</strong>The surface quality of a subject, such as rough, smooth, soft, or patterned, made visible through light.</div>
+            <div class="vocab-card"><strong>Capstone Project</strong>A culminating project that brings together skills learned across a unit or semester.</div>
+        </div>
+    </div>
+
+    <!-- SELF-CHECK RUBRIC -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#9989; SELF-CHECK RUBRIC &middot; REVIEW BEFORE YOU SUBMIT</div>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">This is the exact rubric your teacher will use to grade your project. Check your work against it before you submit.</p>
+        <div style="overflow-x: auto;">
+        <table class="rubric-table">
+            <tr><th>Criterion</th><th>4 &ndash; Strong</th><th>3 &ndash; Proficient</th><th>2 &ndash; Developing</th><th>1 &ndash; Beginning</th></tr>
+            <tr><td>Understanding of the tools</td><td>Correct, purposeful use of two or more lighting techniques and the required Pixlr E edits (crop/exposure on one photo, color adjustment/filter on another)</td><td>Required lighting techniques and edits are present but applied less precisely</td><td>Only one lighting technique or one required edit type is present</td><td>Lighting techniques and/or required edits are missing</td></tr>
+            <tr><td>Quality of choices</td><td>Theme is clear and every photo and edit serves it; lighting and editing choices are deliberate</td><td>Theme is present and mostly consistent across photos</td><td>Theme is unclear or the photos feel unrelated</td><td>No identifiable theme connects the photos</td></tr>
+            <tr><td>Craftsmanship</td><td>All three photos and the statement are clean, finished, and exported/saved correctly; at least one photo clearly shows texture</td><td>Minor rough edges in an edit or the statement</td><td>Noticeably unfinished editing or a texture photo that is unclear</td><td>Incomplete files or missing texture photo</td></tr>
+            <tr><td>Intellectual honesty</td><td>All three photos are the student's own, unedited originals are kept, and the statement accurately describes real choices made</td><td>Original work with a statement that is mostly accurate</td><td>Statement is vague or does not match the actual edits made</td><td>Photos or statement are not clearly the student's own work</td></tr>
+        </table>
+        </div>
+    </div>
+
+    <!-- WHAT YOU'LL DO NEXT -->
+    <div style="background: #FFFFFF; border-top: 3px solid #0E1C42; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 16px;">&#10145;&#65039; WHAT YOU'LL DO NEXT (IN CANVAS)</div>
+        <div class="next-item"><div class="num learn">1</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Planning Check: Capstone Requirements</strong> &middot; Week 7</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">A short auto-graded check on what the project requires: photo count, lighting techniques, texture, and editing steps.</div></div></div>
+        <div class="next-item"><div class="num learn">2</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Discussion: Share Your Planned Theme</strong> &middot; Week 7</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Post your theme and shot list before you shoot, and give one classmate specific feedback.</div></div></div>
+        <div class="next-item"><div class="num create">3</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>End-of-Semester Project: Edited Photo Series</strong> &middot; Week 7</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Your Q2 capstone: three original photos unified by a theme, at least two lighting techniques, one texture photo, Pixlr E edits, and a typed artist statement. Your graded project this week.</div></div></div>
+    </div>
+
+    <!-- WRAP-UP -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128170; THE BIG IDEA</div>
+        <p style="font-size: 18px; color: #1a2340; line-height: 1.65; margin: 0;">A photographer who plans is not less creative than one who improvises; planning is what lets creativity survive contact with a real camera, real light, and a real deadline. This week you connect two halves of your semester, seeing light and shaping it afterward, into one body of work you chose and can explain in your own words. That is the whole point of a capstone: not a new skill, but proof of the skills you already own.</p>
+    </div>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div style="background: #0E1C42; border-top: 3px solid #55C8E8; padding: 18px 34px; text-align: center;">
+    <div style="font-size: 18px; color: #ffffff; margin-bottom: 6px;"><span style="color: #55c8e8;">Optima Academy Online</span> &middot; DIGITAL ART IMAGING &middot; Quarter 2 &middot; Student Lesson Page</div>
+    <div style="font-size: 13px; color: rgba(255,255,255,0.65); margin-bottom: 4px;">Module 2 &middot; Week 7 &middot; Planning Your Capstone Photo Series</div>
+    <div style="font-size: 12px; color: rgba(255,255,255,0.4);">&copy; Optima Academy Online &middot; An Education Experience Company. Concept diagrams shown are original CSS/SVG illustrations, not photographs.</div>
+</div>
+
+</div>
+
+<!-- ===== WIDGET RUNTIME — from optima-lesson-format template. One delegated listener drives every engine. ===== -->
+<script>
+(function () {
+  document.addEventListener('click', function (e) {
+    var reset = e.target.closest('.widget-reset');
+    if (reset) {
+      var w = reset.closest('.optima-widget');
+      w.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      w.querySelectorAll('.widget-feedback').forEach(function (f) { f.classList.remove('show'); f.textContent = ''; });
+      w.querySelectorAll('.row-feedback').forEach(function (f) { f.remove(); });
+      return;
+    }
+    var rBtn = e.target.closest('.ow-reflect .widget-options button');
+    if (rBtn) {
+      var rw = rBtn.closest('.optima-widget');
+      rw.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected'); });
+      rBtn.classList.add('selected');
+      var fb = rw.querySelector('.widget-feedback');
+      fb.textContent = rBtn.dataset.response || '';
+      fb.classList.add('show');
+      return;
+    }
+    var sBtn = e.target.closest('.ow-select .widget-row .widget-options button');
+    if (sBtn) {
+      var row = sBtn.closest('.widget-row');
+      var correct = row.dataset.correct;
+      row.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      var right = sBtn.dataset.choice === correct;
+      sBtn.classList.add(right ? 'correct' : 'incorrect');
+      var text = right ? (sBtn.dataset.fb || row.dataset.fb || 'Right.') : (sBtn.dataset.fb || row.dataset.hint || 'Not quite. Try again.');
+      var rf = row.querySelector('.row-feedback') || row.appendChild(document.createElement('div'));
+      rf.className = 'row-feedback ' + (right ? 'correct' : 'incorrect');
+      rf.textContent = text;
+      return;
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Digital Art Imaging &mdash; Week 7: Photography Inspiration</title>
+<style>
+    body { margin: 0; padding: 0; font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #f4f6fa; }
+    .canvas-frame { max-width: 1100px; margin: 0 auto; background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+
+    /* ===== WIDGET CSS — from optima-lesson-format/assets/lesson-interactive-template.html (byte-consistent) ===== */
+    .optima-widget { background: linear-gradient(135deg, #E8F6FB 0%, #F4F9FC 100%); border: 1px solid #C5DCE5; border-left: 5px solid #2196D0; border-radius: 8px; padding: 18px 22px; margin: 18px 0; }
+    .widget-kicker { font-size: 11px; color: #1B6A94; margin-bottom: 10px; letter-spacing: 0.4px; }
+    .widget-question { font-size: 17px; color: #0E1C42; margin-bottom: 14px; line-height: 1.55; }
+    .widget-row { background: #FFFFFF; border: 1px solid #D0D9E8; border-radius: 6px; padding: 12px 14px; margin-bottom: 10px; }
+    .widget-row-prompt { font-size: 15px; color: #0E1C42; margin-bottom: 8px; line-height: 1.5; font-style: italic; }
+    .widget-options { display: flex; flex-wrap: wrap; gap: 8px; }
+    .widget-options button { background: #FFFFFF; border: 1.5px solid #D0D9E8; border-radius: 8px; padding: 8px 14px; font-size: 14px; color: #0E1C42; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+    .widget-options button:hover { background: #F4F6FA; border-color: #55C8E8; }
+    .widget-options button.selected { background: #0E1C42; color: #FFFFFF; border-color: #0E1C42; }
+    .widget-options button.correct { background: #D8F0DD; border-color: #2A9D5C; color: #1A6B3D; }
+    .widget-options button.incorrect { background: #FDECEC; border-color: #C0392B; color: #8A1F16; }
+    .widget-feedback { background: #FFFFFF; border-left: 3px solid #C7922C; padding: 10px 14px; font-size: 15px; color: #1a2340; line-height: 1.55; margin: 10px 0; display: none; border-radius: 4px; }
+    .widget-feedback.show { display: block; }
+    .row-feedback { padding: 8px 12px; margin-top: 8px; font-size: 14px; border-radius: 4px; line-height: 1.5; }
+    .row-feedback.correct { background: #D8F0DD; border-left: 3px solid #2A9D5C; color: #1A6B3D; }
+    .row-feedback.incorrect { background: #FDECEC; border-left: 3px solid #C0392B; color: #8A1F16; }
+    .widget-reset { background: transparent; border: 1px solid #C7922C; color: #C7922C; border-radius: 6px; padding: 6px 12px; font-size: 12px; cursor: pointer; font-family: inherit; margin-top: 6px; }
+    .widget-reset:hover { background: #FDF3E3; }
+
+    /* ===== Art-course components (layered on the brand; teal/coral are activity accents only) ===== */
+    .art-fig { margin: 14px 0; text-align: center; }
+    .art-fig img { max-width: 100%; height: auto; border-radius: 6px; border: 1px solid #D0D9E8; }
+    .art-fig figcaption { font-size: 13px; color: #666; margin-top: 8px; line-height: 1.5; }
+    .art-fig figcaption a { color: #1B6A94; }
+    .el-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin: 16px 0; }
+    .el-card { border: 1px solid #D0D9E8; border-radius: 8px; overflow: hidden; }
+    .el-demo { height: 80px; display: flex; align-items: center; justify-content: center; }
+    .el-text { padding: 10px 13px; }
+    .el-text strong { color: #167567; display: block; margin-bottom: 3px; font-size: 16px; }
+    .el-text span { font-size: 14px; color: #1a2340; }
+    .callout { border-radius: 6px; padding: 14px 20px; margin: 16px 0; }
+    .callout .ck { font-size: 11px; margin-bottom: 8px; letter-spacing: 0.5px; }
+    .callout .cb { font-size: 16px; line-height: 1.6; color: #0E1C42; }
+    .c-help { background: #E8F6FB; border-left: 5px solid #2196D0; border-top: 3px solid #55C8E8; }
+    .c-help .ck { color: #1B6A94; }
+    .c-warn { background: #FDECEC; border-left: 5px solid #C0392B; border-top: 3px solid #E74C3C; }
+    .c-warn .ck { color: #8A1F16; }
+    .c-art { background: #E6F4F1; border-left: 5px solid #1B8A7A; }
+    .c-art .ck { color: #167567; }
+    .next-item { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+    .next-item .num { min-width: 30px; height: 30px; border-radius: 50%; color: #fff; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .num.learn { background: #1B8A7A; }
+    .num.create { background: #D9583B; }
+    .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+    .vocab-card { background: #EEF1F8; border-radius: 6px; padding: 10px 13px; font-size: 14px; color: #1a2340; }
+    .vocab-card strong { color: #0E1C42; display: block; margin-bottom: 2px; }
+    details { background: #FFFFFF; border: 1px solid #D0D9E8; border-left: 4px solid #C7922C; border-radius: 6px; padding: 12px 18px; margin: 14px 0; }
+    details summary { font-size: 16px; color: #0E1C42; cursor: pointer; }
+    details .ac-body { font-size: 16px; color: #1a2340; margin-top: 10px; padding-top: 10px; border-top: 1px solid #EEF1F8; line-height: 1.6; }
+    /* Pixel vs. smooth concept visual */
+    .pix-wrap { display: flex; flex-wrap: wrap; gap: 22px; align-items: center; justify-content: center; margin: 16px 0 6px; }
+    .pix-panel { text-align: center; }
+    .pix-label { font-size: 12px; color: #6b7a99; margin-top: 8px; }
+    .rvv { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+    .rvv > div { border: 1px solid #D0D9E8; border-radius: 8px; padding: 14px 16px; }
+    .rvv h4 { margin: 0 0 6px 0; font-size: 16px; }
+    .rvv p { margin: 0; font-size: 14px; color: #1a2340; line-height: 1.55; }
+    @media (max-width: 560px){ .rvv { grid-template-columns: 1fr; } }
+    /* Idea grid (week 7 only) */
+    .idea-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin: 16px 0; }
+    .idea-card { border: 1px solid #D0D9E8; border-radius: 8px; padding: 14px 16px; background: #FAFBFD; border-top: 3px solid #1B8A7A; }
+    .idea-card h4 { margin: 0 0 6px 0; font-size: 16px; color: #167567; }
+    .idea-card p { margin: 0; font-size: 14px; color: #1a2340; line-height: 1.55; }
+    .shot-list { border: 1px solid #D0D9E8; border-radius: 8px; padding: 16px 20px; background: #FFFFFF; margin: 14px 0; }
+    .shot-list li { font-size: 16px; color: #1a2340; line-height: 1.7; }
+</style>
+</head>
+<body>
+<div class="canvas-frame">
+
+<!-- ===== HEADER ===== -->
+<div style="background: #0E1C42; border-bottom: 5px solid #55C8E8; padding: 22px 34px;">
+    <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 10px;">
+        <div style="width: 52px; height: 52px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><img src="https://raw.githubusercontent.com/optimaondemand/optima-assets/eeb0b335630058906d52f478028361d352253a93/images/Optima%20Final%20Circle%20-%20Owl%20Only.png" alt="Optima Academy" style="width: 50px; height: 40px; object-fit: contain;" /></div>
+        <div>
+            <div style="font-size: 28px; color: #ffffff; line-height: 1.2;">Optima Academy Online</div>
+            <div style="font-size: 12px; color: #55c8e8;">An Education Experience Company</div>
+        </div>
+    </div>
+    <div style="font-size: 36px; color: #ffffff; margin-bottom: 6px;">DIGITAL ART IMAGING</div>
+</div>
+
+<!-- ===== METADATA STRIP ===== -->
+<div style="background: #FFFFFF; border-bottom: 2px solid #D0D9E8; display: flex; flex-wrap: wrap;">
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Quarter / Week</div>
+        <div style="font-size: 17px; color: #0e1c42;">Q1 &middot; Module 1, Week 7</div>
+        <div style="font-size: 12px; color: #666;">Module 1: Digital Imaging Foundations</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Focus</div>
+        <div style="font-size: 17px; color: #0e1c42;">Photography Inspiration</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">This Week's Project</div>
+        <div style="font-size: 17px; color: #0e1c42; font-style: italic;">Making the Ordinary Extraordinary</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Software</div>
+        <div style="font-size: 16px; color: #0e1c42;">Pixlr E (free, browser) + camera/phone</div>
+    </div>
+</div>
+
+<!-- ===== BODY WRAPPER ===== -->
+<div style="padding: 24px 34px;">
+
+    <!-- Lavender title strip -->
+    <div style="background: #EEF1F8; border-left: 5px solid #0E1C42; border-radius: 7px; padding: 18px 22px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #0e1c42; margin-bottom: 6px;">MODULE 1 &middot; WEEK 7</div>
+        <div style="font-size: 22px; color: #0e1c42; margin-bottom: 4px;">Photography Inspiration</div>
+        <div style="font-size: 16px; color: #666;">Lesson</div>
+    </div>
+
+    <!-- Essential Question -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128214; ESSENTIAL QUESTION</div>
+        <div style="font-size: 20px; color: #0e1c42; font-style: italic; margin-bottom: 10px;">Where does a photographer find a great subject when nothing "interesting" seems to be around?</div>
+        <div style="font-size: 18px; color: #1a2340; line-height: 1.65;">You do not need a rare object or a dramatic location to make strong art. You need line, space, and a technique, applied to something ordinary. This week you build a shot list from everyday categories so you walk into next week's capstone with a plan instead of a blank page.</div>
+    </div>
+
+    <!-- PART 1 · LOOK FIRST -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128064; PART 1 &middot; LOOK FIRST</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">This week's goal, in one sentence: take a digital photograph of an ordinary object and transform it into something extraordinary using line, space, one photography technique, and one compositional technique from this unit. That is the exact assignment you will complete next week, so treat today as scouting, not shooting.</p>
+
+        <div class="idea-grid">
+            <div class="idea-card">
+                <h4>School Objects</h4>
+                <p>Pencils, notebooks, scissors, paint tubes. One example filled the whole frame with paint tubes to remove distractions, then angled them to create leading lines through the image.</p>
+            </div>
+            <div class="idea-card">
+                <h4>Dishes &amp; Kitchen Items</h4>
+                <p>A cup, bowl, or plate. One example placed a cup off-center using the rule of thirds, then shot through the handle of another mug to frame it.</p>
+            </div>
+            <div class="idea-card">
+                <h4>Furniture</h4>
+                <p>Chairs, tables, anything you sit on or near. One example used a low, unusual angle to highlight leading lines formed by rows of chairs and tables.</p>
+            </div>
+            <div class="idea-card">
+                <h4>Accessories</h4>
+                <p>Sunglasses, headphones, belts, hats. One example shot an umbrella from underneath, letting its radiating spokes become leading lines pulling the eye toward the center.</p>
+            </div>
+            <div class="idea-card">
+                <h4>Reflective Surfaces</h4>
+                <p>Mirrors, glasses, windows, water. One example used a glass sphere to reflect a field of flowers upside-down, letting the sphere itself frame the reflection while the background stayed blurred.</p>
+            </div>
+        </div>
+
+        <div class="optima-widget ow-reflect">
+            <div class="widget-kicker">&#128173; QUICK CHECK-IN &middot; NO WRONG ANSWER</div>
+            <div class="widget-question">Which of these five categories has an object nearest to you right now?</div>
+            <div class="widget-options">
+                <button data-response="School objects are everywhere and easy to arrange. Try filling the frame with several similar items and angling them into a leading line.">School objects</button>
+                <button data-response="Kitchen items photograph well because of their simple, rounded shapes. Try the rule of thirds instead of centering your subject.">Dishes or kitchen items</button>
+                <button data-response="Furniture gives you strong repeating lines to work with. Try getting low or shooting down a row of them.">Furniture</button>
+                <button data-response="Accessories often have interesting texture and shape up close. Try shooting from an unusual angle, like from underneath.">An accessory</button>
+                <button data-response="Reflective surfaces add a twist because they show two things at once. Try blurring the background to keep attention on the reflection.">A reflective surface</button>
+            </div>
+            <div class="widget-feedback"></div>
+            <button class="widget-reset">Reset</button>
+        </div>
+    </div>
+
+    <!-- PART 2 · READING A PHOTOGRAPHER'S CHOICES -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128218; PART 2 &middot; READING A PHOTOGRAPHER'S CHOICES</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Notice that none of the five examples above relied on an exotic subject. Every one of them combined an ordinary object with a deliberate technique from earlier this module:</p>
+        <ul style="font-size: 17px; color: #1a2340; line-height: 1.7; margin: 0 0 12px 0; padding-left: 22px;">
+            <li><strong>Leading lines</strong> (the paint tubes, the chair rows, the umbrella spokes) guide the eye through the frame.</li>
+            <li><strong>Rule of thirds</strong> (the off-center cup) makes a simple object feel composed rather than accidental.</li>
+            <li><strong>Framing</strong> (shooting through the mug handle, or inside the glass sphere) uses one object to draw attention to another.</li>
+            <li><strong>Depth of field</strong> (the blurred background behind the glass sphere) is a camera technique that isolates the subject through exclusion.</li>
+        </ul>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">This is the pattern behind almost every strong photograph of an ordinary object: one clear subject, one line-based composition choice, and one technique that removes or reduces everything competing for attention.</p>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 14px 0 10px 0;">Working photographers usually specialize in a category. Here is one verified historical example from each of three common categories, so you can see what a professional's choices look like before you build your own shot list.</p>
+
+        <div class="idea-grid">
+            <figure class="art-fig" style="margin:0;">
+                <img src="https://images.metmuseum.org/CRDImages/ph/original/DP209008.jpg" alt="Still Life with Fruit by Roger Fenton: an arrangement of fruit, including grapes on the vine, piled on a table against a plain dark background." />
+                <figcaption>Roger Fenton (British, 1819&ndash;1869), <em>[Still Life with Fruit]</em>, 1860. Albumen silver print. Met, public domain. <a href="https://www.metmuseum.org/art/collection/search/283087">metmuseum.org</a></figcaption>
+            </figure>
+            <figure class="art-fig" style="margin:0;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/1/1d/Alfred_Stieglitz_Winter_Fifth_Avenue_1892.jpg" alt="Winter, Fifth Avenue by Alfred Stieglitz: a horse-drawn omnibus pushing through a blizzard on a New York City street, captured candidly from a distance." />
+                <figcaption>Alfred Stieglitz (American, 1864&ndash;1946), <em>Winter, Fifth Avenue</em>, 1892&ndash;93. Public domain. <a href="https://commons.wikimedia.org/wiki/File:Alfred_Stieglitz_Winter_Fifth_Avenue_1892.jpg">Wikimedia Commons</a></figcaption>
+            </figure>
+            <figure class="art-fig" style="margin:0;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Adams_The_Tetons_and_the_Snake_River.jpg" alt="The Tetons and the Snake River by Ansel Adams: a mountain range above a river winding through a forested valley." />
+                <figcaption>Ansel Adams (American, 1902&ndash;1984), <em>The Tetons and the Snake River</em>, 1942, for the National Park Service. Public domain. <a href="https://commons.wikimedia.org/wiki/File:Adams_The_Tetons_and_the_Snake_River.jpg">Wikimedia Commons</a></figcaption>
+            </figure>
+        </div>
+        <p style="font-size: 14px; color: #6b7a99; margin: 0 0 10px 0; text-align:center;">Left to right: still life, street photography, nature photography.</p>
+
+        <div class="callout c-help">
+            <div class="ck">&#128161; STUDYING PHOTOGRAPHERS ON YOUR OWN</div>
+            <div class="cb">Many working photographers post their process online. If you want to see more examples at a larger scale, search a photography category that interests you (still life, street, nature) on a museum or gallery site rather than a general image search, since museum sites credit the photographer and the year. Living and recent photographers' work belongs to them: view and study it on their own site or a museum's site rather than downloading or reposting it.</div>
+        </div>
+    </div>
+
+    <!-- PART 3 · BUILD YOUR SHOT LIST -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128269; PART 3 &middot; BUILD YOUR SHOT LIST</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Before next week's project, scout three possible ordinary objects and plan one technique for each. A shot list turns "I'll figure it out later" into a plan you can execute in ten minutes.</p>
+
+        <div class="shot-list">
+            <ol>
+                <li><strong>Object 1:</strong> ______________ &middot; Line type or technique to try: ______________</li>
+                <li><strong>Object 2:</strong> ______________ &middot; Line type or technique to try: ______________</li>
+                <li><strong>Object 3:</strong> ______________ &middot; Line type or technique to try: ______________</li>
+            </ol>
+        </div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 10px 0;">You do not have to shoot all three. Having three planned gives you a backup if your first idea does not work once you are looking through the lens.</p>
+
+        <div class="optima-widget ow-select">
+            <div class="widget-kicker">&#9889; TRY IT &middot; MATCH THE TECHNIQUE</div>
+            <div class="widget-question">Read each scenario, decide which technique it demonstrates, then check your answer.</div>
+            <div class="widget-row" data-correct="framing" data-hint="Think about what the mug handle is doing to the shot, not just where the cup sits. Try again.">
+                <div class="widget-row-prompt">A photographer shoots a cup through the handle of another mug in the foreground. What technique is this mainly an example of?</div>
+                <div class="widget-options">
+                    <button data-choice="framing" data-fb="Correct. Using one object to create a frame around another is a classic compositional technique for directing attention.">Framing</button>
+                    <button data-choice="thirds">Rule of thirds</button>
+                    <button data-choice="exclusion">Exclusion</button>
+                </div>
+            </div>
+            <div class="widget-row" data-correct="leading" data-hint="Think about what the radiating spokes are doing to the viewer's eye. Try again.">
+                <div class="widget-row-prompt">A photographer shoots an umbrella from underneath so its spokes radiate outward from a central point toward the corners. This mainly demonstrates:</div>
+                <div class="widget-options">
+                    <button data-choice="negative">Negative space</button>
+                    <button data-choice="leading" data-fb="Right. Radiating lines from a central point act as leading lines, pulling the viewer's eye through the frame.">Leading lines</button>
+                    <button data-choice="orientation">Orientation</button>
+                </div>
+            </div>
+            <button class="widget-reset">Reset</button>
+        </div>
+    </div>
+
+    <!-- AI AWARENESS (factual) -->
+    <div class="callout c-warn">
+        <div class="ck">&#9888;&#65039; WORTH KNOWING &middot; AI IMAGE SEARCH</div>
+        <div class="cb">An AI tool can generate example images of "creative still life photography" in seconds, but those images are not real photographs and cannot substitute for studying an actual photographer's choices. When you research this week, look at real photographs by real photographers on museum or gallery sites, where the composition decisions were made by a person working with an actual camera and an actual object.</div>
+    </div>
+
+    <!-- VOCABULARY -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128221; VOCABULARY</div>
+        <div class="vocab-grid">
+            <div class="vocab-card"><strong>Shot List</strong>A planned list of subjects and techniques to try before shooting.</div>
+            <div class="vocab-card"><strong>Framing</strong>Using one object or shape in a photo to surround and draw attention to another.</div>
+            <div class="vocab-card"><strong>Depth of Field</strong>A camera technique that controls how much of the image is in sharp focus, often used to blur a background.</div>
+            <div class="vocab-card"><strong>Leading Line</strong>A line within a photograph that guides the viewer's eye toward a subject or into the distance.</div>
+            <div class="vocab-card"><strong>Rule of Thirds</strong>Dividing a frame into nine equal parts to place a subject off-center, near a grid intersection.</div>
+            <div class="vocab-card"><strong>Ordinary Object</strong>A common, everyday item used as the subject of an intentionally composed photograph.</div>
+        </div>
+    </div>
+
+    <!-- WHAT YOU'LL DO NEXT -->
+    <div style="background: #FFFFFF; border-top: 3px solid #0E1C42; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 16px;">&#10145;&#65039; WHAT YOU'LL DO NEXT (IN CANVAS)</div>
+        <div class="next-item"><div class="num learn">1</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Discussion: Shot List Share</strong> &middot; Week 7</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Post your three-object shot list and one classmate's idea you might borrow, then reply to a classmate.</div></div></div>
+        <div class="next-item"><div class="num learn">2</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Quiz: Photography Inspiration</strong> &middot; Week 7</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">6 questions, auto-graded in Canvas.</div></div></div>
+        <div class="next-item"><div class="num create">3</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Art Lesson &amp; Reflection: Making the Ordinary Extraordinary</strong> &middot; Week 7</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Shoot one photo of an ordinary object using line, space, one photography technique, and one compositional technique from this unit. Your graded artwork this week.</div></div></div>
+    </div>
+
+    <!-- WRAP-UP -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128170; THE BIG IDEA</div>
+        <p style="font-size: 18px; color: #1a2340; line-height: 1.65; margin: 0;">Inspiration is not a rare object. It is an ordinary object plus a deliberate technique. Every example this week started with something you already own: a mug, an umbrella, a chair. What made each photograph extraordinary was a photographer who planned a line, decided what to include and exclude, and pressed the shutter on purpose.</p>
+    </div>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div style="background: #0E1C42; border-top: 3px solid #55C8E8; padding: 18px 34px; text-align: center;">
+    <div style="font-size: 18px; color: #ffffff; margin-bottom: 6px;"><span style="color: #55c8e8;">Optima Academy Online</span> &middot; DIGITAL ART IMAGING &middot; Quarter 1 &middot; Student Lesson Page</div>
+    <div style="font-size: 13px; color: rgba(255,255,255,0.65); margin-bottom: 4px;">Module 1 &middot; Week 7 &middot; Photography Inspiration</div>
+    <div style="font-size: 12px; color: rgba(255,255,255,0.4);">&copy; Optima Academy Online &middot; An Education Experience Company. Photographs shown are in the public domain; see captions for sources. Students research living photographers' work on museum or gallery sites.</div>
+</div>
+
+</div>
+
+<!-- ===== WIDGET RUNTIME — from optima-lesson-format template. One delegated listener drives every engine. ===== -->
+<script>
+(function () {
+  document.addEventListener('click', function (e) {
+    var reset = e.target.closest('.widget-reset');
+    if (reset) {
+      var w = reset.closest('.optima-widget');
+      w.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      w.querySelectorAll('.widget-feedback').forEach(function (f) { f.classList.remove('show'); f.textContent = ''; });
+      w.querySelectorAll('.row-feedback').forEach(function (f) { f.remove(); });
+      return;
+    }
+    var rBtn = e.target.closest('.ow-reflect .widget-options button');
+    if (rBtn) {
+      var rw = rBtn.closest('.optima-widget');
+      rw.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected'); });
+      rBtn.classList.add('selected');
+      var fb = rw.querySelector('.widget-feedback');
+      fb.textContent = rBtn.dataset.response || '';
+      fb.classList.add('show');
+      return;
+    }
+    var sBtn = e.target.closest('.ow-select .widget-row .widget-options button');
+    if (sBtn) {
+      var row = sBtn.closest('.widget-row');
+      var correct = row.dataset.correct;
+      row.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      var right = sBtn.dataset.choice === correct;
+      sBtn.classList.add(right ? 'correct' : 'incorrect');
+      var text = right ? (sBtn.dataset.fb || row.dataset.fb || 'Right.') : (sBtn.dataset.fb || row.dataset.hint || 'Not quite. Try again.');
+      var rf = row.querySelector('.row-feedback') || row.appendChild(document.createElement('div'));
+      rf.className = 'row-feedback ' + (right ? 'correct' : 'incorrect');
+      rf.textContent = text;
+      return;
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

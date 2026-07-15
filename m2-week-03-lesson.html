@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Digital Art Imaging &mdash; Week 3: Capturing the Light</title>
+<style>
+    body { margin: 0; padding: 0; font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #f4f6fa; }
+    .canvas-frame { max-width: 1100px; margin: 0 auto; background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+
+    /* ===== WIDGET CSS — from optima-lesson-format/assets/lesson-interactive-template.html (byte-consistent) ===== */
+    .optima-widget { background: linear-gradient(135deg, #E8F6FB 0%, #F4F9FC 100%); border: 1px solid #C5DCE5; border-left: 5px solid #2196D0; border-radius: 8px; padding: 18px 22px; margin: 18px 0; }
+    .widget-kicker { font-size: 11px; color: #1B6A94; margin-bottom: 10px; letter-spacing: 0.4px; }
+    .widget-question { font-size: 17px; color: #0E1C42; margin-bottom: 14px; line-height: 1.55; }
+    .widget-row { background: #FFFFFF; border: 1px solid #D0D9E8; border-radius: 6px; padding: 12px 14px; margin-bottom: 10px; }
+    .widget-row-prompt { font-size: 15px; color: #0E1C42; margin-bottom: 8px; line-height: 1.5; font-style: italic; }
+    .widget-options { display: flex; flex-wrap: wrap; gap: 8px; }
+    .widget-options button { background: #FFFFFF; border: 1.5px solid #D0D9E8; border-radius: 8px; padding: 8px 14px; font-size: 14px; color: #0E1C42; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+    .widget-options button:hover { background: #F4F6FA; border-color: #55C8E8; }
+    .widget-options button.selected { background: #0E1C42; color: #FFFFFF; border-color: #0E1C42; }
+    .widget-options button.correct { background: #D8F0DD; border-color: #2A9D5C; color: #1A6B3D; }
+    .widget-options button.incorrect { background: #FDECEC; border-color: #C0392B; color: #8A1F16; }
+    .widget-feedback { background: #FFFFFF; border-left: 3px solid #C7922C; padding: 10px 14px; font-size: 15px; color: #1a2340; line-height: 1.55; margin: 10px 0; display: none; border-radius: 4px; }
+    .widget-feedback.show { display: block; }
+    .row-feedback { padding: 8px 12px; margin-top: 8px; font-size: 14px; border-radius: 4px; line-height: 1.5; }
+    .row-feedback.correct { background: #D8F0DD; border-left: 3px solid #2A9D5C; color: #1A6B3D; }
+    .row-feedback.incorrect { background: #FDECEC; border-left: 3px solid #C0392B; color: #8A1F16; }
+    .widget-reset { background: transparent; border: 1px solid #C7922C; color: #C7922C; border-radius: 6px; padding: 6px 12px; font-size: 12px; cursor: pointer; font-family: inherit; margin-top: 6px; }
+    .widget-reset:hover { background: #FDF3E3; }
+
+    /* ===== Art-course components (layered on the brand; teal/coral are activity accents only) ===== */
+    .art-fig { margin: 14px 0; text-align: center; }
+    .art-fig img { max-width: 100%; height: auto; border-radius: 6px; border: 1px solid #D0D9E8; }
+    .art-fig figcaption { font-size: 13px; color: #666; margin-top: 8px; line-height: 1.5; }
+    .art-fig figcaption a { color: #1B6A94; }
+    .el-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin: 16px 0; }
+    .el-card { border: 1px solid #D0D9E8; border-radius: 8px; overflow: hidden; }
+    .el-demo { height: 80px; display: flex; align-items: center; justify-content: center; }
+    .el-text { padding: 10px 13px; }
+    .el-text strong { color: #167567; display: block; margin-bottom: 3px; font-size: 16px; }
+    .el-text span { font-size: 14px; color: #1a2340; }
+    .callout { border-radius: 6px; padding: 14px 20px; margin: 16px 0; }
+    .callout .ck { font-size: 11px; margin-bottom: 8px; letter-spacing: 0.5px; }
+    .callout .cb { font-size: 16px; line-height: 1.6; color: #0E1C42; }
+    .c-help { background: #E8F6FB; border-left: 5px solid #2196D0; border-top: 3px solid #55C8E8; }
+    .c-help .ck { color: #1B6A94; }
+    .c-warn { background: #FDECEC; border-left: 5px solid #C0392B; border-top: 3px solid #E74C3C; }
+    .c-warn .ck { color: #8A1F16; }
+    .c-art { background: #E6F4F1; border-left: 5px solid #1B8A7A; }
+    .c-art .ck { color: #167567; }
+    .next-item { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+    .next-item .num { min-width: 30px; height: 30px; border-radius: 50%; color: #fff; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .num.learn { background: #1B8A7A; }
+    .num.create { background: #D9583B; }
+    .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+    .vocab-card { background: #EEF1F8; border-radius: 6px; padding: 10px 13px; font-size: 14px; color: #1a2340; }
+    .vocab-card strong { color: #0E1C42; display: block; margin-bottom: 2px; }
+    details { background: #FFFFFF; border: 1px solid #D0D9E8; border-left: 4px solid #C7922C; border-radius: 6px; padding: 12px 18px; margin: 14px 0; }
+    details summary { font-size: 16px; color: #0E1C42; cursor: pointer; }
+    details .ac-body { font-size: 16px; color: #1a2340; margin-top: 10px; padding-top: 10px; border-top: 1px solid #EEF1F8; line-height: 1.6; }
+    /* Pixel vs. smooth concept visual */
+    .pix-wrap { display: flex; flex-wrap: wrap; gap: 22px; align-items: center; justify-content: center; margin: 16px 0 6px; }
+    .pix-panel { text-align: center; }
+    .pix-label { font-size: 12px; color: #6b7a99; margin-top: 8px; }
+    .rvv { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+    .rvv > div { border: 1px solid #D0D9E8; border-radius: 8px; padding: 14px 16px; }
+    .rvv h4 { margin: 0 0 6px 0; font-size: 16px; }
+    .rvv p { margin: 0; font-size: 14px; color: #1a2340; line-height: 1.55; }
+    @media (max-width: 560px){ .rvv { grid-template-columns: 1fr; } }
+    /* Exposure strip */
+    .exp-strip { display: flex; gap: 6px; margin: 14px 0 4px; }
+    .exp-swatch { flex: 1; height: 70px; border-radius: 6px; display: flex; align-items: flex-end; justify-content: center; }
+    .exp-swatch span { font-size: 11px; color: #0e1c42; background: rgba(255,255,255,0.75); padding: 2px 5px; border-radius: 3px; margin-bottom: 4px; }
+    /* Color temperature scale */
+    .temp-scale { height: 44px; border-radius: 8px; background: linear-gradient(90deg, #ff9d3f 0%, #ffd8a8 25%, #fff4e6 50%, #d6ecff 75%, #7fb3e8 100%); position: relative; margin: 16px 0 6px; }
+    .temp-labels { display: flex; justify-content: space-between; font-size: 12px; color: #6b7a99; }
+</style>
+</head>
+<body>
+<div class="canvas-frame">
+
+<!-- ===== HEADER ===== -->
+<div style="background: #0E1C42; border-bottom: 5px solid #55C8E8; padding: 22px 34px;">
+    <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 10px;">
+        <div style="width: 52px; height: 52px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><img src="https://raw.githubusercontent.com/optimaondemand/optima-assets/eeb0b335630058906d52f478028361d352253a93/images/Optima%20Final%20Circle%20-%20Owl%20Only.png" alt="Optima Academy" style="width: 50px; height: 40px; object-fit: contain;" /></div>
+        <div>
+            <div style="font-size: 28px; color: #ffffff; line-height: 1.2;">Optima Academy Online</div>
+            <div style="font-size: 12px; color: #55c8e8;">An Education Experience Company</div>
+        </div>
+    </div>
+    <div style="font-size: 36px; color: #ffffff; margin-bottom: 6px;">DIGITAL ART IMAGING</div>
+</div>
+
+<!-- ===== METADATA STRIP ===== -->
+<div style="background: #FFFFFF; border-bottom: 2px solid #D0D9E8; display: flex; flex-wrap: wrap;">
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Quarter / Week</div>
+        <div style="font-size: 17px; color: #0e1c42;">Q2 &middot; Module 2, Week 3</div>
+        <div style="font-size: 12px; color: #666;">Module 2: Capturing Light &amp; Editing</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Focus</div>
+        <div style="font-size: 17px; color: #0e1c42;">Capturing the Light</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">This Week's Project</div>
+        <div style="font-size: 17px; color: #0e1c42; font-style: italic;">Art Lesson &amp; Reflection</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Software</div>
+        <div style="font-size: 16px; color: #0e1c42;">Pixlr E (free, browser)</div>
+    </div>
+</div>
+
+<!-- ===== BODY WRAPPER ===== -->
+<div style="padding: 24px 34px;">
+
+    <!-- Lavender title strip -->
+    <div style="background: #EEF1F8; border-left: 5px solid #0E1C42; border-radius: 7px; padding: 18px 22px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #0e1c42; margin-bottom: 6px;">MODULE 2 &middot; WEEK 3</div>
+        <div style="font-size: 22px; color: #0e1c42; margin-bottom: 4px;">Capturing the Light</div>
+        <div style="font-size: 16px; color: #666;">Lesson</div>
+    </div>
+
+    <!-- Essential Question -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128214; ESSENTIAL QUESTION</div>
+        <div style="font-size: 20px; color: #0e1c42; font-style: italic; margin-bottom: 10px;">What decisions turn ordinary light into a photograph with a mood?</div>
+        <div style="font-size: 18px; color: #1a2340; line-height: 1.65;">You already know that where light comes from changes a photo. This week goes one layer deeper: what kind of light it is, how much of it reaches your camera, and what temperature it carries. Small changes here (a cloud passing, a lamp switched on, a slightly longer exposure) can turn the same scene calm, dramatic, warm, or cold.</div>
+    </div>
+
+    <!-- PART 1 · LOOK FIRST -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128064; PART 1 &middot; LOOK FIRST</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">The same subject, exposed to more or less light, produces very different photos. <strong>Exposure</strong> is how much light reaches your camera's sensor. Too little light and a photo is <strong>underexposed</strong> (too dark, shadows swallow detail). Too much light and a photo is <strong>overexposed</strong> (too bright, highlights wash out detail). Between the two sits a balanced exposure where both shadow and highlight detail are visible.</p>
+
+        <div class="exp-strip">
+            <div class="exp-swatch" style="background:#1a1d24;"><span>Underexposed</span></div>
+            <div class="exp-swatch" style="background:#4a4d55;"><span>Slightly dark</span></div>
+            <div class="exp-swatch" style="background:#9aa0ad; color:#0e1c42;"><span>Balanced</span></div>
+            <div class="exp-swatch" style="background:#dfe3ea;"><span>Slightly bright</span></div>
+            <div class="exp-swatch" style="background:#f7f8fa;"><span>Overexposed</span></div>
+        </div>
+        <p style="font-size: 14px; color: #6b7a99; margin: 0;">Concept diagram. The same value range, from underexposed to overexposed. A balanced exposure keeps detail visible in both shadow and highlight.</p>
+
+        <div class="optima-widget ow-reflect">
+            <div class="widget-kicker">&#128173; QUICK CHECK-IN &middot; NO WRONG ANSWER</div>
+            <div class="widget-question">Have you ever taken a photo that came out too dark or too washed out? What do you think caused it?</div>
+            <div class="widget-options">
+                <button data-response="Too little light reaching the camera (a dim room, shooting into shade, or a fast shutter) usually causes underexposure.">Too dark (underexposed)</button>
+                <button data-response="Too much light reaching the camera (bright sun, a flash too close, or shooting straight at a light source) usually causes overexposure.">Too bright (overexposed)</button>
+                <button data-response="A mismatched color temperature, like indoor lamp light photographed on a setting meant for daylight, can make a photo look too orange or too blue.">The wrong color (too orange or too blue)</button>
+                <button data-response="That is a great sign. Balanced exposure and matched color temperature are exactly what this lesson will help you control on purpose.">None, my photos usually look right</button>
+            </div>
+            <div class="widget-feedback"></div>
+            <button class="widget-reset">Reset</button>
+        </div>
+    </div>
+
+    <!-- PART 2 · NATURAL VS ARTIFICIAL LIGHT AND EXPOSURE -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#9728;&#65039; PART 2 &middot; NATURAL VS. ARTIFICIAL LIGHT</div>
+
+        <div class="rvv">
+            <div style="border-top: 3px solid #1B8A7A;">
+                <h4 style="color:#167567;">Natural light</h4>
+                <p>Light from the sun or sky. It changes constantly through the day, from harsh midday sun to the soft glow of golden hour, and shifts with weather: clouds, rain, fog, and snow all change how natural light behaves.</p>
+            </div>
+            <div style="border-top: 3px solid #D9583B;">
+                <h4 style="color:#c0472e;">Artificial light</h4>
+                <p>Light from a human-made source: a lamp, a phone flashlight, a streetlight, a stage light. Artificial light is more predictable and controllable than natural light, but it often carries a strong color cast of its own.</p>
+            </div>
+        </div>
+
+        <figure class="art-fig">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/9d/Clouds_in_blue_sky.jpg" alt="Bright natural sunlight on white cumulus clouds against a clear blue sky." style="max-width: 320px;" />
+            <figcaption>Rosendahl, <em>Clouds in Blue Sky</em>. Public domain. Source: <a href="https://commons.wikimedia.org/wiki/File:Clouds_in_blue_sky.jpg">commons.wikimedia.org</a></figcaption>
+        </figure>
+        <figure class="art-fig">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Ceiling_lamp_light.JPG" alt="An artificial ceiling lamp fixture glowing indoors, its own bulb the light source instead of the sun." style="max-width: 320px;" />
+            <figcaption>Mmm Daffodils, <em>Ceiling Lamp Light</em>, 2012. Public domain (CC0). Source: <a href="https://commons.wikimedia.org/wiki/File:Ceiling_lamp_light.JPG">commons.wikimedia.org</a></figcaption>
+        </figure>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 14px 0 10px 0;">Whichever kind of light you use, you are always managing <strong>exposure</strong>, the amount of light that reaches your camera. On a phone or basic camera, exposure is often controlled automatically, but you can influence it: move your subject out of direct sun, add or remove a light source, or use your device's exposure/brightness slider before you shoot. Getting exposure right protects two things at once: <strong>shadow detail</strong> (the darkest parts of your photo still show some texture and form) and <strong>highlight detail</strong> (the brightest parts are not a pure white blank).</p>
+
+        <div class="callout c-help">
+            <div class="ck">&#128161; CHECK YOUR SHADOWS AND HIGHLIGHTS</div>
+            <div class="cb">Before you shoot, glance at the darkest and brightest parts of your scene. If the darkest area already looks like solid black or the brightest area looks like solid white on your screen, you are likely to lose detail there. Reposition your subject or adjust your exposure setting before you press the shutter, since it is far easier to fix at capture than to recover lost detail afterward.</div>
+        </div>
+    </div>
+
+    <!-- PART 3 · COLOR TEMPERATURE AND MOOD -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#127752; PART 3 &middot; COLOR TEMPERATURE AND MOOD</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Light is not just bright or dim; it also carries <strong>color temperature</strong>, a warm-to-cool range that changes the feel of a photo before you touch any editing tool. Warm light leans orange and gold. Cool light leans blue.</p>
+
+        <div class="temp-scale" role="img" aria-label="A horizontal scale from warm orange light on the left to cool blue light on the right, with neutral white in the middle."></div>
+        <div class="temp-labels"><span>Warm (candlelight, golden hour, indoor lamps)</span><span>Neutral (daylight)</span><span>Cool (shade, overcast, blue hour)</span></div>
+
+        <div class="pix-wrap">
+            <figure class="art-fig">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/3/32/Hot_color_temperature.JPG" alt="The same scene photographed with a warm white balance, giving every surface a strong orange-red cast." style="max-width: 220px;" />
+                <figcaption>Dawid Skalec, <em>Hot Color Temperature</em>, 2015. Licensed CC BY-SA 4.0. Source: <a href="https://commons.wikimedia.org/wiki/File:Hot_color_temperature.JPG">commons.wikimedia.org</a></figcaption>
+            </figure>
+            <figure class="art-fig">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/64/5700K_Color_Temperature_.jpg" alt="A scene lit at 5700K, close to neutral daylight white balance, without a strong orange or blue cast." style="max-width: 220px;" />
+                <figcaption>Murphy Outdoor Lighting, <em>5700K Color Temperature</em>, 2015. Licensed CC BY-SA 4.0. Source: <a href="https://commons.wikimedia.org/wiki/File:5700K_Color_Temperature_.jpg">commons.wikimedia.org</a></figcaption>
+            </figure>
+            <figure class="art-fig">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/75/Cold_color_temperature.JPG" alt="The same scene photographed with a cool white balance, giving every surface a strong blue cast." style="max-width: 220px;" />
+                <figcaption>Dawid Skalec, <em>Cold Color Temperature</em>, 2015. Licensed CC BY-SA 4.0. Source: <a href="https://commons.wikimedia.org/wiki/File:Cold_color_temperature.JPG">commons.wikimedia.org</a></figcaption>
+            </figure>
+        </div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 14px 0 10px 0;">Color temperature and mood travel together. A candlelit room or a golden hour photo feels warm, intimate, or nostalgic. An overcast day or a blue hour photo feels cool, calm, or somber. Indoor artificial lamps often push warm/orange; a shaded area on a sunny day often pushes cool/blue, which is why a photo taken partly in sun and partly in shade can look like it has two different color casts unless you correct it.</p>
+
+        <details>
+            <summary>Before you look: if you wanted a photo to feel calm and a little melancholy, would you choose warm or cool light? Decide your answer, then click to check.</summary>
+            <div class="ac-body">Cool light. Blue-leaning color temperature, like an overcast day or blue hour, generally reads as calm, quiet, or somber, while warm light tends to read as cozy or energetic instead.</div>
+        </details>
+
+        <div class="optima-widget ow-select">
+            <div class="widget-kicker">&#9889; TRY IT &middot; READ THE LIGHT</div>
+            <div class="widget-question">Read each scene, decide what is happening with the light, then check your answer.</div>
+            <div class="widget-row" data-correct="over" data-hint="Think about what happens when too much light reaches the camera. Try again.">
+                <div class="widget-row-prompt">A photo taken facing direct midday sun comes out with a washed-out sky and no visible clouds.</div>
+                <div class="widget-options">
+                    <button data-choice="under">Underexposed</button>
+                    <button data-choice="over" data-fb="Right. Too much light reached the camera, so the bright sky lost its detail. This is overexposure.">Overexposed</button>
+                </div>
+            </div>
+            <div class="widget-row" data-correct="warm" data-hint="Think about which end of the color temperature scale this light source sits on. Try again.">
+                <div class="widget-row-prompt">A room lit only by a table lamp gives every object in the photo an orange tint.</div>
+                <div class="widget-options">
+                    <button data-choice="warm" data-fb="Right. Indoor lamps are a common source of warm, orange-leaning color temperature.">Warm light</button>
+                    <button data-choice="cool">Cool light</button>
+                </div>
+            </div>
+            <button class="widget-reset">Reset</button>
+        </div>
+    </div>
+
+    <!-- AI AWARENESS (factual) -->
+    <div class="callout c-warn">
+        <div class="ck">&#9888;&#65039; WORTH KNOWING &middot; AI IMAGE TOOLS</div>
+        <div class="cb">An AI image generator can produce an image described as "warm golden hour light" or "moody blue exposure" from a text prompt. It has not read an actual light meter, walked into an actual room, or decided how to protect shadow and highlight detail in a real scene. This week's project is graded on the exposure and color temperature decisions you make with your own camera.</div>
+    </div>
+
+    <!-- VOCABULARY -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128221; VOCABULARY</div>
+        <div class="vocab-grid">
+            <div class="vocab-card"><strong>Natural Light</strong>Light from the sun or sky.</div>
+            <div class="vocab-card"><strong>Artificial Light</strong>Light from a human-made source, such as a lamp or flash.</div>
+            <div class="vocab-card"><strong>Exposure</strong>The amount of light that reaches the camera.</div>
+            <div class="vocab-card"><strong>Underexposed</strong>Too little light reached the camera; the image looks too dark.</div>
+            <div class="vocab-card"><strong>Overexposed</strong>Too much light reached the camera; the image looks too bright, washed out.</div>
+            <div class="vocab-card"><strong>Shadow Detail</strong>Visible texture and form in the darkest parts of an image.</div>
+            <div class="vocab-card"><strong>Highlight Detail</strong>Visible texture and form in the brightest parts of an image.</div>
+            <div class="vocab-card"><strong>Color Temperature</strong>The warm-to-cool range of a light source's color.</div>
+        </div>
+    </div>
+
+    <!-- WHAT YOU'LL DO NEXT -->
+    <div style="background: #FFFFFF; border-top: 3px solid #0E1C42; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 16px;">&#10145;&#65039; WHAT YOU'LL DO NEXT (IN CANVAS)</div>
+        <div class="next-item"><div class="num learn">1</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Exposure Sort</strong> &middot; Week 3</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Sort a set of sample photos as underexposed, balanced, or overexposed. Completion grade.</div></div></div>
+        <div class="next-item"><div class="num learn">2</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Discussion: Warm or Cool</strong> &middot; Week 3</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Name a mood and the color temperature that creates it, with a specific example, and respond to a classmate.</div></div></div>
+        <div class="next-item"><div class="num learn">3</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Quiz: Capturing the Light</strong> &middot; Week 3</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">8 questions, auto-graded in Canvas.</div></div></div>
+        <div class="next-item"><div class="num create">4</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Art Lesson &amp; Reflection</strong> &middot; Week 3</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Photograph the same subject in natural and artificial light and reflect on exposure and mood. Your graded artwork this week.</div></div></div>
+    </div>
+
+    <!-- WRAP-UP -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128170; THE BIG IDEA</div>
+        <p style="font-size: 18px; color: #1a2340; line-height: 1.65; margin: 0;">Light is the raw material of every photograph, and it has three dials you can learn to read: source, exposure, and temperature. A photographer who watches all three before pressing the shutter is not relying on luck. They are deciding, in advance, what mood the finished photo will carry.</p>
+    </div>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div style="background: #0E1C42; border-top: 3px solid #55C8E8; padding: 18px 34px; text-align: center;">
+    <div style="font-size: 18px; color: #ffffff; margin-bottom: 6px;"><span style="color: #55c8e8;">Optima Academy Online</span> &middot; DIGITAL ART IMAGING &middot; Quarter 2 &middot; Student Lesson Page</div>
+    <div style="font-size: 13px; color: rgba(255,255,255,0.65); margin-bottom: 4px;">Module 2 &middot; Week 3 &middot; Capturing the Light</div>
+    <div style="font-size: 12px; color: rgba(255,255,255,0.4);">&copy; Optima Academy Online &middot; An Education Experience Company. Diagrams are original CSS/SVG concept illustrations. Photographs are public domain or openly licensed; see each caption for source.</div>
+</div>
+
+</div>
+
+<!-- ===== WIDGET RUNTIME — from optima-lesson-format template. One delegated listener drives every engine. ===== -->
+<script>
+(function () {
+  document.addEventListener('click', function (e) {
+    var reset = e.target.closest('.widget-reset');
+    if (reset) {
+      var w = reset.closest('.optima-widget');
+      w.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      w.querySelectorAll('.widget-feedback').forEach(function (f) { f.classList.remove('show'); f.textContent = ''; });
+      w.querySelectorAll('.row-feedback').forEach(function (f) { f.remove(); });
+      return;
+    }
+    var rBtn = e.target.closest('.ow-reflect .widget-options button');
+    if (rBtn) {
+      var rw = rBtn.closest('.optima-widget');
+      rw.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected'); });
+      rBtn.classList.add('selected');
+      var fb = rw.querySelector('.widget-feedback');
+      fb.textContent = rBtn.dataset.response || '';
+      fb.classList.add('show');
+      return;
+    }
+    var sBtn = e.target.closest('.ow-select .widget-row .widget-options button');
+    if (sBtn) {
+      var row = sBtn.closest('.widget-row');
+      var correct = row.dataset.correct;
+      row.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      var right = sBtn.dataset.choice === correct;
+      sBtn.classList.add(right ? 'correct' : 'incorrect');
+      var text = right ? (sBtn.dataset.fb || row.dataset.fb || 'Right.') : (sBtn.dataset.fb || row.dataset.hint || 'Not quite. Try again.');
+      var rf = row.querySelector('.row-feedback') || row.appendChild(document.createElement('div'));
+      rf.className = 'row-feedback ' + (right ? 'correct' : 'incorrect');
+      rf.textContent = text;
+      return;
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Digital Art Imaging &mdash; Week 2: Elements of Art &amp; Principles of Design</title>
+<style>
+    body { margin: 0; padding: 0; font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #f4f6fa; }
+    .canvas-frame { max-width: 1100px; margin: 0 auto; background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+
+    /* ===== WIDGET CSS — from optima-lesson-format/assets/lesson-interactive-template.html (byte-consistent) ===== */
+    .optima-widget { background: linear-gradient(135deg, #E8F6FB 0%, #F4F9FC 100%); border: 1px solid #C5DCE5; border-left: 5px solid #2196D0; border-radius: 8px; padding: 18px 22px; margin: 18px 0; }
+    .widget-kicker { font-size: 11px; color: #1B6A94; margin-bottom: 10px; letter-spacing: 0.4px; }
+    .widget-question { font-size: 17px; color: #0E1C42; margin-bottom: 14px; line-height: 1.55; }
+    .widget-row { background: #FFFFFF; border: 1px solid #D0D9E8; border-radius: 6px; padding: 12px 14px; margin-bottom: 10px; }
+    .widget-row-prompt { font-size: 15px; color: #0E1C42; margin-bottom: 8px; line-height: 1.5; font-style: italic; }
+    .widget-options { display: flex; flex-wrap: wrap; gap: 8px; }
+    .widget-options button { background: #FFFFFF; border: 1.5px solid #D0D9E8; border-radius: 8px; padding: 8px 14px; font-size: 14px; color: #0E1C42; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+    .widget-options button:hover { background: #F4F6FA; border-color: #55C8E8; }
+    .widget-options button.selected { background: #0E1C42; color: #FFFFFF; border-color: #0E1C42; }
+    .widget-options button.correct { background: #D8F0DD; border-color: #2A9D5C; color: #1A6B3D; }
+    .widget-options button.incorrect { background: #FDECEC; border-color: #C0392B; color: #8A1F16; }
+    .widget-feedback { background: #FFFFFF; border-left: 3px solid #C7922C; padding: 10px 14px; font-size: 15px; color: #1a2340; line-height: 1.55; margin: 10px 0; display: none; border-radius: 4px; }
+    .widget-feedback.show { display: block; }
+    .row-feedback { padding: 8px 12px; margin-top: 8px; font-size: 14px; border-radius: 4px; line-height: 1.5; }
+    .row-feedback.correct { background: #D8F0DD; border-left: 3px solid #2A9D5C; color: #1A6B3D; }
+    .row-feedback.incorrect { background: #FDECEC; border-left: 3px solid #C0392B; color: #8A1F16; }
+    .widget-reset { background: transparent; border: 1px solid #C7922C; color: #C7922C; border-radius: 6px; padding: 6px 12px; font-size: 12px; cursor: pointer; font-family: inherit; margin-top: 6px; }
+    .widget-reset:hover { background: #FDF3E3; }
+
+    /* ===== Art-course components (layered on the brand; teal/coral are activity accents only) ===== */
+    .art-fig { margin: 14px 0; text-align: center; }
+    .art-fig img { max-width: 100%; height: auto; border-radius: 6px; border: 1px solid #D0D9E8; }
+    .art-fig figcaption { font-size: 13px; color: #666; margin-top: 8px; line-height: 1.5; }
+    .art-fig figcaption a { color: #1B6A94; }
+    .el-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin: 16px 0; }
+    .el-card { border: 1px solid #D0D9E8; border-radius: 8px; overflow: hidden; }
+    .el-demo { height: 80px; display: flex; align-items: center; justify-content: center; }
+    .el-text { padding: 10px 13px; }
+    .el-text strong { color: #167567; display: block; margin-bottom: 3px; font-size: 16px; }
+    .el-text span { font-size: 14px; color: #1a2340; }
+    .callout { border-radius: 6px; padding: 14px 20px; margin: 16px 0; }
+    .callout .ck { font-size: 11px; margin-bottom: 8px; letter-spacing: 0.5px; }
+    .callout .cb { font-size: 16px; line-height: 1.6; color: #0E1C42; }
+    .c-help { background: #E8F6FB; border-left: 5px solid #2196D0; border-top: 3px solid #55C8E8; }
+    .c-help .ck { color: #1B6A94; }
+    .c-warn { background: #FDECEC; border-left: 5px solid #C0392B; border-top: 3px solid #E74C3C; }
+    .c-warn .ck { color: #8A1F16; }
+    .c-art { background: #E6F4F1; border-left: 5px solid #1B8A7A; }
+    .c-art .ck { color: #167567; }
+    .next-item { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+    .next-item .num { min-width: 30px; height: 30px; border-radius: 50%; color: #fff; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .num.learn { background: #1B8A7A; }
+    .num.create { background: #D9583B; }
+    .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+    .vocab-card { background: #EEF1F8; border-radius: 6px; padding: 10px 13px; font-size: 14px; color: #1a2340; }
+    .vocab-card strong { color: #0E1C42; display: block; margin-bottom: 2px; }
+    details { background: #FFFFFF; border: 1px solid #D0D9E8; border-left: 4px solid #C7922C; border-radius: 6px; padding: 12px 18px; margin: 14px 0; }
+    details summary { font-size: 16px; color: #0E1C42; cursor: pointer; }
+    details .ac-body { font-size: 16px; color: #1a2340; margin-top: 10px; padding-top: 10px; border-top: 1px solid #EEF1F8; line-height: 1.6; }
+    /* Pixel vs. smooth concept visual */
+    .pix-wrap { display: flex; flex-wrap: wrap; gap: 22px; align-items: center; justify-content: center; margin: 16px 0 6px; }
+    .pix-panel { text-align: center; }
+    .pix-label { font-size: 12px; color: #6b7a99; margin-top: 8px; }
+    .rvv { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+    .rvv > div { border: 1px solid #D0D9E8; border-radius: 8px; padding: 14px 16px; }
+    .rvv h4 { margin: 0 0 6px 0; font-size: 16px; }
+    .rvv p { margin: 0; font-size: 14px; color: #1a2340; line-height: 1.55; }
+    @media (max-width: 560px){ .rvv { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="canvas-frame">
+
+<!-- ===== HEADER ===== -->
+<div style="background: #0E1C42; border-bottom: 5px solid #55C8E8; padding: 22px 34px;">
+    <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 10px;">
+        <div style="width: 52px; height: 52px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><img src="https://raw.githubusercontent.com/optimaondemand/optima-assets/eeb0b335630058906d52f478028361d352253a93/images/Optima%20Final%20Circle%20-%20Owl%20Only.png" alt="Optima Academy" style="width: 50px; height: 40px; object-fit: contain;" /></div>
+        <div>
+            <div style="font-size: 28px; color: #ffffff; line-height: 1.2;">Optima Academy Online</div>
+            <div style="font-size: 12px; color: #55c8e8;">An Education Experience Company</div>
+        </div>
+    </div>
+    <div style="font-size: 36px; color: #ffffff; margin-bottom: 6px;">DIGITAL ART IMAGING</div>
+</div>
+
+<!-- ===== METADATA STRIP ===== -->
+<div style="background: #FFFFFF; border-bottom: 2px solid #D0D9E8; display: flex; flex-wrap: wrap;">
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Quarter / Week</div>
+        <div style="font-size: 17px; color: #0e1c42;">Q1 &middot; Module 1, Week 2</div>
+        <div style="font-size: 12px; color: #666;">Module 1: Digital Imaging Foundations</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Focus</div>
+        <div style="font-size: 17px; color: #0e1c42;">Elements of Art &amp; Principles of Design</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">This Week's Project</div>
+        <div style="font-size: 17px; color: #0e1c42; font-style: italic;">Art Lesson &amp; Reflection</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Software</div>
+        <div style="font-size: 16px; color: #0e1c42;">Pixlr E (free, browser)</div>
+    </div>
+</div>
+
+<!-- ===== BODY WRAPPER ===== -->
+<div style="padding: 24px 34px;">
+
+    <!-- Lavender title strip -->
+    <div style="background: #EEF1F8; border-left: 5px solid #0E1C42; border-radius: 7px; padding: 18px 22px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #0e1c42; margin-bottom: 6px;">MODULE 1 &middot; WEEK 2</div>
+        <div style="font-size: 22px; color: #0e1c42; margin-bottom: 4px;">Elements of Art &amp; Principles of Design</div>
+        <div style="font-size: 16px; color: #666;">Lesson</div>
+    </div>
+
+    <!-- Essential Question -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128214; ESSENTIAL QUESTION</div>
+        <div style="font-size: 20px; color: #0e1c42; font-style: italic; margin-bottom: 10px;">How can the Elements of Art and Principles of Design be found and captured in the world around us?</div>
+        <div style="font-size: 18px; color: #1a2340; line-height: 1.65;">Now that you know how to keep your digital art original, it is time to explore what makes artwork look and feel complete. Every piece of art, digital or traditional, is built using two main ideas: the Elements of Art and the Principles of Design. This week you learn both, and you start applying them on purpose in your own compositions.</div>
+    </div>
+
+    <!-- PART 1 · LOOK FIRST -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128064; PART 1 &middot; LOOK FIRST</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;"><strong>Elements of Art</strong> are the basic visual ingredients artists use to build an artwork: think of them as the tools you use, like shape, color, and line. <strong>Principles of Design</strong> are the rules or guidelines for using those tools well. They help artists organize the elements so a piece feels balanced, interesting, and complete. Look at the same shape below built two different ways: as scattered elements, and then arranged using a principle of design (balance).</p>
+
+        <div class="pix-wrap">
+            <div class="pix-panel">
+                <svg width="180" height="150" viewBox="0 0 180 150" role="img" aria-label="Three shapes of different sizes scattered without any arrangement.">
+                    <rect width="180" height="150" fill="#EEF1F8"/>
+                    <circle cx="35" cy="30" r="14" fill="#1B8A7A"/>
+                    <rect x="120" y="95" width="34" height="34" fill="#D9583B"/>
+                    <polygon points="90,20 105,55 75,55" fill="#0E1C42"/>
+                </svg>
+                <div class="pix-label">Elements alone: shapes with no plan</div>
+            </div>
+            <div style="font-size: 26px; color: #6b7a99;">&#8594;</div>
+            <div class="pix-panel">
+                <svg width="180" height="150" viewBox="0 0 180 150" role="img" aria-label="The same three shapes arranged with symmetrical balance around a center line.">
+                    <rect width="180" height="150" fill="#EEF1F8"/>
+                    <line x1="90" y1="10" x2="90" y2="140" stroke="#D0D9E8" stroke-width="1" stroke-dasharray="4,4"/>
+                    <circle cx="55" cy="75" r="16" fill="#1B8A7A"/>
+                    <circle cx="125" cy="75" r="16" fill="#1B8A7A"/>
+                    <polygon points="90,30 105,60 75,60" fill="#0E1C42"/>
+                    <polygon points="90,120 105,90 75,90" fill="#0E1C42"/>
+                </svg>
+                <div class="pix-label">Elements + a principle (balance): arranged on purpose</div>
+            </div>
+        </div>
+        <p style="font-size: 14px; color: #6b7a99; margin: 0;">Concept diagram. Same visual ingredients, different result. The difference is a principle of design, in this case symmetrical balance.</p>
+
+        <div class="optima-widget ow-reflect">
+            <div class="widget-kicker">&#128173; QUICK CHECK-IN &middot; NO WRONG ANSWER</div>
+            <div class="widget-question">Look at your phone's home screen or your desktop right now. What is one Element of Art or Principle of Design you can spot?</div>
+            <div class="widget-options">
+                <button data-response="App icons are shapes, usually rounded squares or circles. Grouping them by color or use is a form of pattern.">Shape or pattern in the icons</button>
+                <button data-response="Wallpaper images often use color to set a mood: warm colors feel energetic, cool colors feel calm. That is a deliberate design choice.">Color in the wallpaper</button>
+                <button data-response="A dock or a row of icons lined up evenly is balance. Designers space icons carefully so the screen does not feel crowded on one side.">The way icons are spaced or balanced</button>
+                <button data-response="A single bright notification badge against a plain background is emphasis: it is built to be the first thing your eye finds.">One thing that stands out (emphasis)</button>
+            </div>
+            <div class="widget-feedback"></div>
+            <button class="widget-reset">Reset</button>
+        </div>
+    </div>
+
+    <!-- PART 2 · THE ELEMENTS OF ART -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128218; PART 2 &middot; THE ELEMENTS OF ART</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 14px 0;">Every piece of digital art, whether a photo edit, a game character, or an abstract composition, is built from these seven elements.</p>
+
+        <div class="el-grid">
+            <div class="el-card">
+                <div class="el-demo" style="background: #F4F6FA;"><svg width="100" height="60" viewBox="0 0 100 60"><path d="M10 50 Q 40 10, 90 30" stroke="#0E1C42" stroke-width="3" fill="none"/></svg></div>
+                <div class="el-text"><strong>Line</strong><span>A path created by a moving point. Lines show direction, create movement, or define shapes.</span></div>
+            </div>
+            <div class="el-card">
+                <div class="el-demo" style="background: #F4F6FA;"><svg width="100" height="60" viewBox="0 0 100 60"><polygon points="30,10 70,10 90,50 10,50" fill="#1B8A7A"/></svg></div>
+                <div class="el-text"><strong>Shape</strong><span>A flat, enclosed area made when lines connect. Shapes can be geometric or organic.</span></div>
+            </div>
+            <div class="el-card">
+                <div class="el-demo" style="background: #F4F6FA;"><svg width="100" height="60" viewBox="0 0 100 60"><rect x="15" y="15" width="70" height="30" fill="#D9583B"/></svg></div>
+                <div class="el-text"><strong>Color</strong><span>The visual quality produced by light reflection. Color has hue, value, and intensity.</span></div>
+            </div>
+            <div class="el-card">
+                <div class="el-demo" style="background: #F4F6FA;"><svg width="100" height="60" viewBox="0 0 100 60"><rect x="15" y="20" width="70" height="20" fill="#0E1C42"/><rect x="15" y="20" width="70" height="20" fill="url(#g2)"/><defs><linearGradient id="g2"><stop offset="0" stop-color="#0E1C42"/><stop offset="1" stop-color="#B9C3DD"/></linearGradient></defs></svg></div>
+                <div class="el-text"><strong>Value</strong><span>How light or dark something appears. Value creates contrast, depth, and mood.</span></div>
+            </div>
+            <div class="el-card">
+                <div class="el-demo" style="background: #F4F6FA;"><svg width="100" height="60" viewBox="0 0 100 60"><polygon points="30,45 30,20 55,10 55,35" fill="#1B8A7A"/><polygon points="30,20 55,10 80,20 55,30" fill="#167567"/><polygon points="55,35 55,10 80,20 80,45" fill="#0f4d43"/></svg></div>
+                <div class="el-text"><strong>Form</strong><span>A 3D version of a shape with height, width, and depth. Form can be real or implied by shading.</span></div>
+            </div>
+            <div class="el-card">
+                <div class="el-demo" style="background: #F4F6FA;"><svg width="100" height="60" viewBox="0 0 100 60"><rect width="100" height="60" fill="#EEF1F8"/><g stroke="#0E1C42" stroke-width="1"><line x1="0" y1="10" x2="100" y2="10"/><line x1="0" y1="20" x2="100" y2="20"/><line x1="0" y1="30" x2="100" y2="30"/><line x1="0" y1="40" x2="100" y2="40"/><line x1="0" y1="50" x2="100" y2="50"/></g></svg></div>
+                <div class="el-text"><strong>Texture</strong><span>How something looks or feels. Texture can be actual (touchable) or visual (only looks rough or smooth).</span></div>
+            </div>
+            <div class="el-card">
+                <div class="el-demo" style="background: #F4F6FA;"><svg width="100" height="60" viewBox="0 0 100 60"><circle cx="25" cy="30" r="8" fill="#D9583B"/><circle cx="75" cy="30" r="16" fill="#1B8A7A"/></svg></div>
+                <div class="el-text"><strong>Space</strong><span>The area around, between, and within objects. Space creates foreground, middle ground, and background.</span></div>
+            </div>
+        </div>
+
+        <div class="callout c-help">
+            <div class="ck">&#128161; WHY THIS MATTERS</div>
+            <div class="cb">The Elements of Art and Principles of Design are the foundation of all visual art. They help you communicate ideas clearly, build visual balance, develop strong compositions, and experiment with confidence. Once you understand the basics, you can break the "rules" on purpose, which is very different from breaking them by accident.</div>
+        </div>
+    </div>
+
+    <!-- PART 3 · THE PRINCIPLES OF DESIGN -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128269; PART 3 &middot; THE PRINCIPLES OF DESIGN</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">If the Elements are your ingredients, the Principles are your recipe: the guidelines for arranging elements so a composition works.</p>
+
+        <ul style="font-size: 17px; color: #1a2340; line-height: 1.75; margin: 0 0 12px 0; padding-left: 22px;">
+            <li><strong>Balance</strong>: the distribution of visual weight. Balance can be symmetrical, asymmetrical, or radial.</li>
+            <li><strong>Emphasis</strong>: the area that stands out or draws attention first.</li>
+            <li><strong>Movement</strong>: the path the viewer's eye takes through the artwork.</li>
+            <li><strong>Pattern</strong>: the repeated use of shapes, colors, or lines to create a consistent design.</li>
+            <li><strong>Repetition</strong>: reusing visual elements for unity and rhythm.</li>
+            <li><strong>Rhythm</strong>: a visual beat that makes an artwork feel active and flowing, created by repeating elements with variation.</li>
+            <li><strong>Proportion</strong>: the size relationship between parts of an artwork.</li>
+            <li><strong>Variety</strong>: using different elements together to create interest and avoid monotony.</li>
+            <li><strong>Unity</strong>: the sense that all parts of the artwork belong together.</li>
+        </ul>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 14px 0 8px 0;">In digital composition, these principles are decisions you make in Pixlr E, not accidents. Here is the same idea applied two ways.</p>
+        <div class="rvv">
+            <div style="border-top: 3px solid #1B8A7A;">
+                <h4 style="color:#167567;">Elements of Art</h4>
+                <p>What you use to build the artwork: line, shape, color, value, form, texture, space. These are your raw materials, placed with the Shape and Brush tools, color picker, and layers.</p>
+            </div>
+            <div style="border-top: 3px solid #D9583B;">
+                <h4 style="color:#c0472e;">Principles of Design</h4>
+                <p>How you arrange those materials: balance, emphasis, movement, pattern, repetition, rhythm, proportion, variety, unity. These are choices about layout, size, and repetition inside your canvas.</p>
+            </div>
+        </div>
+
+        <details>
+            <summary>Before you reveal: in your notebook, sketch or describe a simple composition (three shapes) that uses emphasis to make one shape the clear focal point. Then click to compare your idea.</summary>
+            <div class="ac-body">One way to create emphasis: make the focal shape larger, give it the highest-contrast color against the background, and place the other two shapes smaller and duller so the eye lands on the focal shape first. There is no single correct layout: the test is whether a viewer's eye goes to your intended shape first.</div>
+        </details>
+
+        <div class="optima-widget ow-select">
+            <div class="widget-kicker">&#9889; TRY IT &middot; ELEMENT OR PRINCIPLE?</div>
+            <div class="widget-question">Read each term, decide if it is an Element of Art or a Principle of Design, then check your answer.</div>
+            <div class="widget-row" data-correct="principle" data-hint="Think about whether this is a raw ingredient or a rule for arranging ingredients. Try again.">
+                <div class="widget-row-prompt">Rhythm: a visual beat created by repeating elements with variation.</div>
+                <div class="widget-options">
+                    <button data-choice="element">Element of Art</button>
+                    <button data-choice="principle" data-fb="Correct. Rhythm is a Principle of Design: it describes how repeated elements are arranged to create a visual beat.">Principle of Design</button>
+                </div>
+            </div>
+            <div class="widget-row" data-correct="element" data-hint="Think about whether this is a raw ingredient or a rule for arranging ingredients. Try again.">
+                <div class="widget-row-prompt">Texture: how something looks or feels, actual or visual.</div>
+                <div class="widget-options">
+                    <button data-choice="element" data-fb="Correct. Texture is one of the seven Elements of Art: a basic visual ingredient you place into a composition.">Element of Art</button>
+                    <button data-choice="principle">Principle of Design</button>
+                </div>
+            </div>
+            <div class="widget-row" data-correct="principle" data-hint="Think about whether this is a raw ingredient or a rule for arranging ingredients. Try again.">
+                <div class="widget-row-prompt">Emphasis: the area of an artwork that draws the viewer's attention first.</div>
+                <div class="widget-options">
+                    <button data-choice="element">Element of Art</button>
+                    <button data-choice="principle" data-fb="Correct. Emphasis is a Principle of Design: a guideline for directing the viewer's eye.">Principle of Design</button>
+                </div>
+            </div>
+            <button class="widget-reset">Reset</button>
+        </div>
+    </div>
+
+    <!-- STUDIO NOTE -->
+    <div class="callout c-art">
+        <div class="ck">&#127912; APPLYING THIS IN PIXLR E</div>
+        <div class="cb">In Pixlr E, each shape or brush stroke you add becomes its own <strong>layer</strong>. Use the Layers panel to check your composition for balance: hide one layer at a time and ask whether the piece still feels complete. Use the <strong>Move tool</strong> to nudge shapes until one element clearly leads the eye (emphasis), and duplicate a shape a few times at different sizes to build rhythm or pattern.</div>
+    </div>
+
+    <!-- AI AWARENESS (factual) -->
+    <div class="callout c-warn">
+        <div class="ck">&#9888;&#65039; WORTH KNOWING &middot; AI AND COMPOSITION</div>
+        <div class="cb">An AI image generator can produce a finished-looking picture, but it cannot show you why a composition works. Naming which Elements and Principles are present in an image, and deciding how to arrange your own, is a skill you build by practicing it yourself. That is what this week's project checks.</div>
+    </div>
+
+    <!-- VOCABULARY -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128221; VOCABULARY</div>
+        <div class="vocab-grid">
+            <div class="vocab-card"><strong>Elements of Art</strong>The basic visual ingredients artists use: line, shape, color, value, form, texture, space.</div>
+            <div class="vocab-card"><strong>Principles of Design</strong>The guidelines for arranging elements: balance, emphasis, movement, pattern, repetition, rhythm, proportion, variety, unity.</div>
+            <div class="vocab-card"><strong>Balance</strong>The distribution of visual weight; symmetrical, asymmetrical, or radial.</div>
+            <div class="vocab-card"><strong>Emphasis</strong>The area of an artwork that draws the viewer's eye first.</div>
+            <div class="vocab-card"><strong>Movement</strong>The path the viewer's eye takes through an artwork.</div>
+            <div class="vocab-card"><strong>Pattern &amp; Repetition</strong>Reusing shapes, colors, or lines for consistency and unity.</div>
+            <div class="vocab-card"><strong>Rhythm</strong>A visual beat made by repeating elements with variation.</div>
+            <div class="vocab-card"><strong>Unity</strong>The sense that all parts of an artwork belong together.</div>
+        </div>
+    </div>
+
+    <!-- WHAT YOU'LL DO NEXT -->
+    <div style="background: #FFFFFF; border-top: 3px solid #0E1C42; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 16px;">&#10145;&#65039; WHAT YOU'LL DO NEXT (IN CANVAS)</div>
+        <div class="next-item"><div class="num learn">1</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Discussion: Spot the Principle</strong> &middot; Week 2</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Find one Principle of Design in an image of your choice and explain it, then respond to a classmate.</div></div></div>
+        <div class="next-item"><div class="num learn">2</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Quiz: Elements &amp; Principles</strong> &middot; Week 2</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">8 questions, auto-graded in Canvas.</div></div></div>
+        <div class="next-item"><div class="num create">3</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Project: Art Lesson &amp; Reflection</strong> &middot; Week 2</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Build a digital composition in Pixlr E that uses at least four Elements of Art and two Principles of Design, then write a short reflection naming your choices. Your graded artwork this week.</div></div></div>
+    </div>
+
+    <!-- WRAP-UP -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128170; THE BIG IDEA</div>
+        <p style="font-size: 18px; color: #1a2340; line-height: 1.65; margin: 0;">The Elements of Art are what you use to build digital art. The Principles of Design are how you arrange those elements to make your work visually successful. Once you can name both in someone else's work, you can start making the same decisions on purpose in your own.</p>
+    </div>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div style="background: #0E1C42; border-top: 3px solid #55C8E8; padding: 18px 34px; text-align: center;">
+    <div style="font-size: 18px; color: #ffffff; margin-bottom: 6px;"><span style="color: #55c8e8;">Optima Academy Online</span> &middot; DIGITAL ART IMAGING &middot; Quarter 1 &middot; Student Lesson Page</div>
+    <div style="font-size: 13px; color: rgba(255,255,255,0.65); margin-bottom: 4px;">Module 1 &middot; Week 2 &middot; Elements of Art &amp; Principles of Design</div>
+    <div style="font-size: 12px; color: rgba(255,255,255,0.4);">&copy; Optima Academy Online &middot; An Education Experience Company. Concept diagrams built with CSS/SVG; no external artwork used.</div>
+</div>
+
+</div>
+
+<!-- ===== WIDGET RUNTIME — from optima-lesson-format template. One delegated listener drives every engine. ===== -->
+<script>
+(function () {
+  document.addEventListener('click', function (e) {
+    var reset = e.target.closest('.widget-reset');
+    if (reset) {
+      var w = reset.closest('.optima-widget');
+      w.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      w.querySelectorAll('.widget-feedback').forEach(function (f) { f.classList.remove('show'); f.textContent = ''; });
+      w.querySelectorAll('.row-feedback').forEach(function (f) { f.remove(); });
+      return;
+    }
+    var rBtn = e.target.closest('.ow-reflect .widget-options button');
+    if (rBtn) {
+      var rw = rBtn.closest('.optima-widget');
+      rw.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected'); });
+      rBtn.classList.add('selected');
+      var fb = rw.querySelector('.widget-feedback');
+      fb.textContent = rBtn.dataset.response || '';
+      fb.classList.add('show');
+      return;
+    }
+    var sBtn = e.target.closest('.ow-select .widget-row .widget-options button');
+    if (sBtn) {
+      var row = sBtn.closest('.widget-row');
+      var correct = row.dataset.correct;
+      row.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      var right = sBtn.dataset.choice === correct;
+      sBtn.classList.add(right ? 'correct' : 'incorrect');
+      var text = right ? (sBtn.dataset.fb || row.dataset.fb || 'Right.') : (sBtn.dataset.fb || row.dataset.hint || 'Not quite. Try again.');
+      var rf = row.querySelector('.row-feedback') || row.appendChild(document.createElement('div'));
+      rf.className = 'row-feedback ' + (right ? 'correct' : 'incorrect');
+      rf.textContent = text;
+      return;
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

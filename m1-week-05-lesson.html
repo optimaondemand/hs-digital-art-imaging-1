@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Digital Art Imaging &mdash; Week 5: Photography, Line &amp; Space</title>
+<style>
+    body { margin: 0; padding: 0; font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #f4f6fa; }
+    .canvas-frame { max-width: 1100px; margin: 0 auto; background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+
+    /* ===== WIDGET CSS — from optima-lesson-format/assets/lesson-interactive-template.html (byte-consistent) ===== */
+    .optima-widget { background: linear-gradient(135deg, #E8F6FB 0%, #F4F9FC 100%); border: 1px solid #C5DCE5; border-left: 5px solid #2196D0; border-radius: 8px; padding: 18px 22px; margin: 18px 0; }
+    .widget-kicker { font-size: 11px; color: #1B6A94; margin-bottom: 10px; letter-spacing: 0.4px; }
+    .widget-question { font-size: 17px; color: #0E1C42; margin-bottom: 14px; line-height: 1.55; }
+    .widget-row { background: #FFFFFF; border: 1px solid #D0D9E8; border-radius: 6px; padding: 12px 14px; margin-bottom: 10px; }
+    .widget-row-prompt { font-size: 15px; color: #0E1C42; margin-bottom: 8px; line-height: 1.5; font-style: italic; }
+    .widget-options { display: flex; flex-wrap: wrap; gap: 8px; }
+    .widget-options button { background: #FFFFFF; border: 1.5px solid #D0D9E8; border-radius: 8px; padding: 8px 14px; font-size: 14px; color: #0E1C42; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+    .widget-options button:hover { background: #F4F6FA; border-color: #55C8E8; }
+    .widget-options button.selected { background: #0E1C42; color: #FFFFFF; border-color: #0E1C42; }
+    .widget-options button.correct { background: #D8F0DD; border-color: #2A9D5C; color: #1A6B3D; }
+    .widget-options button.incorrect { background: #FDECEC; border-color: #C0392B; color: #8A1F16; }
+    .widget-feedback { background: #FFFFFF; border-left: 3px solid #C7922C; padding: 10px 14px; font-size: 15px; color: #1a2340; line-height: 1.55; margin: 10px 0; display: none; border-radius: 4px; }
+    .widget-feedback.show { display: block; }
+    .row-feedback { padding: 8px 12px; margin-top: 8px; font-size: 14px; border-radius: 4px; line-height: 1.5; }
+    .row-feedback.correct { background: #D8F0DD; border-left: 3px solid #2A9D5C; color: #1A6B3D; }
+    .row-feedback.incorrect { background: #FDECEC; border-left: 3px solid #C0392B; color: #8A1F16; }
+    .widget-reset { background: transparent; border: 1px solid #C7922C; color: #C7922C; border-radius: 6px; padding: 6px 12px; font-size: 12px; cursor: pointer; font-family: inherit; margin-top: 6px; }
+    .widget-reset:hover { background: #FDF3E3; }
+
+    /* ===== Art-course components (layered on the brand; teal/coral are activity accents only) ===== */
+    .art-fig { margin: 14px 0; text-align: center; }
+    .art-fig img { max-width: 100%; height: auto; border-radius: 6px; border: 1px solid #D0D9E8; }
+    .art-fig figcaption { font-size: 13px; color: #666; margin-top: 8px; line-height: 1.5; }
+    .art-fig figcaption a { color: #1B6A94; }
+    .el-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin: 16px 0; }
+    .el-card { border: 1px solid #D0D9E8; border-radius: 8px; overflow: hidden; }
+    .el-demo { height: 80px; display: flex; align-items: center; justify-content: center; }
+    .el-text { padding: 10px 13px; }
+    .el-text strong { color: #167567; display: block; margin-bottom: 3px; font-size: 16px; }
+    .el-text span { font-size: 14px; color: #1a2340; }
+    .callout { border-radius: 6px; padding: 14px 20px; margin: 16px 0; }
+    .callout .ck { font-size: 11px; margin-bottom: 8px; letter-spacing: 0.5px; }
+    .callout .cb { font-size: 16px; line-height: 1.6; color: #0E1C42; }
+    .c-help { background: #E8F6FB; border-left: 5px solid #2196D0; border-top: 3px solid #55C8E8; }
+    .c-help .ck { color: #1B6A94; }
+    .c-warn { background: #FDECEC; border-left: 5px solid #C0392B; border-top: 3px solid #E74C3C; }
+    .c-warn .ck { color: #8A1F16; }
+    .c-art { background: #E6F4F1; border-left: 5px solid #1B8A7A; }
+    .c-art .ck { color: #167567; }
+    .next-item { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+    .next-item .num { min-width: 30px; height: 30px; border-radius: 50%; color: #fff; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .num.learn { background: #1B8A7A; }
+    .num.create { background: #D9583B; }
+    .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+    .vocab-card { background: #EEF1F8; border-radius: 6px; padding: 10px 13px; font-size: 14px; color: #1a2340; }
+    .vocab-card strong { color: #0E1C42; display: block; margin-bottom: 2px; }
+    details { background: #FFFFFF; border: 1px solid #D0D9E8; border-left: 4px solid #C7922C; border-radius: 6px; padding: 12px 18px; margin: 14px 0; }
+    details summary { font-size: 16px; color: #0E1C42; cursor: pointer; }
+    details .ac-body { font-size: 16px; color: #1a2340; margin-top: 10px; padding-top: 10px; border-top: 1px solid #EEF1F8; line-height: 1.6; }
+    /* Pixel vs. smooth concept visual */
+    .pix-wrap { display: flex; flex-wrap: wrap; gap: 22px; align-items: center; justify-content: center; margin: 16px 0 6px; }
+    .pix-panel { text-align: center; }
+    .pix-label { font-size: 12px; color: #6b7a99; margin-top: 8px; }
+    .rvv { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+    .rvv > div { border: 1px solid #D0D9E8; border-radius: 8px; padding: 14px 16px; }
+    .rvv h4 { margin: 0 0 6px 0; font-size: 16px; }
+    .rvv p { margin: 0; font-size: 14px; color: #1a2340; line-height: 1.55; }
+    @media (max-width: 560px){ .rvv { grid-template-columns: 1fr; } }
+    /* Line-type diagram grid (week 5 only, reuses el-grid pattern) */
+    .line-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin: 16px 0; }
+    .line-card { border: 1px solid #D0D9E8; border-radius: 8px; padding: 10px; text-align: center; background: #FAFBFD; }
+    .line-card .line-label { font-size: 13px; color: #167567; margin-top: 8px; }
+    /* Rule of thirds grid overlay */
+    .thirds-wrap { display: flex; justify-content: center; margin: 16px 0 6px; }
+    .thirds-photo { position: relative; display: inline-block; max-width: 340px; margin: 4px auto; }
+    .thirds-photo img { display: block; width: 100%; height: auto; border-radius: 6px; border: 1px solid #D0D9E8; }
+    .thirds-photo svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+</style>
+</head>
+<body>
+<div class="canvas-frame">
+
+<!-- ===== HEADER ===== -->
+<div style="background: #0E1C42; border-bottom: 5px solid #55C8E8; padding: 22px 34px;">
+    <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 10px;">
+        <div style="width: 52px; height: 52px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><img src="https://raw.githubusercontent.com/optimaondemand/optima-assets/eeb0b335630058906d52f478028361d352253a93/images/Optima%20Final%20Circle%20-%20Owl%20Only.png" alt="Optima Academy" style="width: 50px; height: 40px; object-fit: contain;" /></div>
+        <div>
+            <div style="font-size: 28px; color: #ffffff; line-height: 1.2;">Optima Academy Online</div>
+            <div style="font-size: 12px; color: #55c8e8;">An Education Experience Company</div>
+        </div>
+    </div>
+    <div style="font-size: 36px; color: #ffffff; margin-bottom: 6px;">DIGITAL ART IMAGING</div>
+</div>
+
+<!-- ===== METADATA STRIP ===== -->
+<div style="background: #FFFFFF; border-bottom: 2px solid #D0D9E8; display: flex; flex-wrap: wrap;">
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Quarter / Week</div>
+        <div style="font-size: 17px; color: #0e1c42;">Q1 &middot; Module 1, Week 5</div>
+        <div style="font-size: 12px; color: #666;">Module 1: Digital Imaging Foundations</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Focus</div>
+        <div style="font-size: 17px; color: #0e1c42;">Photography: Line &amp; Space</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">This Week's Project</div>
+        <div style="font-size: 17px; color: #0e1c42; font-style: italic;">Lines and Space in a Photograph</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Software</div>
+        <div style="font-size: 16px; color: #0e1c42;">Pixlr E (free, browser) + camera/phone</div>
+    </div>
+</div>
+
+<!-- ===== BODY WRAPPER ===== -->
+<div style="padding: 24px 34px;">
+
+    <!-- Lavender title strip -->
+    <div style="background: #EEF1F8; border-left: 5px solid #0E1C42; border-radius: 7px; padding: 18px 22px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #0e1c42; margin-bottom: 6px;">MODULE 1 &middot; WEEK 5</div>
+        <div style="font-size: 22px; color: #0e1c42; margin-bottom: 4px;">Photography: Line &amp; Space</div>
+        <div style="font-size: 16px; color: #666;">Lesson</div>
+    </div>
+
+    <!-- Essential Question -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128214; ESSENTIAL QUESTION</div>
+        <div style="font-size: 20px; color: #0e1c42; font-style: italic; margin-bottom: 10px;">How do photographers use line and space to guide a viewer's eye and turn a snapshot into a composition?</div>
+        <div style="font-size: 18px; color: #1a2340; line-height: 1.65;">A photograph is not just a record of what was in front of a camera. It is a set of choices about where lines fall and how space is divided. This week you start treating your camera the way you have been treating Pixlr E: as a tool for making deliberate compositional decisions.</div>
+    </div>
+
+    <!-- PART 1 · LOOK FIRST -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128064; PART 1 &middot; LOOK FIRST</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">A <strong>line</strong> is the simplest and most essential element of art: a mark that shows length and direction. Lines can guide your eye to a focal point, define shapes, or suggest movement, and they appear in photographs whether or not the photographer planned them. Look at the six kinds of line below.</p>
+
+        <div class="line-grid">
+            <div class="line-card">
+                <svg width="100" height="90" viewBox="0 0 100 90"><rect width="100" height="90" fill="#FAFBFD"/><line x1="30" y1="10" x2="30" y2="80" stroke="#1B8A7A" stroke-width="4"/><line x1="55" y1="10" x2="55" y2="80" stroke="#1B8A7A" stroke-width="4"/><line x1="75" y1="10" x2="75" y2="80" stroke="#1B8A7A" stroke-width="4"/></svg>
+                <div class="line-label">Vertical: tree trunks</div>
+            </div>
+            <div class="line-card">
+                <svg width="100" height="90" viewBox="0 0 100 90"><rect width="100" height="90" fill="#FAFBFD"/><line x1="10" y1="30" x2="90" y2="30" stroke="#1B8A7A" stroke-width="4"/><line x1="10" y1="50" x2="90" y2="50" stroke="#1B8A7A" stroke-width="4"/><line x1="10" y1="65" x2="90" y2="65" stroke="#1B8A7A" stroke-width="4"/></svg>
+                <div class="line-label">Horizontal: shoreline waves</div>
+            </div>
+            <div class="line-card">
+                <svg width="100" height="90" viewBox="0 0 100 90"><rect width="100" height="90" fill="#FAFBFD"/><line x1="15" y1="80" x2="85" y2="10" stroke="#1B8A7A" stroke-width="4"/><line x1="35" y1="80" x2="90" y2="35" stroke="#1B8A7A" stroke-width="4"/></svg>
+                <div class="line-label">Diagonal: tractor rows</div>
+            </div>
+            <div class="line-card">
+                <svg width="100" height="90" viewBox="0 0 100 90"><rect width="100" height="90" fill="#FAFBFD"/><path d="M15 70 Q 35 10, 55 50 T 90 30" stroke="#1B8A7A" stroke-width="4" fill="none"/></svg>
+                <div class="line-label">Curved: flowing motion</div>
+            </div>
+            <div class="line-card">
+                <svg width="100" height="90" viewBox="0 0 100 90"><rect width="100" height="90" fill="#FAFBFD"/><polyline points="10,75 30,20 50,75 70,20 90,75" stroke="#1B8A7A" stroke-width="4" fill="none"/></svg>
+                <div class="line-label">Zigzag: rooftops</div>
+            </div>
+            <div class="line-card">
+                <svg width="100" height="90" viewBox="0 0 100 90"><rect width="100" height="90" fill="#FAFBFD"/><path d="M50 45 m 0 0 a 5 5 0 1 1 0.1 0 M50 45 a 10 10 0 1 1 10 10 M50 45 a 18 18 0 1 1 -18 18 M50 45 a 28 28 0 1 1 28 -28" stroke="#1B8A7A" stroke-width="3" fill="none"/></svg>
+                <div class="line-label">Spiral: a winding staircase</div>
+            </div>
+        </div>
+        <p style="font-size: 14px; color: #6b7a99; margin: 0;">Concept diagrams. Every real photograph in this lesson uses at least one of these line types, whether the photographer noticed it or not.</p>
+
+        <div class="optima-widget ow-reflect">
+            <div class="widget-kicker">&#128173; QUICK CHECK-IN &middot; NO WRONG ANSWER</div>
+            <div class="widget-question">Look around the room you are in right now. What is the strongest line you can see, and what kind is it?</div>
+            <div class="widget-options">
+                <button data-response="Vertical lines, like doorframes, walls, or window edges, feel steady and formal. Photographers use them to make a scene feel calm or upright.">A vertical line (a wall, a doorframe)</button>
+                <button data-response="Horizontal lines, like a tabletop or a shelf, feel restful and stable. They often sit near the bottom or middle of a photo.">A horizontal line (a table edge, a shelf)</button>
+                <button data-response="Diagonal lines, like a staircase railing or a slanted shadow, feel energetic. They are one of the strongest tools for adding movement to a still photo.">A diagonal line (a railing, a shadow)</button>
+                <button data-response="Curved lines are rare indoors but powerful when you find them. They pull the eye slowly instead of directly.">A curved line (a lamp cord, a plant stem)</button>
+            </div>
+            <div class="widget-feedback"></div>
+            <button class="widget-reset">Reset</button>
+        </div>
+    </div>
+
+    <!-- PART 2 · UNSEEN LINES AND THE RULE OF THIRDS -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128218; PART 2 &middot; UNSEEN LINES AND THE RULE OF THIRDS</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Digital artists often use <strong>invisible lines</strong>: lines you cannot actually see but that still organize a composition. The best-known example is the <strong>rule of thirds</strong>. Instead of placing your subject dead center, imagine a grid of two vertical and two horizontal lines dividing the frame into nine equal parts. The four points where those lines cross are strong spots for your subject.</p>
+
+        <div class="thirds-wrap">
+            <svg width="280" height="200" viewBox="0 0 280 200" role="img" aria-label="A rule of thirds grid: two vertical and two horizontal lines dividing the frame into nine parts, with dots marking the four intersection points.">
+                <rect width="280" height="200" fill="#EEF1F8" stroke="#D0D9E8"/>
+                <line x1="93" y1="0" x2="93" y2="200" stroke="#0E1C42" stroke-width="1.5" stroke-dasharray="5,4"/>
+                <line x1="187" y1="0" x2="187" y2="200" stroke="#0E1C42" stroke-width="1.5" stroke-dasharray="5,4"/>
+                <line x1="0" y1="67" x2="280" y2="67" stroke="#0E1C42" stroke-width="1.5" stroke-dasharray="5,4"/>
+                <line x1="0" y1="133" x2="280" y2="133" stroke="#0E1C42" stroke-width="1.5" stroke-dasharray="5,4"/>
+                <circle cx="93" cy="67" r="6" fill="#D9583B"/>
+                <circle cx="187" cy="67" r="6" fill="#D9583B"/>
+                <circle cx="93" cy="133" r="6" fill="#D9583B"/>
+                <circle cx="187" cy="133" r="6" fill="#D9583B"/>
+            </svg>
+        </div>
+        <p style="font-size: 14px; color: #6b7a99; text-align: center; margin: 0 0 10px 0;">Concept diagram. The four coral dots mark the strongest points to place a subject.</p>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">A photographer using the rule of thirds might place a flamingo's head directly on one of these intersection points instead of in the middle of the frame. This one shift makes a composition feel more dynamic and intentional.</p>
+
+        <div class="thirds-wrap">
+            <div class="thirds-photo">
+                <img src="https://images.metmuseum.org/CRDImages/ph/original/DP240624.jpg" alt="Brig on the Water by Gustave Le Gray: a black-and-white seascape showing a single sailing ship positioned to one side of the frame, with a vast sky above and calm sea below." />
+                <svg viewBox="0 0 300 200" preserveAspectRatio="none" role="img" aria-label="Rule of thirds grid overlaid on the photograph.">
+                    <line x1="100" y1="0" x2="100" y2="200" stroke="#FFFFFF" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.85"/>
+                    <line x1="200" y1="0" x2="200" y2="200" stroke="#FFFFFF" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.85"/>
+                    <line x1="0" y1="67" x2="300" y2="67" stroke="#FFFFFF" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.85"/>
+                    <line x1="0" y1="133" x2="300" y2="133" stroke="#FFFFFF" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.85"/>
+                </svg>
+            </div>
+        </div>
+        <p style="font-size: 13px; color: #666; text-align: center; margin: 0 0 10px 0;">Gustave Le Gray (French, 1820&ndash;1884), <em>Brig on the Water</em>, 1856. Albumen silver print. The brig sits near a grid intersection rather than dead center. Metropolitan Museum of Art, public domain. Source: <a href="https://www.metmuseum.org/art/collection/search/261937">metmuseum.org</a></p>
+
+        <div class="callout c-help">
+            <div class="ck">&#128161; TRY IT ON YOUR PHONE</div>
+            <div class="cb">Most phone cameras can show this same grid on screen. Look in your camera app's settings for "Grid" and turn it on. Once it is visible, line up your subject with an intersection point instead of the center before you tap the shutter.</div>
+        </div>
+    </div>
+
+    <!-- PART 3 · SPACE, PERSPECTIVE, AND LEADING LINES -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128269; PART 3 &middot; SPACE, PERSPECTIVE, AND LEADING LINES</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">In art, <strong>space</strong> is not outer space. It is the area between and around objects, and artists use it to show distance, size, and depth, sometimes creating the illusion that you could step right into the photograph.</p>
+
+        <div class="rvv">
+            <div style="border-top: 3px solid #1B8A7A;">
+                <h4 style="color:#167567;">Positive space</h4>
+                <p>The main subject of the photograph: the part that draws the viewer's attention. An elephant filling most of the frame is the positive space.</p>
+            </div>
+            <div style="border-top: 3px solid #D9583B;">
+                <h4 style="color:#c0472e;">Negative space</h4>
+                <p>The area surrounding the subject. It does not have to be dark or empty; it can be any color or tone. Silhouetted branches against a plain white wall make the branches the positive space and the wall the negative space.</p>
+            </div>
+        </div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Look back at Le Gray's <em>Brig on the Water</em> in Part 2. The small ship is the positive space, the part your eye locks onto first. The huge, calm sky and sea around it are the negative space: empty of detail, but doing real work, since that emptiness is what makes the tiny ship feel so alone on the water.</p>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 14px 0 10px 0;">Photographers can also create the illusion of depth using <strong>one-point perspective</strong>, which makes a flat image feel three-dimensional. The tool that does most of the work is the <strong>leading line</strong>: a line that guides the viewer's eye, often into the distance. A path stretching away from the camera, its edges narrowing toward a single point, can make you feel like you could walk right into the picture.</p>
+
+        <div class="art-fig">
+            <svg width="280" height="180" viewBox="0 0 280 180" role="img" aria-label="A simple path made of two converging diagonal lines that appear to lead the eye toward a single vanishing point in the distance, demonstrating one-point perspective and leading lines.">
+                <rect width="280" height="180" fill="#EEF1F8"/>
+                <polygon points="0,180 110,90 170,90 280,180" fill="#D0D9E8"/>
+                <line x1="0" y1="180" x2="140" y2="88" stroke="#1B8A7A" stroke-width="4"/>
+                <line x1="280" y1="180" x2="140" y2="88" stroke="#1B8A7A" stroke-width="4"/>
+                <circle cx="140" cy="88" r="4" fill="#D9583B"/>
+            </svg>
+            <figcaption>Concept diagram: two leading lines (teal) converge toward a vanishing point (coral dot), pulling the eye into the distance.</figcaption>
+        </div>
+
+        <div class="optima-widget ow-select">
+            <div class="widget-kicker">&#9889; TRY IT &middot; READ THE PHOTOGRAPH</div>
+            <div class="widget-question">Read each situation, decide, then check your answer.</div>
+            <div class="widget-row" data-correct="depth" data-hint="Think about what a path narrowing into the distance does to the viewer's eye. Try again.">
+                <div class="widget-row-prompt">A photographer lines up a boardwalk so its edges converge toward a single point on the horizon. What is this leading line technique mainly used to create?</div>
+                <div class="widget-options">
+                    <button data-choice="symmetry">A sense of symmetry</button>
+                    <button data-choice="depth" data-fb="Correct. Converging leading lines create one-point perspective, which makes a flat photo feel three-dimensional.">A sense of depth</button>
+                    <button data-choice="color">A change in color</button>
+                </div>
+            </div>
+            <div class="widget-row" data-correct="wall" data-hint="Positive space is the subject. Ask what surrounds it instead.">
+                <div class="widget-row-prompt">In a photo of dark tree branches silhouetted against a plain white wall, which part is the negative space?</div>
+                <div class="widget-options">
+                    <button data-choice="branches">The branches</button>
+                    <button data-choice="wall" data-fb="Right. The branches are the positive space (the subject); the plain wall around them is the negative space.">The white wall</button>
+                </div>
+            </div>
+            <button class="widget-reset">Reset</button>
+        </div>
+    </div>
+
+    <!-- AI AWARENESS (factual) -->
+    <div class="callout c-warn">
+        <div class="ck">&#9888;&#65039; WORTH KNOWING &middot; AI AND COMPOSITION</div>
+        <div class="cb">Some phone cameras use AI to suggest a crop or straighten a horizon after you shoot. That can be a helpful check, but it cannot walk around your subject, notice a leading line, or decide where the rule-of-thirds point should land before you take the photo. Those decisions happen while you are framing the shot, and they are what this week's project grades.</div>
+    </div>
+
+    <!-- VOCABULARY -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128221; VOCABULARY</div>
+        <div class="vocab-grid">
+            <div class="vocab-card"><strong>Line</strong>A mark showing length and direction; the most basic element of art.</div>
+            <div class="vocab-card"><strong>Rule of Thirds</strong>Dividing a frame into nine equal parts with two vertical and two horizontal lines; subjects are placed near the intersections.</div>
+            <div class="vocab-card"><strong>Space</strong>The area between and around objects in an artwork.</div>
+            <div class="vocab-card"><strong>Positive Space</strong>The main subject of an artwork; what draws the viewer's attention.</div>
+            <div class="vocab-card"><strong>Negative Space</strong>The area surrounding the subject; can be any color or tone.</div>
+            <div class="vocab-card"><strong>One-Point Perspective</strong>A technique that creates the illusion of depth using lines that converge at a single point.</div>
+            <div class="vocab-card"><strong>Leading Line</strong>A line within a photograph that guides the viewer's eye toward a subject or into the distance.</div>
+            <div class="vocab-card"><strong>Composition</strong>How the parts of an artwork are arranged.</div>
+        </div>
+    </div>
+
+    <!-- WHAT YOU'LL DO NEXT -->
+    <div style="background: #FFFFFF; border-top: 3px solid #0E1C42; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 16px;">&#10145;&#65039; WHAT YOU'LL DO NEXT (IN CANVAS)</div>
+        <div class="next-item"><div class="num learn">1</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Discussion: Line and Space Scavenger Hunt</strong> &middot; Week 5</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Post a photo (or a description) of one strong line you found today and name its type, then reply to a classmate.</div></div></div>
+        <div class="next-item"><div class="num learn">2</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Quiz: Line and Space</strong> &middot; Week 5</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">8 questions, auto-graded in Canvas.</div></div></div>
+        <div class="next-item"><div class="num create">3</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Art Lesson &amp; Reflection: Lines and Space in a Photograph</strong> &middot; Week 5</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Shoot an original photo on your phone or camera that uses a leading line and clear positive/negative space, then write a short reflection. Your graded artwork this week.</div></div></div>
+    </div>
+
+    <!-- WRAP-UP -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128170; THE BIG IDEA</div>
+        <p style="font-size: 18px; color: #1a2340; line-height: 1.65; margin: 0;">A camera records everything in front of it, but a photographer decides what matters. Line and space are two of your most powerful decisions: where you let the eye travel, and what you leave empty so the subject can breathe. Every photo you take from here forward should answer the question, "where do I want the eye to go?"</p>
+    </div>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div style="background: #0E1C42; border-top: 3px solid #55C8E8; padding: 18px 34px; text-align: center;">
+    <div style="font-size: 18px; color: #ffffff; margin-bottom: 6px;"><span style="color: #55c8e8;">Optima Academy Online</span> &middot; DIGITAL ART IMAGING &middot; Quarter 1 &middot; Student Lesson Page</div>
+    <div style="font-size: 13px; color: rgba(255,255,255,0.65); margin-bottom: 4px;">Module 1 &middot; Week 5 &middot; Photography: Line &amp; Space</div>
+    <div style="font-size: 12px; color: rgba(255,255,255,0.4);">&copy; Optima Academy Online &middot; An Education Experience Company. Diagrams shown are original concept illustrations. The photograph shown is in the public domain; see caption for source.</div>
+</div>
+
+</div>
+
+<!-- ===== WIDGET RUNTIME — from optima-lesson-format template. One delegated listener drives every engine. ===== -->
+<script>
+(function () {
+  document.addEventListener('click', function (e) {
+    var reset = e.target.closest('.widget-reset');
+    if (reset) {
+      var w = reset.closest('.optima-widget');
+      w.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      w.querySelectorAll('.widget-feedback').forEach(function (f) { f.classList.remove('show'); f.textContent = ''; });
+      w.querySelectorAll('.row-feedback').forEach(function (f) { f.remove(); });
+      return;
+    }
+    var rBtn = e.target.closest('.ow-reflect .widget-options button');
+    if (rBtn) {
+      var rw = rBtn.closest('.optima-widget');
+      rw.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected'); });
+      rBtn.classList.add('selected');
+      var fb = rw.querySelector('.widget-feedback');
+      fb.textContent = rBtn.dataset.response || '';
+      fb.classList.add('show');
+      return;
+    }
+    var sBtn = e.target.closest('.ow-select .widget-row .widget-options button');
+    if (sBtn) {
+      var row = sBtn.closest('.widget-row');
+      var correct = row.dataset.correct;
+      row.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      var right = sBtn.dataset.choice === correct;
+      sBtn.classList.add(right ? 'correct' : 'incorrect');
+      var text = right ? (sBtn.dataset.fb || row.dataset.fb || 'Right.') : (sBtn.dataset.fb || row.dataset.hint || 'Not quite. Try again.');
+      var rf = row.querySelector('.row-feedback') || row.appendChild(document.createElement('div'));
+      rf.className = 'row-feedback ' + (right ? 'correct' : 'incorrect');
+      rf.textContent = text;
+      return;
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

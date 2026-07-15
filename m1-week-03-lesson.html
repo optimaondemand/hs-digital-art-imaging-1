@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Digital Art Imaging &mdash; Week 3: Shape &amp; Creating Digital Color</title>
+<style>
+    body { margin: 0; padding: 0; font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #f4f6fa; }
+    .canvas-frame { max-width: 1100px; margin: 0 auto; background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+
+    /* ===== WIDGET CSS — from optima-lesson-format/assets/lesson-interactive-template.html (byte-consistent) ===== */
+    .optima-widget { background: linear-gradient(135deg, #E8F6FB 0%, #F4F9FC 100%); border: 1px solid #C5DCE5; border-left: 5px solid #2196D0; border-radius: 8px; padding: 18px 22px; margin: 18px 0; }
+    .widget-kicker { font-size: 11px; color: #1B6A94; margin-bottom: 10px; letter-spacing: 0.4px; }
+    .widget-question { font-size: 17px; color: #0E1C42; margin-bottom: 14px; line-height: 1.55; }
+    .widget-row { background: #FFFFFF; border: 1px solid #D0D9E8; border-radius: 6px; padding: 12px 14px; margin-bottom: 10px; }
+    .widget-row-prompt { font-size: 15px; color: #0E1C42; margin-bottom: 8px; line-height: 1.5; font-style: italic; }
+    .widget-options { display: flex; flex-wrap: wrap; gap: 8px; }
+    .widget-options button { background: #FFFFFF; border: 1.5px solid #D0D9E8; border-radius: 8px; padding: 8px 14px; font-size: 14px; color: #0E1C42; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+    .widget-options button:hover { background: #F4F6FA; border-color: #55C8E8; }
+    .widget-options button.selected { background: #0E1C42; color: #FFFFFF; border-color: #0E1C42; }
+    .widget-options button.correct { background: #D8F0DD; border-color: #2A9D5C; color: #1A6B3D; }
+    .widget-options button.incorrect { background: #FDECEC; border-color: #C0392B; color: #8A1F16; }
+    .widget-feedback { background: #FFFFFF; border-left: 3px solid #C7922C; padding: 10px 14px; font-size: 15px; color: #1a2340; line-height: 1.55; margin: 10px 0; display: none; border-radius: 4px; }
+    .widget-feedback.show { display: block; }
+    .row-feedback { padding: 8px 12px; margin-top: 8px; font-size: 14px; border-radius: 4px; line-height: 1.5; }
+    .row-feedback.correct { background: #D8F0DD; border-left: 3px solid #2A9D5C; color: #1A6B3D; }
+    .row-feedback.incorrect { background: #FDECEC; border-left: 3px solid #C0392B; color: #8A1F16; }
+    .widget-reset { background: transparent; border: 1px solid #C7922C; color: #C7922C; border-radius: 6px; padding: 6px 12px; font-size: 12px; cursor: pointer; font-family: inherit; margin-top: 6px; }
+    .widget-reset:hover { background: #FDF3E3; }
+
+    /* ===== Art-course components (layered on the brand; teal/coral are activity accents only) ===== */
+    .art-fig { margin: 14px 0; text-align: center; }
+    .art-fig img { max-width: 100%; height: auto; border-radius: 6px; border: 1px solid #D0D9E8; }
+    .art-fig figcaption { font-size: 13px; color: #666; margin-top: 8px; line-height: 1.5; }
+    .art-fig figcaption a { color: #1B6A94; }
+    .el-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin: 16px 0; }
+    .el-card { border: 1px solid #D0D9E8; border-radius: 8px; overflow: hidden; }
+    .el-demo { height: 80px; display: flex; align-items: center; justify-content: center; }
+    .el-text { padding: 10px 13px; }
+    .el-text strong { color: #167567; display: block; margin-bottom: 3px; font-size: 16px; }
+    .el-text span { font-size: 14px; color: #1a2340; }
+    .callout { border-radius: 6px; padding: 14px 20px; margin: 16px 0; }
+    .callout .ck { font-size: 11px; margin-bottom: 8px; letter-spacing: 0.5px; }
+    .callout .cb { font-size: 16px; line-height: 1.6; color: #0E1C42; }
+    .c-help { background: #E8F6FB; border-left: 5px solid #2196D0; border-top: 3px solid #55C8E8; }
+    .c-help .ck { color: #1B6A94; }
+    .c-warn { background: #FDECEC; border-left: 5px solid #C0392B; border-top: 3px solid #E74C3C; }
+    .c-warn .ck { color: #8A1F16; }
+    .c-art { background: #E6F4F1; border-left: 5px solid #1B8A7A; }
+    .c-art .ck { color: #167567; }
+    .next-item { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+    .next-item .num { min-width: 30px; height: 30px; border-radius: 50%; color: #fff; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .num.learn { background: #1B8A7A; }
+    .num.create { background: #D9583B; }
+    .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+    .vocab-card { background: #EEF1F8; border-radius: 6px; padding: 10px 13px; font-size: 14px; color: #1a2340; }
+    .vocab-card strong { color: #0E1C42; display: block; margin-bottom: 2px; }
+    details { background: #FFFFFF; border: 1px solid #D0D9E8; border-left: 4px solid #C7922C; border-radius: 6px; padding: 12px 18px; margin: 14px 0; }
+    details summary { font-size: 16px; color: #0E1C42; cursor: pointer; }
+    details .ac-body { font-size: 16px; color: #1a2340; margin-top: 10px; padding-top: 10px; border-top: 1px solid #EEF1F8; line-height: 1.6; }
+    /* Pixel vs. smooth concept visual */
+    .pix-wrap { display: flex; flex-wrap: wrap; gap: 22px; align-items: center; justify-content: center; margin: 16px 0 6px; }
+    .pix-panel { text-align: center; }
+    .pix-label { font-size: 12px; color: #6b7a99; margin-top: 8px; }
+    .rvv { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+    .rvv > div { border: 1px solid #D0D9E8; border-radius: 8px; padding: 14px 16px; }
+    .rvv h4 { margin: 0 0 6px 0; font-size: 16px; }
+    .rvv p { margin: 0; font-size: 14px; color: #1a2340; line-height: 1.55; }
+    @media (max-width: 560px){ .rvv { grid-template-columns: 1fr; } }
+    /* Color-wheel & swatch components — Week 3 only; hues are taught subject matter, not chrome */
+    .swatch-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 14px 0; }
+    .swatch { width: 84px; text-align: center; }
+    .swatch-chip { height: 54px; border-radius: 6px; border: 1px solid #D0D9E8; }
+    .swatch-label { font-size: 12px; color: #1a2340; margin-top: 6px; }
+</style>
+</head>
+<body>
+<div class="canvas-frame">
+
+<!-- ===== HEADER ===== -->
+<div style="background: #0E1C42; border-bottom: 5px solid #55C8E8; padding: 22px 34px;">
+    <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 10px;">
+        <div style="width: 52px; height: 52px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><img src="https://raw.githubusercontent.com/optimaondemand/optima-assets/eeb0b335630058906d52f478028361d352253a93/images/Optima%20Final%20Circle%20-%20Owl%20Only.png" alt="Optima Academy" style="width: 50px; height: 40px; object-fit: contain;" /></div>
+        <div>
+            <div style="font-size: 28px; color: #ffffff; line-height: 1.2;">Optima Academy Online</div>
+            <div style="font-size: 12px; color: #55c8e8;">An Education Experience Company</div>
+        </div>
+    </div>
+    <div style="font-size: 36px; color: #ffffff; margin-bottom: 6px;">DIGITAL ART IMAGING</div>
+</div>
+
+<!-- ===== METADATA STRIP ===== -->
+<div style="background: #FFFFFF; border-bottom: 2px solid #D0D9E8; display: flex; flex-wrap: wrap;">
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Quarter / Week</div>
+        <div style="font-size: 17px; color: #0e1c42;">Q1 &middot; Module 1, Week 3</div>
+        <div style="font-size: 12px; color: #666;">Module 1: Digital Imaging Foundations</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Focus</div>
+        <div style="font-size: 17px; color: #0e1c42;">Shape &amp; Creating Digital Color</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">This Week's Project</div>
+        <div style="font-size: 17px; color: #0e1c42; font-style: italic;">Creating Digital Color</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Software</div>
+        <div style="font-size: 16px; color: #0e1c42;">Pixlr E (free, browser)</div>
+    </div>
+</div>
+
+<!-- ===== BODY WRAPPER ===== -->
+<div style="padding: 24px 34px;">
+
+    <!-- Lavender title strip -->
+    <div style="background: #EEF1F8; border-left: 5px solid #0E1C42; border-radius: 7px; padding: 18px 22px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #0e1c42; margin-bottom: 6px;">MODULE 1 &middot; WEEK 3</div>
+        <div style="font-size: 22px; color: #0e1c42; margin-bottom: 4px;">Shape &amp; Creating Digital Color</div>
+        <div style="font-size: 16px; color: #666;">Lesson</div>
+    </div>
+
+    <!-- Essential Question -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128214; ESSENTIAL QUESTION</div>
+        <div style="font-size: 20px; color: #0e1c42; font-style: italic; margin-bottom: 10px;">How do artists use shape and color to build mood and meaning in a digital composition?</div>
+        <div style="font-size: 18px; color: #1a2340; line-height: 1.65;">Take a moment to look around your digital workspace: your desktop, phone screen, or art app. What shapes do you notice? Every digital artwork begins with shape, and every digital artwork lives or dies by color. This week you learn both: how shapes are classified, and how color is actually built on a screen.</div>
+    </div>
+
+    <!-- PART 1 · LOOK FIRST -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128064; PART 1 &middot; LOOK FIRST</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">The <strong>color wheel</strong> organizes every visible hue by how colors relate to one another: primary, secondary, and tertiary. Study the wheel below before you read further.</p>
+
+        <div style="text-align:center; margin: 10px 0;">
+            <svg width="320" height="320" viewBox="0 0 320 320" role="img" aria-label="A twelve-slice color wheel showing primary colors red, yellow, and blue; secondary colors orange, green, and violet; and six tertiary colors between them.">
+                <g transform="translate(160,160)">
+                    <!-- 12 wedges, 30 degrees each, starting at top (red) going clockwise -->
+                    <path d="M0,0 L0,-140 A140,140 0 0,1 70,-121.24 Z" fill="#E4302B"/>
+                    <path d="M0,0 L70,-121.24 A140,140 0 0,1 121.24,-70 Z" fill="#E8632B"/>
+                    <path d="M0,0 L121.24,-70 A140,140 0 0,1 140,0 Z" fill="#EF8B1E"/>
+                    <path d="M0,0 L140,0 A140,140 0 0,1 121.24,70 Z" fill="#F0B429"/>
+                    <path d="M0,0 L121.24,70 A140,140 0 0,1 70,121.24 Z" fill="#D8C93A"/>
+                    <path d="M0,0 L70,121.24 A140,140 0 0,1 0,140 Z" fill="#8FBF3F"/>
+                    <path d="M0,0 L0,140 A140,140 0 0,1 -70,121.24 Z" fill="#3E9E4A"/>
+                    <path d="M0,0 L-70,121.24 A140,140 0 0,1 -121.24,70 Z" fill="#1F8A6E"/>
+                    <path d="M0,0 L-121.24,70 A140,140 0 0,1 -140,0 Z" fill="#1E6FA8"/>
+                    <path d="M0,0 L-140,0 A140,140 0 0,1 -121.24,-70 Z" fill="#2A4E9E"/>
+                    <path d="M0,0 L-121.24,-70 A140,140 0 0,1 -70,-121.24 Z" fill="#5B3E97"/>
+                    <path d="M0,0 L-70,-121.24 A140,140 0 0,1 0,-140 Z" fill="#9C3E8E"/>
+                    <circle r="42" fill="#FFFFFF" stroke="#D0D9E8" stroke-width="1"/>
+                    <text x="0" y="-4" text-anchor="middle" font-size="12" fill="#0E1C42" font-family="Segoe UI, sans-serif">Color</text>
+                    <text x="0" y="12" text-anchor="middle" font-size="12" fill="#0E1C42" font-family="Segoe UI, sans-serif">Wheel</text>
+                </g>
+            </svg>
+        </div>
+        <p style="font-size: 14px; color: #6b7a99; margin: 0 0 10px 0; text-align:center;">Concept diagram. Red, yellow, and blue sit 4 slices apart (primary); orange, green, and violet sit between them (secondary); the remaining six slices are tertiary mixes.</p>
+
+        <div class="optima-widget ow-reflect">
+            <div class="widget-kicker">&#128173; QUICK CHECK-IN &middot; NO WRONG ANSWER</div>
+            <div class="widget-question">Look at the color wheel above. Which section pulls your eye first?</div>
+            <div class="widget-options">
+                <button data-response="Red, yellow, and blue are the primary colors: they cannot be mixed from any other colors, and every other hue on the wheel is built from them.">The reds, yellows, or blues (primary)</button>
+                <button data-response="Orange, green, and violet are the secondary colors, made by mixing two primaries next to them on the wheel.">The oranges, greens, or violets (secondary)</button>
+                <button data-response="The colors between a primary and a secondary (like red-orange or blue-green) are tertiary colors, named for both parents.">A color that looks mixed, like blue-green</button>
+                <button data-response="Complementary colors sit directly across the wheel from each other, like red and green, or blue and orange. They create the strongest contrast on the wheel.">Two colors on opposite sides of the wheel</button>
+            </div>
+            <div class="widget-feedback"></div>
+            <button class="widget-reset">Reset</button>
+        </div>
+    </div>
+
+    <!-- PART 2 · SHAPE -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128218; PART 2 &middot; SHAPE</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Shape is one of the most important Elements of Art. Because shapes are two-dimensional, they are central to digital design, photography, and illustration. In Pixlr E, you combine and layer shapes to build characters, scenes, and abstract compositions. Every digital artwork begins with shape, whether the finished piece looks simple or complex.</p>
+
+        <div class="el-grid">
+            <div class="el-card">
+                <div class="el-demo" style="background: #F4F6FA;"><svg width="110" height="60" viewBox="0 0 110 60"><rect x="10" y="10" width="35" height="35" fill="#0E1C42"/><circle cx="80" cy="27" r="18" fill="#1B8A7A"/></svg></div>
+                <div class="el-text"><strong>Geometric</strong><span>Precise and structured: circles, triangles, rectangles, polygons. Common for symmetry, logos, patterns, and modern designs. Easy to build cleanly in Pixlr E's Shape tool.</span></div>
+            </div>
+            <div class="el-card">
+                <div class="el-demo" style="background: #F4F6FA;"><svg width="110" height="60" viewBox="0 0 110 60"><path d="M20 45 Q 10 20, 35 15 Q 55 5, 65 25 Q 85 30, 75 50 Q 50 55, 20 45 Z" fill="#D9583B"/></svg></div>
+                <div class="el-text"><strong>Organic</strong><span>Natural, flowing, irregular: leaves, clouds, waves. Makes a composition feel dynamic and lifelike, and contrasts well against clean geometric shapes.</span></div>
+            </div>
+            <div class="el-card">
+                <div class="el-demo" style="background: #F4F6FA;"><svg width="110" height="60" viewBox="0 0 110 60"><polygon points="55,8 75,40 90,52 20,52 35,40" fill="#167567"/></svg></div>
+                <div class="el-text"><strong>Abstract</strong><span>A simplified or stylized version of a real object or idea. A mountain scene can be built from just a few triangles: not realistic, but still recognizable.</span></div>
+            </div>
+        </div>
+
+        <div class="callout c-help">
+            <div class="ck">&#128161; SHAPE IN PIXLR E</div>
+            <div class="cb">Pixlr E's Shape tool draws clean geometric shapes directly on their own layer. To build organic or abstract shapes, use the Brush or Pen tool freehand, or combine several geometric shapes and edit their outlines. Every shape you place is a separate layer until you flatten or group it, which means you can move, resize, or recolor it without touching the rest of your composition.</div>
+        </div>
+    </div>
+
+    <!-- PART 3 · CREATING DIGITAL COLOR -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128269; PART 3 &middot; CREATING DIGITAL COLOR</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">In traditional painting, color is created through a <strong>subtractive</strong> process: mixing pigments, where adding more color makes the mixture darker. Digital screens work the opposite way. A screen creates color through an <strong>additive</strong> process, projecting light directly to your eyes. Digital tools mix the additive primary colors, red, green, and blue, known as <strong>RGB</strong>. The more light you add, the brighter the result, and all three colors at full strength make white light.</p>
+
+        <div class="rvv">
+            <div style="border-top: 3px solid #1B8A7A;">
+                <h4 style="color:#167567;">Subtractive (pigment/paint)</h4>
+                <p>Mixing paint or ink. Adding more color makes the mixture darker. Mixing all colors moves toward black or muddy brown. This is how traditional painting works.</p>
+            </div>
+            <div style="border-top: 3px solid #D9583B;">
+                <h4 style="color:#c0472e;">Additive (light/RGB)</h4>
+                <p>Mixing light on a screen. Adding more color makes the result brighter. Red, green, and blue light at full strength combine to make white. This is how every digital screen works.</p>
+            </div>
+        </div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 14px 0 10px 0;">A screen is not the only place your art might end up. Everything above describes how a <strong>screen</strong> builds color: light, mixed additively, in RGB. Professional printing uses a different, subtractive system called <strong>CMYK</strong>: cyan, magenta, yellow, and key (black) ink layered on paper. Week 1's quiz asked which format was the strongest choice for a logo that must print sharp on both a card and a billboard, and the answer was vector, because a vector file scales to any size without losing quality. CMYK versus RGB is a separate, additional decision from vector versus raster for that same logo: vector versus raster decides whether the artwork stays sharp at any size, while CMYK versus RGB decides whether the colors on your screen will match the colors once the file reaches a printer.</p>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 14px 0 10px 0;">When the additive primaries mix, they form the additive secondary colors: yellow, magenta, and cyan. Just like the traditional color wheel, complementary colors sit across from each other: red and cyan are complementary, as are green and magenta. Most digital art programs let you dial red, green, and blue light from 0 to 255 each.</p>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 8px 0;">Digital color also has three adjustable properties, known as <strong>HSL</strong>:</p>
+        <ul style="font-size: 17px; color: #1a2340; line-height: 1.7; margin: 0 0 12px 0; padding-left: 22px;">
+            <li><strong>Hue</strong>: the name of the color itself (red, blue, yellow).</li>
+            <li><strong>Saturation</strong>: the intensity or purity of a color. Highly saturated looks bold and vivid; desaturated looks muted or grayish.</li>
+            <li><strong>Lightness</strong>: how light or dark a color appears, based on the amount of light in it.</li>
+        </ul>
+
+        <div class="callout c-help">
+            <div class="ck">&#128161; MIXING COLOR IN PIXLR E</div>
+            <div class="cb">Open the color picker in Pixlr E and you will see RGB sliders and an HSL option side by side. Try building a palette of about five main colors (not counting black and white) for your next project. A limited palette keeps a design feeling unified instead of chaotic, and it is faster to keep consistent across layers than picking a new color every time.</div>
+        </div>
+    </div>
+
+    <!-- PART 4 · COLOR SCHEMES -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#127912; PART 4 &middot; COLOR SCHEMES AND MOOD</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 12px 0;">Artists and photographers choose color schemes deliberately to create mood and meaning. Here are six ways to build a palette.</p>
+
+        <div class="swatch-row">
+            <div class="swatch"><div class="swatch-chip" style="background:#E4302B;"></div><div class="swatch-label">Warm</div></div>
+            <div class="swatch"><div class="swatch-chip" style="background:#EF8B1E;"></div><div class="swatch-label">(red/orange/yellow)</div></div>
+        </div>
+        <p style="font-size: 16px; color: #1a2340; line-height: 1.6; margin: 0 0 12px 0;"><strong>Warm colors</strong>, like red, orange, and yellow, remind us of sunlight, heat, and energy. Photographers and digital artists often use warm tones to express happiness, excitement, or warmth.</p>
+        <figure class="art-fig">
+            <img src="https://assets.science.nasa.gov/content/dam/science/esd/eo/images/imagerecords/89000/89168/iss049e049442_lrg.jpg" alt="A sunset photographed from the International Space Station: layers of Earth's atmosphere glowing in deep orange, red, and yellow along the curved horizon, fading into the dark blue of space." style="max-width:420px;" />
+            <figcaption>NASA, <em>Fiery South Atlantic Sunset</em>, photographed by an Expedition 49 crew member aboard the International Space Station, October 27, 2016. Public domain (U.S. government work). Source: <a href="https://science.nasa.gov/earth/earth-observatory/fiery-south-atlantic-sunset-89168/">science.nasa.gov</a></figcaption>
+        </figure>
+
+        <div class="swatch-row">
+            <div class="swatch"><div class="swatch-chip" style="background:#1E6FA8;"></div><div class="swatch-label">Cool</div></div>
+            <div class="swatch"><div class="swatch-chip" style="background:#3E9E4A;"></div><div class="swatch-label">(blue/green/violet)</div></div>
+        </div>
+        <p style="font-size: 16px; color: #1a2340; line-height: 1.6; margin: 0 0 12px 0;"><strong>Cool colors</strong>, like blue, green, and violet, suggest calmness, distance, or even sadness. A cool palette can make a scene feel calm or emotionally distant.</p>
+        <figure class="art-fig">
+            <img src="https://assets.science.nasa.gov/content/dam/science/esd/eo/images/imagerecords/91000/91396/Transantarctic_pho_2017334_lrg.jpg" alt="An aerial photograph of Antarctic ice: white snow interrupted by pale and deep blue patches of exposed ice and refrozen meltwater across the Transantarctic Mountains." style="max-width:420px;" />
+            <figcaption>NASA Operation IceBridge, photograph by Chris Larsen, <em>IceBridge Blues</em>, Transantarctic Mountains, November 30, 2017. Public domain (U.S. government work). Source: <a href="https://science.nasa.gov/earth/earth-observatory/icebridge-blues-91396/">science.nasa.gov</a></figcaption>
+        </figure>
+
+        <div class="swatch-row">
+            <div class="swatch"><div class="swatch-chip" style="background:#FFFFFF; border:1px solid #C7C7C7;"></div><div class="swatch-label">Neutral</div></div>
+            <div class="swatch"><div class="swatch-chip" style="background:#9B9B9B;"></div><div class="swatch-label">gray</div></div>
+            <div class="swatch"><div class="swatch-chip" style="background:#3A2E28;"></div><div class="swatch-label">brown</div></div>
+            <div class="swatch"><div class="swatch-chip" style="background:#1a1a1a;"></div><div class="swatch-label">black</div></div>
+        </div>
+        <p style="font-size: 16px; color: #1a2340; line-height: 1.6; margin: 0 0 12px 0;"><strong>Neutral colors</strong>, white, gray, black, and brown, are not on the color wheel. In digital art and photography, neutrals highlight the main subject rather than the color itself.</p>
+
+        <div class="swatch-row">
+            <div class="swatch"><div class="swatch-chip" style="background:#F0B429;"></div><div class="swatch-label">Mono</div></div>
+            <div class="swatch"><div class="swatch-chip" style="background:#D8C93A;"></div><div class="swatch-label">(one hue,</div></div>
+            <div class="swatch"><div class="swatch-chip" style="background:#F7DE85;"></div><div class="swatch-label">tints/shades)</div></div>
+        </div>
+        <p style="font-size: 16px; color: #1a2340; line-height: 1.6; margin: 0 0 12px 0;"><strong>Monochromatic</strong> palettes use different tints, tones, and shades of a single color, for example variations of yellow ranging from pale cream to deep gold. This creates harmony and unity while still showing depth and contrast.</p>
+
+        <div class="swatch-row">
+            <div class="swatch"><div class="swatch-chip" style="background:#E4302B;"></div><div class="swatch-label">Poly</div></div>
+            <div class="swatch"><div class="swatch-chip" style="background:#F0B429;"></div><div class="swatch-label">(many</div></div>
+            <div class="swatch"><div class="swatch-chip" style="background:#1E6FA8;"></div><div class="swatch-label">hues)</div></div>
+            <div class="swatch"><div class="swatch-chip" style="background:#5B3E97;"></div><div class="swatch-label">&nbsp;</div></div>
+        </div>
+        <p style="font-size: 16px; color: #1a2340; line-height: 1.6; margin: 0 0 12px 0;"><strong>Polychromatic</strong> schemes include many different hues. Using a variety of colors can make an image feel vibrant and lively; a polychromatic palette might combine primary, secondary, and neutral colors for visual excitement.</p>
+
+        <div class="swatch-row">
+            <div class="swatch"><div class="swatch-chip" style="background:#FFFFFF; border:1px solid #C7C7C7;"></div><div class="swatch-label">Grayscale</div></div>
+            <div class="swatch"><div class="swatch-chip" style="background:#B0B0B0;"></div><div class="swatch-label">&nbsp;</div></div>
+            <div class="swatch"><div class="swatch-chip" style="background:#5A5A5A;"></div><div class="swatch-label">&nbsp;</div></div>
+            <div class="swatch"><div class="swatch-chip" style="background:#1a1a1a;"></div><div class="swatch-label">&nbsp;</div></div>
+        </div>
+        <p style="font-size: 16px; color: #1a2340; line-height: 1.6; margin: 0 0 4px 0;"><strong>Grayscale</strong> moves from white to gray to black. It is common in black-and-white photography and digital editing to highlight light, shadow, and form. Without color to distract, viewers focus more on texture, lighting, and composition.</p>
+
+        <div class="optima-widget ow-select">
+            <div class="widget-kicker">&#9889; TRY IT &middot; NAME THE SCHEME</div>
+            <div class="widget-question">Read each description, decide which color scheme it describes, then check your answer.</div>
+            <div class="widget-row" data-correct="mono" data-hint="Think about how many different hues are used. Try again.">
+                <div class="widget-row-prompt">A poster uses only pale blue, medium blue, and deep navy.</div>
+                <div class="widget-options">
+                    <button data-choice="poly">Polychromatic</button>
+                    <button data-choice="mono" data-fb="Correct. One hue (blue) shown in different tints and shades is a monochromatic scheme.">Monochromatic</button>
+                    <button data-choice="neutral">Neutral</button>
+                </div>
+            </div>
+            <div class="widget-row" data-correct="warm" data-hint="Think about which temperature these colors suggest. Try again.">
+                <div class="widget-row-prompt">A campfire photo dominated by red, orange, and yellow light.</div>
+                <div class="widget-options">
+                    <button data-choice="cool">Cool</button>
+                    <button data-choice="warm" data-fb="Correct. Red, orange, and yellow are warm colors, associated with heat and energy.">Warm</button>
+                    <button data-choice="gray">Grayscale</button>
+                </div>
+            </div>
+            <div class="widget-row" data-correct="additive" data-hint="Think about whether this is mixing light or mixing pigment. Try again.">
+                <div class="widget-row-prompt">Red, green, and blue light combine at full strength to make white.</div>
+                <div class="widget-options">
+                    <button data-choice="subtractive">Subtractive</button>
+                    <button data-choice="additive" data-fb="Correct. This is the additive process: mixing light, where more color means more brightness.">Additive</button>
+                </div>
+            </div>
+            <button class="widget-reset">Reset</button>
+        </div>
+    </div>
+
+    <!-- STUDIO NOTE -->
+    <div class="callout c-art">
+        <div class="ck">&#127912; BUILDING COLOR ON PURPOSE</div>
+        <div class="cb">Before you open Pixlr E for this week's project, decide your color scheme first: warm, cool, monochromatic, polychromatic, or grayscale. Choosing on purpose, before you start clicking, is what separates a composition that feels intentional from one that feels random.</div>
+    </div>
+
+    <!-- AI AWARENESS (factual) -->
+    <div class="callout c-warn">
+        <div class="ck">&#9888;&#65039; WORTH KNOWING &middot; AI COLOR PALETTES</div>
+        <div class="cb">An AI tool can generate a color palette instantly from a prompt, but it cannot tell you why warm colors read as energetic or why a monochromatic scheme feels unified in your specific composition. Naming the color relationship and choosing it for a reason is the skill this week's project checks.</div>
+    </div>
+
+    <!-- VOCABULARY -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128221; VOCABULARY</div>
+        <div class="vocab-grid">
+            <div class="vocab-card"><strong>Color Wheel</strong>The organized arrangement of primary, secondary, and tertiary colors.</div>
+            <div class="vocab-card"><strong>Additive Color</strong>Mixing light (RGB); more color makes the result brighter.</div>
+            <div class="vocab-card"><strong>Subtractive Color</strong>Mixing pigment; more color makes the result darker.</div>
+            <div class="vocab-card"><strong>RGB</strong>Red, green, blue: the additive primary colors used by screens.</div>
+            <div class="vocab-card"><strong>HSL</strong>Hue, Saturation, Lightness: the three adjustable properties of digital color.</div>
+            <div class="vocab-card"><strong>Complementary Colors</strong>Colors directly across from each other on the wheel.</div>
+            <div class="vocab-card"><strong>Monochromatic</strong>Tints, tones, and shades of a single hue.</div>
+            <div class="vocab-card"><strong>Geometric / Organic / Abstract Shape</strong>Precise and structured; natural and irregular; simplified or stylized.</div>
+        </div>
+    </div>
+
+    <!-- WHAT YOU'LL DO NEXT -->
+    <div style="background: #FFFFFF; border-top: 3px solid #0E1C42; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 16px;">&#10145;&#65039; WHAT YOU'LL DO NEXT (IN CANVAS)</div>
+        <div class="next-item"><div class="num learn">1</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Discussion: Choose Your Scheme</strong> &middot; Week 3</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Name the color scheme you plan to use for this week's project and the mood you want it to create, then respond to a classmate.</div></div></div>
+        <div class="next-item"><div class="num learn">2</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Quiz: Shape &amp; Digital Color</strong> &middot; Week 3</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">8 questions, auto-graded in Canvas.</div></div></div>
+        <div class="next-item"><div class="num create">3</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Project: Creating Digital Color</strong> &middot; Week 3</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Build a shape-based composition in Pixlr E using one chosen color scheme, applied on purpose. Your graded artwork this week.</div></div></div>
+    </div>
+
+    <!-- WRAP-UP -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128170; THE BIG IDEA</div>
+        <p style="font-size: 18px; color: #1a2340; line-height: 1.65; margin: 0;">Shape gives your composition its structure. Color gives it its mood. On a screen, color is built from light, not pigment, which changes how you mix and adjust it. Once you can name a color scheme and explain why you chose it, you are making a deliberate artistic decision, not just picking a color you like.</p>
+    </div>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div style="background: #0E1C42; border-top: 3px solid #55C8E8; padding: 18px 34px; text-align: center;">
+    <div style="font-size: 18px; color: #ffffff; margin-bottom: 6px;"><span style="color: #55c8e8;">Optima Academy Online</span> &middot; DIGITAL ART IMAGING &middot; Quarter 1 &middot; Student Lesson Page</div>
+    <div style="font-size: 13px; color: rgba(255,255,255,0.65); margin-bottom: 4px;">Module 1 &middot; Week 3 &middot; Shape &amp; Creating Digital Color</div>
+    <div style="font-size: 12px; color: rgba(255,255,255,0.4);">&copy; Optima Academy Online &middot; An Education Experience Company. Color wheel and swatches are original CSS/SVG diagrams built for this lesson. Photographs shown are U.S. government works in the public domain; see captions for source.</div>
+</div>
+
+</div>
+
+<!-- ===== WIDGET RUNTIME — from optima-lesson-format template. One delegated listener drives every engine. ===== -->
+<script>
+(function () {
+  document.addEventListener('click', function (e) {
+    var reset = e.target.closest('.widget-reset');
+    if (reset) {
+      var w = reset.closest('.optima-widget');
+      w.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      w.querySelectorAll('.widget-feedback').forEach(function (f) { f.classList.remove('show'); f.textContent = ''; });
+      w.querySelectorAll('.row-feedback').forEach(function (f) { f.remove(); });
+      return;
+    }
+    var rBtn = e.target.closest('.ow-reflect .widget-options button');
+    if (rBtn) {
+      var rw = rBtn.closest('.optima-widget');
+      rw.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected'); });
+      rBtn.classList.add('selected');
+      var fb = rw.querySelector('.widget-feedback');
+      fb.textContent = rBtn.dataset.response || '';
+      fb.classList.add('show');
+      return;
+    }
+    var sBtn = e.target.closest('.ow-select .widget-row .widget-options button');
+    if (sBtn) {
+      var row = sBtn.closest('.widget-row');
+      var correct = row.dataset.correct;
+      row.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      var right = sBtn.dataset.choice === correct;
+      sBtn.classList.add(right ? 'correct' : 'incorrect');
+      var text = right ? (sBtn.dataset.fb || row.dataset.fb || 'Right.') : (sBtn.dataset.fb || row.dataset.hint || 'Not quite. Try again.');
+      var rf = row.querySelector('.row-feedback') || row.appendChild(document.createElement('div'));
+      rf.className = 'row-feedback ' + (right ? 'correct' : 'incorrect');
+      rf.textContent = text;
+      return;
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

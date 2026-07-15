@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Digital Art Imaging &mdash; Week 4: Drawing &amp; Editing Shapes</title>
+<style>
+    body { margin: 0; padding: 0; font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #f4f6fa; }
+    .canvas-frame { max-width: 1100px; margin: 0 auto; background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+
+    /* ===== WIDGET CSS — from optima-lesson-format/assets/lesson-interactive-template.html (byte-consistent) ===== */
+    .optima-widget { background: linear-gradient(135deg, #E8F6FB 0%, #F4F9FC 100%); border: 1px solid #C5DCE5; border-left: 5px solid #2196D0; border-radius: 8px; padding: 18px 22px; margin: 18px 0; }
+    .widget-kicker { font-size: 11px; color: #1B6A94; margin-bottom: 10px; letter-spacing: 0.4px; }
+    .widget-question { font-size: 17px; color: #0E1C42; margin-bottom: 14px; line-height: 1.55; }
+    .widget-row { background: #FFFFFF; border: 1px solid #D0D9E8; border-radius: 6px; padding: 12px 14px; margin-bottom: 10px; }
+    .widget-row-prompt { font-size: 15px; color: #0E1C42; margin-bottom: 8px; line-height: 1.5; font-style: italic; }
+    .widget-options { display: flex; flex-wrap: wrap; gap: 8px; }
+    .widget-options button { background: #FFFFFF; border: 1.5px solid #D0D9E8; border-radius: 8px; padding: 8px 14px; font-size: 14px; color: #0E1C42; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+    .widget-options button:hover { background: #F4F6FA; border-color: #55C8E8; }
+    .widget-options button.selected { background: #0E1C42; color: #FFFFFF; border-color: #0E1C42; }
+    .widget-options button.correct { background: #D8F0DD; border-color: #2A9D5C; color: #1A6B3D; }
+    .widget-options button.incorrect { background: #FDECEC; border-color: #C0392B; color: #8A1F16; }
+    .widget-feedback { background: #FFFFFF; border-left: 3px solid #C7922C; padding: 10px 14px; font-size: 15px; color: #1a2340; line-height: 1.55; margin: 10px 0; display: none; border-radius: 4px; }
+    .widget-feedback.show { display: block; }
+    .row-feedback { padding: 8px 12px; margin-top: 8px; font-size: 14px; border-radius: 4px; line-height: 1.5; }
+    .row-feedback.correct { background: #D8F0DD; border-left: 3px solid #2A9D5C; color: #1A6B3D; }
+    .row-feedback.incorrect { background: #FDECEC; border-left: 3px solid #C0392B; color: #8A1F16; }
+    .widget-reset { background: transparent; border: 1px solid #C7922C; color: #C7922C; border-radius: 6px; padding: 6px 12px; font-size: 12px; cursor: pointer; font-family: inherit; margin-top: 6px; }
+    .widget-reset:hover { background: #FDF3E3; }
+
+    /* ===== Art-course components (layered on the brand; teal/coral are activity accents only) ===== */
+    .art-fig { margin: 14px 0; text-align: center; }
+    .art-fig img { max-width: 100%; height: auto; border-radius: 6px; border: 1px solid #D0D9E8; }
+    .art-fig figcaption { font-size: 13px; color: #666; margin-top: 8px; line-height: 1.5; }
+    .art-fig figcaption a { color: #1B6A94; }
+    .el-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin: 16px 0; }
+    .el-card { border: 1px solid #D0D9E8; border-radius: 8px; overflow: hidden; }
+    .el-demo { height: 80px; display: flex; align-items: center; justify-content: center; }
+    .el-text { padding: 10px 13px; }
+    .el-text strong { color: #167567; display: block; margin-bottom: 3px; font-size: 16px; }
+    .el-text span { font-size: 14px; color: #1a2340; }
+    .callout { border-radius: 6px; padding: 14px 20px; margin: 16px 0; }
+    .callout .ck { font-size: 11px; margin-bottom: 8px; letter-spacing: 0.5px; }
+    .callout .cb { font-size: 16px; line-height: 1.6; color: #0E1C42; }
+    .c-help { background: #E8F6FB; border-left: 5px solid #2196D0; border-top: 3px solid #55C8E8; }
+    .c-help .ck { color: #1B6A94; }
+    .c-warn { background: #FDECEC; border-left: 5px solid #C0392B; border-top: 3px solid #E74C3C; }
+    .c-warn .ck { color: #8A1F16; }
+    .c-art { background: #E6F4F1; border-left: 5px solid #1B8A7A; }
+    .c-art .ck { color: #167567; }
+    .next-item { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+    .next-item .num { min-width: 30px; height: 30px; border-radius: 50%; color: #fff; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .num.learn { background: #1B8A7A; }
+    .num.create { background: #D9583B; }
+    .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+    .vocab-card { background: #EEF1F8; border-radius: 6px; padding: 10px 13px; font-size: 14px; color: #1a2340; }
+    .vocab-card strong { color: #0E1C42; display: block; margin-bottom: 2px; }
+    details { background: #FFFFFF; border: 1px solid #D0D9E8; border-left: 4px solid #C7922C; border-radius: 6px; padding: 12px 18px; margin: 14px 0; }
+    details summary { font-size: 16px; color: #0E1C42; cursor: pointer; }
+    details .ac-body { font-size: 16px; color: #1a2340; margin-top: 10px; padding-top: 10px; border-top: 1px solid #EEF1F8; line-height: 1.6; }
+    /* Pixel vs. smooth concept visual */
+    .pix-wrap { display: flex; flex-wrap: wrap; gap: 22px; align-items: center; justify-content: center; margin: 16px 0 6px; }
+    .pix-panel { text-align: center; }
+    .pix-label { font-size: 12px; color: #6b7a99; margin-top: 8px; }
+    .rvv { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+    .rvv > div { border: 1px solid #D0D9E8; border-radius: 8px; padding: 14px 16px; }
+    .rvv h4 { margin: 0 0 6px 0; font-size: 16px; }
+    .rvv p { margin: 0; font-size: 14px; color: #1a2340; line-height: 1.55; }
+    @media (max-width: 560px){ .rvv { grid-template-columns: 1fr; } }
+    /* Layer stack concept visual — Week 4 */
+    .layer-stack { display: flex; flex-direction: column-reverse; align-items: center; gap: 6px; margin: 10px 0; }
+    .layer-plate { width: 210px; height: 34px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #fff; }
+</style>
+</head>
+<body>
+<div class="canvas-frame">
+
+<!-- ===== HEADER ===== -->
+<div style="background: #0E1C42; border-bottom: 5px solid #55C8E8; padding: 22px 34px;">
+    <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 10px;">
+        <div style="width: 52px; height: 52px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><img src="https://raw.githubusercontent.com/optimaondemand/optima-assets/eeb0b335630058906d52f478028361d352253a93/images/Optima%20Final%20Circle%20-%20Owl%20Only.png" alt="Optima Academy" style="width: 50px; height: 40px; object-fit: contain;" /></div>
+        <div>
+            <div style="font-size: 28px; color: #ffffff; line-height: 1.2;">Optima Academy Online</div>
+            <div style="font-size: 12px; color: #55c8e8;">An Education Experience Company</div>
+        </div>
+    </div>
+    <div style="font-size: 36px; color: #ffffff; margin-bottom: 6px;">DIGITAL ART IMAGING</div>
+</div>
+
+<!-- ===== METADATA STRIP ===== -->
+<div style="background: #FFFFFF; border-bottom: 2px solid #D0D9E8; display: flex; flex-wrap: wrap;">
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Quarter / Week</div>
+        <div style="font-size: 17px; color: #0e1c42;">Q1 &middot; Module 1, Week 4</div>
+        <div style="font-size: 12px; color: #666;">Module 1: Digital Imaging Foundations</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Focus</div>
+        <div style="font-size: 17px; color: #0e1c42;">Drawing &amp; Editing Shapes</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">This Week's Project</div>
+        <div style="font-size: 17px; color: #0e1c42; font-style: italic;">Draw &amp; Edit Shapes: "Two Are Better Than One"</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Software</div>
+        <div style="font-size: 16px; color: #0e1c42;">Pixlr E (free, browser)</div>
+    </div>
+</div>
+
+<!-- ===== BODY WRAPPER ===== -->
+<div style="padding: 24px 34px;">
+
+    <!-- Lavender title strip -->
+    <div style="background: #EEF1F8; border-left: 5px solid #0E1C42; border-radius: 7px; padding: 18px 22px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #0e1c42; margin-bottom: 6px;">MODULE 1 &middot; WEEK 4</div>
+        <div style="font-size: 22px; color: #0e1c42; margin-bottom: 4px;">Drawing &amp; Editing Shapes</div>
+        <div style="font-size: 16px; color: #666;">Lesson</div>
+    </div>
+
+    <!-- Essential Question -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128214; ESSENTIAL QUESTION</div>
+        <div style="font-size: 20px; color: #0e1c42; font-style: italic; margin-bottom: 10px;">What can two combined shapes create that neither shape could create alone?</div>
+        <div style="font-size: 18px; color: #1a2340; line-height: 1.65;">You already know what raster and vector images are, and you have placed shapes on their own layers. This week you go further: drawing shapes with precision, editing them after they are placed, and combining two or more shapes into something new. Your project this week is built entirely on that idea: two shapes are better than one.</div>
+    </div>
+
+    <!-- PART 1 · LOOK FIRST -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128064; PART 1 &middot; LOOK FIRST</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Two plain shapes on their own are not very interesting. Combine and edit them and you get something new. Look at the same two shapes below: first separate, then combined into a single new form.</p>
+
+        <div class="pix-wrap">
+            <div class="pix-panel">
+                <svg width="150" height="130" viewBox="0 0 150 130" role="img" aria-label="A teal circle and a coral rectangle sitting apart from each other, unrelated.">
+                    <rect width="150" height="130" fill="#EEF1F8"/>
+                    <circle cx="45" cy="65" r="35" fill="#1B8A7A"/>
+                    <rect x="90" y="35" width="45" height="60" fill="#D9583B"/>
+                </svg>
+                <div class="pix-label">Two shapes, unrelated</div>
+            </div>
+            <div style="font-size: 26px; color: #6b7a99;">&#8594;</div>
+            <div class="pix-panel">
+                <svg width="150" height="130" viewBox="0 0 150 130" role="img" aria-label="The circle and rectangle overlapped and combined into a single rounded house-like shape.">
+                    <rect width="150" height="130" fill="#EEF1F8"/>
+                    <rect x="45" y="55" width="60" height="55" fill="#167567"/>
+                    <circle cx="75" cy="55" r="30" fill="#167567"/>
+                </svg>
+                <div class="pix-label">Combined into one new shape</div>
+            </div>
+        </div>
+        <p style="font-size: 14px; color: #6b7a99; margin: 0;">Concept diagram. A circle plus a rectangle, overlapped and merged, reads as a single new form rather than two separate objects.</p>
+
+        <div class="optima-widget ow-reflect">
+            <div class="widget-kicker">&#128173; QUICK CHECK-IN &middot; NO WRONG ANSWER</div>
+            <div class="widget-question">Think of a logo, icon, or character design you have seen. What two simple shapes might it be built from?</div>
+            <div class="widget-options">
+                <button data-response="Circles and triangles combine constantly in logo design: a circle for a head or badge, a triangle for a play button or roof.">A circle and a triangle</button>
+                <button data-response="A rectangle and a circle is one of the most common combinations, from a simple house icon to a rounded speech bubble.">A rectangle and a circle</button>
+                <button data-response="Two overlapping circles are the basis of a huge number of logos, since the overlap itself becomes a new shape (a lens or leaf form).">Two overlapping circles</button>
+                <button data-response="Layering an organic shape over a geometric one is a common way to soften a clean design or add a natural detail to a structured icon.">A geometric shape and an organic shape</button>
+            </div>
+            <div class="widget-feedback"></div>
+            <button class="widget-reset">Reset</button>
+        </div>
+    </div>
+
+    <!-- PART 2 · RASTER VS VECTOR REVIEW + THE SHAPE TOOL -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128218; PART 2 &middot; DRAWING SHAPES WITH PRECISION</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">All digital images fall into two categories: <strong>raster images</strong>, made of tiny pixels, like a mosaic, and <strong>vector graphics</strong>, made of mathematical lines and curves that can resize infinitely without losing quality. Pixlr E is primarily a raster editor, but its Shape tool draws with vector-like precision before flattening onto your raster canvas.</p>
+
+        <div class="rvv">
+            <div style="border-top: 3px solid #1B8A7A;">
+                <h4 style="color:#167567;">Raster images</h4>
+                <p>Built from pixels, each holding one color. Photographs and most digital paintings are raster. Zoom in too far and they look blurry or blocky. Common formats: JPEG, PNG, GIF.</p>
+            </div>
+            <div style="border-top: 3px solid #D9583B;">
+                <h4 style="color:#c0472e;">Vector graphics</h4>
+                <p>Built from math-defined lines, shapes, and curves. Resize them at any size and they stay crisp. Ideal for logos, icons, and clean designs. Common formats: SVG, AI, EPS.</p>
+            </div>
+        </div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 14px 0 6px 0;">Here is the same idea shown two ways: a real photograph (raster) beside a clean logo mark built entirely from flat geometric shapes (vector-style).</p>
+        <div class="pix-wrap">
+            <div class="pix-panel">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Adams_The_Tetons_and_the_Snake_River.jpg" alt="The Tetons and the Snake River by Ansel Adams: a black-and-white photograph of a mountain range with the Snake River curving through a forested valley below." style="width:180px; height:auto; border-radius:6px; border:1px solid #D0D9E8;" />
+                <div class="pix-label">Raster: a real photograph, built from a fixed grid of pixels</div>
+            </div>
+            <div style="font-size: 26px; color: #6b7a99;">vs</div>
+            <div class="pix-panel">
+                <svg width="160" height="160" viewBox="0 0 160 160" role="img" aria-label="A simple flat-design logo mark: a coral circle sun above a teal triangular mountain, the kind of clean vector graphic that stays crisp at any size.">
+                    <rect width="160" height="160" fill="#FAFBFD"/>
+                    <circle cx="112" cy="46" r="22" fill="#D9583B"/>
+                    <polygon points="20,132 70,52 120,132" fill="#1B8A7A"/>
+                    <polygon points="55,132 70,107 85,132" fill="#167567"/>
+                </svg>
+                <div class="pix-label">Vector-style: a logo built from math-defined shapes</div>
+            </div>
+        </div>
+        <p style="font-size: 14px; color: #6b7a99; margin: 0 0 10px 0;">Left: Ansel Adams (American, 1902&ndash;1984), <em>The Tetons and the Snake River</em>, 1942, made for the National Park Service. Public domain (U.S. government work). Source: <a href="https://commons.wikimedia.org/wiki/File:Adams_The_Tetons_and_the_Snake_River.jpg">National Archives, via Wikimedia Commons</a>. The photograph is a fixed grid of pixels: enlarge it far enough and the grid shows. Right: the logo mark is built from flat geometric shapes with clean edges: the kind of graphic that stays crisp printed on a card or blown up on a billboard.</p>
+
+        <div class="callout c-help">
+            <div class="ck">&#128161; THE SHAPE TOOL IN PIXLR E</div>
+            <div class="cb">Select the <strong>Shape tool</strong> in the left toolbar to draw rectangles, ellipses, lines, and polygons directly onto a new layer. Hold Shift while dragging to keep a shape's proportions locked (a perfect circle or square). Every shape you draw sits on its own layer, so you can resize, recolor, or delete it without touching anything else in your composition.</div>
+        </div>
+    </div>
+
+    <!-- PART 3 · EDITING AND COMBINING SHAPES -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128269; PART 3 &middot; EDITING AND COMBINING SHAPES WITH LAYERS</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">In digital art, layers let you build, adjust, and refine your work piece by piece. Think of layers as transparent sheets stacked on top of each other, like a stack of pancakes: a plate, a pancake, a layer of butter, another pancake, syrup on top. Layers work the same way, except they are see-through, so you can see everything below while working on the top layer. This keeps your artwork organized and protects your earlier work from accidental changes.</p>
+
+        <div style="text-align:center;">
+            <div class="layer-stack">
+                <div class="layer-plate" style="background:#0E1C42;">Background layer</div>
+                <div class="layer-plate" style="background:#1B8A7A;">Shape 1: rectangle</div>
+                <div class="layer-plate" style="background:#167567;">Shape 2: circle</div>
+                <div class="layer-plate" style="background:#D9583B;">Combined / edited shape</div>
+                <div class="layer-plate" style="background:#c0472e;">Text: signature</div>
+            </div>
+            <p style="font-size: 14px; color: #6b7a99; margin: 8px 0 0 0;">Concept diagram. Every new shape adds a layer; you can reorder, hide, or edit each one independently.</p>
+        </div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 16px 0 10px 0;">When you open a new project, it starts with a single blank layer, visible in the Layers panel. From there, you add as many layers as your project needs. To combine two shapes into one new form, place them on separate layers so you can still move each one independently, then overlap them until the new shape reads clearly, and finally group or flatten the layers once you are happy with the result.</p>
+
+        <details>
+            <summary>Before you reveal: in your notebook, sketch two simple shapes overlapped to form a new recognizable object (for example, a house, a rocket, or an animal). Then click to compare your approach.</summary>
+            <div class="ac-body">One approach: start with the largest shape as your base layer, then add smaller shapes on top layers, checking after each addition whether the combination still reads clearly from a distance. If the new form gets confusing, hide layers one at a time to find which shape is causing the problem. There is no single correct combination; the test is whether a viewer recognizes your intended object.</div>
+        </details>
+
+        <div class="optima-widget ow-select">
+            <div class="widget-kicker">&#9889; TRY IT &middot; RASTER, VECTOR, OR LAYER?</div>
+            <div class="widget-question">Read each statement, decide which term it describes, then check your answer.</div>
+            <div class="widget-row" data-correct="layer" data-hint="Think about which term describes stacking and organizing parts of an image. Try again.">
+                <div class="widget-row-prompt">A transparent digital sheet that lets you edit one part of your artwork without affecting the rest.</div>
+                <div class="widget-options">
+                    <button data-choice="raster">Raster image</button>
+                    <button data-choice="vector">Vector graphic</button>
+                    <button data-choice="layer" data-fb="Correct. A layer is a transparent sheet you can edit independently, then stack with others.">Layer</button>
+                </div>
+            </div>
+            <div class="widget-row" data-correct="raster" data-hint="Think about which format is built from tiny colored squares. Try again.">
+                <div class="widget-row-prompt">An image built from tiny pixels that can look blurry when enlarged too far.</div>
+                <div class="widget-options">
+                    <button data-choice="raster" data-fb="Correct. Raster images are built from a fixed grid of pixels.">Raster image</button>
+                    <button data-choice="vector">Vector graphic</button>
+                    <button data-choice="layer">Layer</button>
+                </div>
+            </div>
+            <div class="widget-row" data-correct="vector" data-hint="Think about which format stays crisp no matter how large you make it. Try again.">
+                <div class="widget-row-prompt">A shape built from mathematical lines and curves, which can be resized infinitely without losing quality.</div>
+                <div class="widget-options">
+                    <button data-choice="raster">Raster image</button>
+                    <button data-choice="vector" data-fb="Correct. Vector graphics use math-defined lines and curves, so they stay crisp at any size.">Vector graphic</button>
+                    <button data-choice="layer">Layer</button>
+                </div>
+            </div>
+            <button class="widget-reset">Reset</button>
+        </div>
+    </div>
+
+    <!-- STUDIO NOTE -->
+    <div class="callout c-art">
+        <div class="ck">&#127912; RESOLUTION MATTERS TOO</div>
+        <div class="cb">The resolution of an image is the number of pixels captured, often measured in dots per inch (dpi). Low-resolution images look blurry or grainy when enlarged; high-resolution images stay sharp when resized, but the file is larger. When you export this week's project, keep your canvas at 1920 x 1080 so your shapes stay crisp.</div>
+    </div>
+
+    <!-- AI AWARENESS (factual) -->
+    <div class="callout c-warn">
+        <div class="ck">&#9888;&#65039; WORTH KNOWING &middot; AI SHAPE GENERATION</div>
+        <div class="cb">An AI tool can generate a finished icon or logo from a text prompt, but it will not show you how the shapes were built, layered, or combined. Practicing the combine-and-edit process yourself, one layer at a time, is what builds the skill this course is teaching.</div>
+    </div>
+
+    <!-- VOCABULARY -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128221; VOCABULARY</div>
+        <div class="vocab-grid">
+            <div class="vocab-card"><strong>Raster Image</strong>An image built from a fixed grid of pixels; can blur when enlarged.</div>
+            <div class="vocab-card"><strong>Vector Graphic</strong>An image built from math-defined lines and curves; stays crisp at any size.</div>
+            <div class="vocab-card"><strong>Resolution</strong>The number of pixels captured in an image, often measured in dpi.</div>
+            <div class="vocab-card"><strong>Layer</strong>A transparent digital sheet that can be stacked, edited, and reordered independently.</div>
+            <div class="vocab-card"><strong>Shape Tool</strong>The Pixlr E tool for drawing precise rectangles, ellipses, lines, and polygons.</div>
+            <div class="vocab-card"><strong>Combine</strong>Overlapping two or more shapes so they read as one new form.</div>
+            <div class="vocab-card"><strong>Flatten</strong>Merging layers into one, once editing is finished.</div>
+            <div class="vocab-card"><strong>Group</strong>Linking multiple layers so they move and resize together.</div>
+        </div>
+    </div>
+
+    <!-- WHAT YOU'LL DO NEXT -->
+    <div style="background: #FFFFFF; border-top: 3px solid #0E1C42; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 16px;">&#10145;&#65039; WHAT YOU'LL DO NEXT (IN CANVAS)</div>
+        <div class="next-item"><div class="num learn">1</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Discussion: Two Shapes, One Idea</strong> &middot; Week 4</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Describe two simple shapes you plan to combine for this week's project and what new object or idea they will form, then respond to a classmate.</div></div></div>
+        <div class="next-item"><div class="num learn">2</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Quiz: Drawing &amp; Editing Shapes</strong> &middot; Week 4</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">8 questions, auto-graded in Canvas.</div></div></div>
+        <div class="next-item"><div class="num create">3</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Project: Draw &amp; Edit Shapes, "Two Are Better Than One"</strong> &middot; Week 4</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Combine and edit at least two shapes in Pixlr E to build one new recognizable form, using layers deliberately. Your graded artwork this week.</div></div></div>
+    </div>
+
+    <!-- WRAP-UP -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128170; THE BIG IDEA</div>
+        <p style="font-size: 18px; color: #1a2340; line-height: 1.65; margin: 0;">A single shape is a building block. Two shapes, drawn with precision and combined with intention, can become an object neither shape could be alone. Layers are what make that combining safe to experiment with: you can always undo one piece without losing the rest. This week, two are better than one.</p>
+    </div>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div style="background: #0E1C42; border-top: 3px solid #55C8E8; padding: 18px 34px; text-align: center;">
+    <div style="font-size: 18px; color: #ffffff; margin-bottom: 6px;"><span style="color: #55c8e8;">Optima Academy Online</span> &middot; DIGITAL ART IMAGING &middot; Quarter 1 &middot; Student Lesson Page</div>
+    <div style="font-size: 13px; color: rgba(255,255,255,0.65); margin-bottom: 4px;">Module 1 &middot; Week 4 &middot; Drawing &amp; Editing Shapes</div>
+    <div style="font-size: 12px; color: rgba(255,255,255,0.4);">&copy; Optima Academy Online &middot; An Education Experience Company. Concept diagrams built with CSS/SVG. Photograph shown is a U.S. government work in the public domain; see caption for source.</div>
+</div>
+
+</div>
+
+<!-- ===== WIDGET RUNTIME — from optima-lesson-format template. One delegated listener drives every engine. ===== -->
+<script>
+(function () {
+  document.addEventListener('click', function (e) {
+    var reset = e.target.closest('.widget-reset');
+    if (reset) {
+      var w = reset.closest('.optima-widget');
+      w.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      w.querySelectorAll('.widget-feedback').forEach(function (f) { f.classList.remove('show'); f.textContent = ''; });
+      w.querySelectorAll('.row-feedback').forEach(function (f) { f.remove(); });
+      return;
+    }
+    var rBtn = e.target.closest('.ow-reflect .widget-options button');
+    if (rBtn) {
+      var rw = rBtn.closest('.optima-widget');
+      rw.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected'); });
+      rBtn.classList.add('selected');
+      var fb = rw.querySelector('.widget-feedback');
+      fb.textContent = rBtn.dataset.response || '';
+      fb.classList.add('show');
+      return;
+    }
+    var sBtn = e.target.closest('.ow-select .widget-row .widget-options button');
+    if (sBtn) {
+      var row = sBtn.closest('.widget-row');
+      var correct = row.dataset.correct;
+      row.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      var right = sBtn.dataset.choice === correct;
+      sBtn.classList.add(right ? 'correct' : 'incorrect');
+      var text = right ? (sBtn.dataset.fb || row.dataset.fb || 'Right.') : (sBtn.dataset.fb || row.dataset.hint || 'Not quite. Try again.');
+      var rf = row.querySelector('.row-feedback') || row.appendChild(document.createElement('div'));
+      rf.className = 'row-feedback ' + (right ? 'correct' : 'incorrect');
+      rf.textContent = text;
+      return;
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

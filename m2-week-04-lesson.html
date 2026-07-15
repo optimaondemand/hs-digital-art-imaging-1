@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Digital Art Imaging &mdash; Week 4: Editing: Emphasis &amp; Non-Digital Editing</title>
+<style>
+    body { margin: 0; padding: 0; font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #f4f6fa; }
+    .canvas-frame { max-width: 1100px; margin: 0 auto; background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+
+    /* ===== WIDGET CSS — from optima-lesson-format/assets/lesson-interactive-template.html (byte-consistent) ===== */
+    .optima-widget { background: linear-gradient(135deg, #E8F6FB 0%, #F4F9FC 100%); border: 1px solid #C5DCE5; border-left: 5px solid #2196D0; border-radius: 8px; padding: 18px 22px; margin: 18px 0; }
+    .widget-kicker { font-size: 11px; color: #1B6A94; margin-bottom: 10px; letter-spacing: 0.4px; }
+    .widget-question { font-size: 17px; color: #0E1C42; margin-bottom: 14px; line-height: 1.55; }
+    .widget-row { background: #FFFFFF; border: 1px solid #D0D9E8; border-radius: 6px; padding: 12px 14px; margin-bottom: 10px; }
+    .widget-row-prompt { font-size: 15px; color: #0E1C42; margin-bottom: 8px; line-height: 1.5; font-style: italic; }
+    .widget-options { display: flex; flex-wrap: wrap; gap: 8px; }
+    .widget-options button { background: #FFFFFF; border: 1.5px solid #D0D9E8; border-radius: 8px; padding: 8px 14px; font-size: 14px; color: #0E1C42; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+    .widget-options button:hover { background: #F4F6FA; border-color: #55C8E8; }
+    .widget-options button.selected { background: #0E1C42; color: #FFFFFF; border-color: #0E1C42; }
+    .widget-options button.correct { background: #D8F0DD; border-color: #2A9D5C; color: #1A6B3D; }
+    .widget-options button.incorrect { background: #FDECEC; border-color: #C0392B; color: #8A1F16; }
+    .widget-feedback { background: #FFFFFF; border-left: 3px solid #C7922C; padding: 10px 14px; font-size: 15px; color: #1a2340; line-height: 1.55; margin: 10px 0; display: none; border-radius: 4px; }
+    .widget-feedback.show { display: block; }
+    .row-feedback { padding: 8px 12px; margin-top: 8px; font-size: 14px; border-radius: 4px; line-height: 1.5; }
+    .row-feedback.correct { background: #D8F0DD; border-left: 3px solid #2A9D5C; color: #1A6B3D; }
+    .row-feedback.incorrect { background: #FDECEC; border-left: 3px solid #C0392B; color: #8A1F16; }
+    .widget-reset { background: transparent; border: 1px solid #C7922C; color: #C7922C; border-radius: 6px; padding: 6px 12px; font-size: 12px; cursor: pointer; font-family: inherit; margin-top: 6px; }
+    .widget-reset:hover { background: #FDF3E3; }
+
+    /* ===== Art-course components (layered on the brand; teal/coral are activity accents only) ===== */
+    .art-fig { margin: 14px 0; text-align: center; }
+    .art-fig img { max-width: 100%; height: auto; border-radius: 6px; border: 1px solid #D0D9E8; }
+    .art-fig figcaption { font-size: 13px; color: #666; margin-top: 8px; line-height: 1.5; }
+    .art-fig figcaption a { color: #1B6A94; }
+    .el-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin: 16px 0; }
+    .el-card { border: 1px solid #D0D9E8; border-radius: 8px; overflow: hidden; }
+    .el-demo { height: 80px; display: flex; align-items: center; justify-content: center; }
+    .el-text { padding: 10px 13px; }
+    .el-text strong { color: #167567; display: block; margin-bottom: 3px; font-size: 16px; }
+    .el-text span { font-size: 14px; color: #1a2340; }
+    .callout { border-radius: 6px; padding: 14px 20px; margin: 16px 0; }
+    .callout .ck { font-size: 11px; margin-bottom: 8px; letter-spacing: 0.5px; }
+    .callout .cb { font-size: 16px; line-height: 1.6; color: #0E1C42; }
+    .c-help { background: #E8F6FB; border-left: 5px solid #2196D0; border-top: 3px solid #55C8E8; }
+    .c-help .ck { color: #1B6A94; }
+    .c-warn { background: #FDECEC; border-left: 5px solid #C0392B; border-top: 3px solid #E74C3C; }
+    .c-warn .ck { color: #8A1F16; }
+    .c-art { background: #E6F4F1; border-left: 5px solid #1B8A7A; }
+    .c-art .ck { color: #167567; }
+    .next-item { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+    .next-item .num { min-width: 30px; height: 30px; border-radius: 50%; color: #fff; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .num.learn { background: #1B8A7A; }
+    .num.create { background: #D9583B; }
+    .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+    .vocab-card { background: #EEF1F8; border-radius: 6px; padding: 10px 13px; font-size: 14px; color: #1a2340; }
+    .vocab-card strong { color: #0E1C42; display: block; margin-bottom: 2px; }
+    details { background: #FFFFFF; border: 1px solid #D0D9E8; border-left: 4px solid #C7922C; border-radius: 6px; padding: 12px 18px; margin: 14px 0; }
+    details summary { font-size: 16px; color: #0E1C42; cursor: pointer; }
+    details .ac-body { font-size: 16px; color: #1a2340; margin-top: 10px; padding-top: 10px; border-top: 1px solid #EEF1F8; line-height: 1.6; }
+    /* Pixel vs. smooth concept visual */
+    .pix-wrap { display: flex; flex-wrap: wrap; gap: 22px; align-items: center; justify-content: center; margin: 16px 0 6px; }
+    .pix-panel { text-align: center; }
+    .pix-label { font-size: 12px; color: #6b7a99; margin-top: 8px; }
+    .rvv { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+    .rvv > div { border: 1px solid #D0D9E8; border-radius: 8px; padding: 14px 16px; }
+    .rvv h4 { margin: 0 0 6px 0; font-size: 16px; }
+    .rvv p { margin: 0; font-size: 14px; color: #1a2340; line-height: 1.55; }
+    @media (max-width: 560px){ .rvv { grid-template-columns: 1fr; } }
+    /* Emphasis grid */
+    .emph-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin: 14px 0; }
+    .emph-tile { border: 1px solid #D0D9E8; border-radius: 8px; overflow: hidden; text-align: center; }
+    .emph-demo { height: 90px; }
+    .emph-name { font-size: 13px; color: #0e1c42; padding: 8px; }
+    /* Frame diagram */
+    .frame-wrap { text-align: center; margin: 16px 0 6px; }
+</style>
+</head>
+<body>
+<div class="canvas-frame">
+
+<!-- ===== HEADER ===== -->
+<div style="background: #0E1C42; border-bottom: 5px solid #55C8E8; padding: 22px 34px;">
+    <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 10px;">
+        <div style="width: 52px; height: 52px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><img src="https://raw.githubusercontent.com/optimaondemand/optima-assets/eeb0b335630058906d52f478028361d352253a93/images/Optima%20Final%20Circle%20-%20Owl%20Only.png" alt="Optima Academy" style="width: 50px; height: 40px; object-fit: contain;" /></div>
+        <div>
+            <div style="font-size: 28px; color: #ffffff; line-height: 1.2;">Optima Academy Online</div>
+            <div style="font-size: 12px; color: #55c8e8;">An Education Experience Company</div>
+        </div>
+    </div>
+    <div style="font-size: 36px; color: #ffffff; margin-bottom: 6px;">DIGITAL ART IMAGING</div>
+</div>
+
+<!-- ===== METADATA STRIP ===== -->
+<div style="background: #FFFFFF; border-bottom: 2px solid #D0D9E8; display: flex; flex-wrap: wrap;">
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Quarter / Week</div>
+        <div style="font-size: 17px; color: #0e1c42;">Q2 &middot; Module 2, Week 4</div>
+        <div style="font-size: 12px; color: #666;">Module 2: Capturing Light &amp; Editing</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Focus</div>
+        <div style="font-size: 17px; color: #0e1c42;">Editing: Emphasis &amp; Non-Digital Editing</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">This Week's Project</div>
+        <div style="font-size: 17px; color: #0e1c42; font-style: italic;">Art Lesson &amp; Reflection</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Software</div>
+        <div style="font-size: 16px; color: #0e1c42;">Pixlr E (free, browser)</div>
+    </div>
+</div>
+
+<!-- ===== BODY WRAPPER ===== -->
+<div style="padding: 24px 34px;">
+
+    <!-- Lavender title strip -->
+    <div style="background: #EEF1F8; border-left: 5px solid #0E1C42; border-radius: 7px; padding: 18px 22px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #0e1c42; margin-bottom: 6px;">MODULE 2 &middot; WEEK 4</div>
+        <div style="font-size: 22px; color: #0e1c42; margin-bottom: 4px;">Editing: Emphasis &amp; Non-Digital Editing</div>
+        <div style="font-size: 16px; color: #666;">Lesson</div>
+    </div>
+
+    <!-- Essential Question -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128214; ESSENTIAL QUESTION</div>
+        <div style="font-size: 20px; color: #0e1c42; font-style: italic; margin-bottom: 10px;">How does an artist make sure a viewer looks exactly where they want, and how much of that decision happens before you ever open editing software?</div>
+        <div style="font-size: 18px; color: #1a2340; line-height: 1.65;">Online, an image has a few seconds to grab attention. Emphasis is the principle that decides where a viewer's eye lands first. This week you learn six ways to build emphasis, and you learn that some of the strongest editing tricks do not use a computer at all: they happen in front of the lens, before you ever press the shutter.</div>
+    </div>
+
+    <!-- PART 1 · LOOK FIRST -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128064; PART 1 &middot; LOOK FIRST</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;"><strong>Emphasis</strong> is a principle of design that guides the viewer's eye to the most important part of an image, the <strong>focal point</strong>. In digital photography and digital art, emphasis can be created while taking the photo, or after the fact through editing. Look at how each of the tiles below pulls your eye to one spot using a different method.</p>
+
+        <div class="emph-grid">
+            <div class="emph-tile">
+                <svg class="emph-demo" viewBox="0 0 150 90" width="100%" height="90" role="img" aria-label="A grid of gray circles with one red circle standing out, demonstrating emphasis through color.">
+                    <rect width="150" height="90" fill="#f4f6fa"/>
+                    <circle cx="25" cy="25" r="12" fill="#c7ccd6"/><circle cx="60" cy="25" r="12" fill="#c7ccd6"/><circle cx="95" cy="25" r="12" fill="#D9583B"/><circle cx="130" cy="25" r="12" fill="#c7ccd6"/>
+                    <circle cx="25" cy="65" r="12" fill="#c7ccd6"/><circle cx="60" cy="65" r="12" fill="#c7ccd6"/><circle cx="95" cy="65" r="12" fill="#c7ccd6"/><circle cx="130" cy="65" r="12" fill="#c7ccd6"/>
+                </svg>
+                <div class="emph-name">Color</div>
+            </div>
+            <div class="emph-tile">
+                <svg class="emph-demo" viewBox="0 0 150 90" width="100%" height="90" role="img" aria-label="A row of circles with one star shape standing out, demonstrating emphasis through shape.">
+                    <rect width="150" height="90" fill="#f4f6fa"/>
+                    <circle cx="25" cy="45" r="14" fill="#a9b4c9"/><circle cx="60" cy="45" r="14" fill="#a9b4c9"/>
+                    <polygon points="95,25 100,40 116,40 103,49 108,64 95,55 82,64 87,49 74,40 90,40" fill="#1B8A7A"/>
+                    <circle cx="130" cy="45" r="14" fill="#a9b4c9"/>
+                </svg>
+                <div class="emph-name">Shape</div>
+            </div>
+            <div class="emph-tile">
+                <svg class="emph-demo" viewBox="0 0 150 90" width="100%" height="90" role="img" aria-label="A row of small circles with one large circle standing out, demonstrating emphasis through size.">
+                    <rect width="150" height="90" fill="#f4f6fa"/>
+                    <circle cx="22" cy="70" r="9" fill="#a9b4c9"/><circle cx="45" cy="70" r="9" fill="#a9b4c9"/>
+                    <circle cx="95" cy="45" r="26" fill="#D9583B"/>
+                    <circle cx="128" cy="70" r="9" fill="#a9b4c9"/>
+                </svg>
+                <div class="emph-name">Size</div>
+            </div>
+            <div class="emph-tile">
+                <svg class="emph-demo" viewBox="0 0 150 90" width="100%" height="90" role="img" aria-label="A blurred background of faint circles with one sharp, detailed circle in focus, demonstrating emphasis through detail.">
+                    <rect width="150" height="90" fill="#f4f6fa"/>
+                    <circle cx="25" cy="25" r="10" fill="#dfe3ea"/><circle cx="120" cy="30" r="10" fill="#dfe3ea"/><circle cx="30" cy="70" r="10" fill="#dfe3ea"/><circle cx="125" cy="68" r="10" fill="#dfe3ea"/>
+                    <circle cx="75" cy="48" r="18" fill="#1B8A7A"/>
+                    <circle cx="75" cy="48" r="10" fill="#167567"/>
+                    <circle cx="75" cy="48" r="4" fill="#0e1c42"/>
+                </svg>
+                <div class="emph-name">Detail</div>
+            </div>
+            <div class="emph-tile">
+                <svg class="emph-demo" viewBox="0 0 150 90" width="100%" height="90" role="img" aria-label="A bright colorful background with one dark silhouette shape standing out, demonstrating emphasis through contrast.">
+                    <rect width="150" height="90" fill="#fce8c9"/>
+                    <path d="M75 20 C 55 20, 45 40, 55 55 L 45 75 L 105 75 L 95 55 C 105 40, 95 20, 75 20 Z" fill="#0e1c42"/>
+                </svg>
+                <div class="emph-name">Contrast</div>
+            </div>
+            <div class="emph-tile">
+                <svg class="emph-demo" viewBox="0 0 150 90" width="100%" height="90" role="img" aria-label="A field of small green dots with one flower shape standing alone, demonstrating emphasis through isolation.">
+                    <rect width="150" height="90" fill="#e6f4e6"/>
+                    <g fill="#8fc98f"><circle cx="15" cy="15" r="3"/><circle cx="30" cy="20" r="3"/><circle cx="20" cy="35" r="3"/><circle cx="10" cy="55" r="3"/><circle cx="25" cy="70" r="3"/><circle cx="130" cy="18" r="3"/><circle cx="140" cy="35" r="3"/><circle cx="125" cy="55" r="3"/><circle cx="135" cy="72" r="3"/><circle cx="60" cy="12" r="3"/><circle cx="90" cy="14" r="3"/><circle cx="55" cy="78" r="3"/><circle cx="95" cy="80" r="3"/></g>
+                    <circle cx="75" cy="45" r="8" fill="#f0c34a"/>
+                    <g fill="#ffffff"><circle cx="75" cy="34" r="6"/><circle cx="86" cy="45" r="6"/><circle cx="75" cy="56" r="6"/><circle cx="64" cy="45" r="6"/></g>
+                    <circle cx="75" cy="45" r="4" fill="#f0c34a"/>
+                </svg>
+                <div class="emph-name">Isolation</div>
+            </div>
+        </div>
+        <p style="font-size: 14px; color: #6b7a99; margin: 0;">Concept diagrams. Each tile uses one method of emphasis. Real photographers often combine two or more at once.</p>
+
+        <div class="optima-widget ow-reflect">
+            <div class="widget-kicker">&#128173; QUICK CHECK-IN &middot; NO WRONG ANSWER</div>
+            <div class="widget-question">Which of the six emphasis methods above do you think would be easiest to create with your own camera, and why?</div>
+            <div class="widget-options">
+                <button data-response="Isolation is often the easiest to set up: find a single subject with open space around it, and the emphasis is nearly automatic.">Isolation, just photograph something alone</button>
+                <button data-response="Contrast is very achievable with light and dark subjects or a silhouette against a bright sky.">Contrast, light against dark</button>
+                <button data-response="Color works well if you can find or stage one bright object in an otherwise muted scene.">Color, one bright object in a dull scene</button>
+                <button data-response="Detail requires getting close and often relies on your camera's focus settings, so it takes a bit more practice to control.">Detail, getting close with a blurred background</button>
+            </div>
+            <div class="widget-feedback"></div>
+            <button class="widget-reset">Reset</button>
+        </div>
+    </div>
+
+    <!-- PART 2 · SIX WAYS TO BUILD EMPHASIS -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#127912; PART 2 &middot; SIX WAYS TO BUILD EMPHASIS</div>
+
+        <ul style="font-size: 17px; color: #1a2340; line-height: 1.8; margin: 0 0 12px 0; padding-left: 22px;">
+            <li><strong>Color:</strong> one of the fastest ways to direct attention. A grayscale photo with a single bright red apple pulls the eye straight to it.</li>
+            <li><strong>Shape:</strong> unique or unexpected shapes stand out. A starfish among round seashells stands apart because its shape (and texture) is unlike anything around it.</li>
+            <li><strong>Size:</strong> a larger subject reads as more important, especially when combined with forced perspective; lowering the camera angle can make a person look much larger than normal.</li>
+            <li><strong>Detail:</strong> zooming in on one part of a scene and using a shallow depth of field to blur the background makes the sharp, detailed area the automatic focal point, as when grapes stay sharp while the background blurs.</li>
+            <li><strong>Contrast:</strong> especially light against dark, draws attention immediately. A dark silhouette against a bright, colorful background becomes the strongest point in the image.</li>
+            <li><strong>Isolation:</strong> when something stands alone, the viewer's eye goes straight to it. A single daisy shot from a bird's-eye view in a field of greenery becomes the obvious focal point simply because it is the only flower.</li>
+        </ul>
+
+        <div class="pix-wrap">
+            <figure class="art-fig">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/9b/Papaver_in_Vienna1.jpg" alt="A single bright red poppy flower stands out sharply against a muted, softer-colored background." style="max-width: 200px;" />
+                <figcaption>David McGregor, <em>Papaver in Vienna</em>. Licensed CC BY-SA 2.0. Source: <a href="https://commons.wikimedia.org/wiki/File:Papaver_in_Vienna1.jpg">commons.wikimedia.org</a></figcaption>
+            </figure>
+            <figure class="art-fig">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a0/Starfish_08_%28paulshaffner%29.jpg" alt="A starfish on the seafloor, its five-pointed shape standing apart from the smoother, rounder shapes around it." style="max-width: 200px;" />
+                <figcaption>Paul Shaffner, <em>Starfish, Lazy Lagoon, Tanzania</em>, 2007. Licensed CC BY 2.0. Source: <a href="https://commons.wikimedia.org/wiki/File:Starfish_08_(paulshaffner).jpg">commons.wikimedia.org</a></figcaption>
+            </figure>
+            <figure class="art-fig">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/d/df/Cat_unsplash_%282016_photo%3B_cropped_2022%29.jpg" alt="A cat's face in sharp focus with its eyes and fur clearly detailed, while the background falls into soft blur." style="max-width: 200px;" />
+                <figcaption>Mikhail Vasilyev, <em>Cat Portrait</em>, 2016. Public domain (CC0, Unsplash). Source: <a href="https://commons.wikimedia.org/wiki/File:Cat_unsplash_(2016_photo;_cropped_2022).jpg">commons.wikimedia.org</a></figcaption>
+            </figure>
+        </div>
+        <div class="pix-wrap">
+            <figure class="art-fig">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/d/de/Dead_Tree_Silhouette_with_Sunset.JPG" alt="A dead tree rendered as a dark silhouette against a bright, glowing sunset sky, a strong contrast between dark and light." style="max-width: 200px;" />
+                <figcaption>ShadowShift, <em>Dead Tree Silhouette with Sunset</em>, 2005. Public domain. Source: <a href="https://commons.wikimedia.org/wiki/File:Dead_Tree_Silhouette_with_Sunset.JPG">commons.wikimedia.org</a></figcaption>
+            </figure>
+            <figure class="art-fig">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/4/4d/Lone_tree_in_a_ploughed_field_-_geograph.org.uk_-_1573975.jpg" alt="A single tree standing alone in an otherwise empty, freshly ploughed field." style="max-width: 200px;" />
+                <figcaption>Bob Jones, <em>Lone Tree in a Ploughed Field</em>, 2009. Licensed CC BY-SA 2.0. Source: <a href="https://commons.wikimedia.org/wiki/File:Lone_tree_in_a_ploughed_field_-_geograph.org.uk_-_1573975.jpg">commons.wikimedia.org</a></figcaption>
+            </figure>
+        </div>
+        <div class="pix-wrap">
+            <figure class="art-fig">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/8/88/Tourists_Posing_to_hold_the_Leaning_Tower_of_Pisa%2C_2023.jpg" alt="A tourist in the foreground poses with hands raised, appearing to hold up the distant Leaning Tower of Pisa behind them; forced perspective makes the tower look small enough to balance on their palm." style="max-width: 260px;" />
+                <figcaption>Julian Lupyan, <em>Tourists Posing to Hold the Leaning Tower of Pisa</em>, 2023. Public domain (CC0). Source: <a href="https://commons.wikimedia.org/wiki/File:Tourists_Posing_to_hold_the_Leaning_Tower_of_Pisa,_2023.jpg">commons.wikimedia.org</a></figcaption>
+            </figure>
+        </div>
+        <p style="font-size: 14px; color: #6b7a99; margin: 0 0 10px 0;">Forced perspective uses size and distance together: placing the foreground subject's hands at exactly the right spot makes a giant tower look small enough to hold. It is an extreme version of the same "size" emphasis at work any time a nearer subject reads as more important than something farther away.</p>
+
+        <div class="callout c-help">
+            <div class="ck">&#128161; STACK YOUR METHODS</div>
+            <div class="cb">You do not have to choose only one method of emphasis. The starfish example uses shape AND texture together. Look for a shot where you can combine two methods (color plus isolation, or detail plus contrast) for a stronger effect.</div>
+        </div>
+    </div>
+
+    <!-- PART 3 · NON-DIGITAL EDITING -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128247; PART 3 &middot; NON-DIGITAL EDITING</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Not all editing happens on a computer. You can create emphasis <strong>before</strong> you even take the picture, using simple, non-digital tools that change how light enters your camera or how your subject is framed. Most of these tools are things you can find at home.</p>
+
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 16px 0 6px 0;">Filters</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">A filter is anything you place in front of your camera lens to change the light. Real photography filters add color, create starburst effects, or soften bright light, but you can improvise your own with colored cellophane or plastic, a reflective surface, or thin white paper or tissue to soften harsh light. These DIY filters can completely change the mood and emphasis of a photo.</p>
+
+        <div class="pix-wrap">
+            <figure class="art-fig">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/Blue%2C_Pink%2C_Gold_%282012-05-01_by_Ian_T._McFarland%29.jpg" alt="A musician performing on stage, lit by overlapping colored stage lights in blue, pink, and gold, which tint the whole scene rather than the light being white." style="max-width: 220px;" />
+                <figcaption>Ian T. McFarland, <em>Blue, Pink, Gold</em>, 2012. Licensed CC BY-SA 2.0. Source: <a href="https://commons.wikimedia.org/wiki/File:Blue,_Pink,_Gold_(2012-05-01_by_Ian_T._McFarland).jpg">commons.wikimedia.org</a></figcaption>
+            </figure>
+        </div>
+        <p style="font-size: 14px; color: #6b7a99; margin: 0 0 10px 0;">Professional colored stage gels and a homemade cellophane filter work the same way: a colored, translucent material sits between the light and the camera, tinting everything the lens sees.</p>
+
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 16px 0 6px 0;">Framing</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Framing directs the viewer's attention by shooting <em>through</em> something instead of using a digital frame. You physically place an object in front of your lens to create a natural border around your subject.</p>
+
+        <div class="frame-wrap">
+            <svg width="220" height="160" viewBox="0 0 220 160" role="img" aria-label="A diagram showing a circular tube frame in the foreground with a subject visible through the opening in the center.">
+                <rect width="220" height="160" fill="#EEF1F8"/>
+                <circle cx="110" cy="80" r="70" fill="#0e1c42"/>
+                <circle cx="110" cy="80" r="46" fill="#f4f6fa"/>
+                <circle cx="110" cy="80" r="20" fill="#D9583B"/>
+            </svg>
+        </div>
+        <p style="font-size: 14px; color: #6b7a99; margin: 0 0 10px 0; text-align: center;">Concept diagram. A paper towel tube, spiraled orange peel, or drinking glass held in front of the lens can frame a subject this way.</p>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Options for a natural frame include a paper towel tube, an ice cream cone with the bottom cut out, a spiraled orange peel, a drinking glass, or a box or cut-out cardboard shape.</p>
+
+        <figure class="art-fig">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/0/0e/City_view_from_window_frame_%28Unsplash%29.jpg" alt="A view of a city street seen through an interior window, the window's edges forming a natural frame around the scene beyond." style="max-width: 320px;" />
+            <figcaption>Fabrizio Verrecchia, <em>City View from Window Frame</em>, Paris, 2017. Public domain (CC0, Unsplash). Source: <a href="https://commons.wikimedia.org/wiki/File:City_view_from_window_frame_(Unsplash).jpg">commons.wikimedia.org</a></figcaption>
+        </figure>
+
+        <details>
+            <summary>Before you look: name two more non-digital tools you could hang in front of your lens for a creative effect, beyond filters and framing. Write your answer, then click to check.</summary>
+            <div class="ac-body">Options from the lesson include transparent surfaces with water droplets, plastic wrap, yarn or string, tinsel, a colander, sheer fabric, or a prism. Always protect your lens: never use anything sharp or dirty, and work with a partner if you need to hold an object steady.</div>
+        </details>
+
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 20px 0 6px 0;">Reflection and refraction</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;"><strong>Reflection</strong> is not limited to mirrors. Puddles, lakes, shiny buildings, and windows can highlight your subject in a second location or double the visual interest of a scene. <strong>Refraction</strong> happens when light bends through a transparent object, such as curved glassware, marbles, water droplets, or bubbles, distorting the subject in a dream-like, surreal way that makes the focal point stand out through shape or clarity changes.</p>
+
+        <div class="pix-wrap">
+            <figure class="art-fig">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/d/da/The_reflection_like_a_mirror_%287834695180%29.jpg" alt="Trees reflected so clearly in still park water that the reflection reads almost like a mirror image." style="max-width: 280px;" />
+                <figcaption>Takashi Hososhima, <em>The Reflection Like a Mirror</em>, Mizumoto Park, Tokyo, 2012. Licensed CC BY-SA 2.0. Source: <a href="https://commons.wikimedia.org/wiki/File:The_reflection_like_a_mirror_(7834695180).jpg">commons.wikimedia.org</a></figcaption>
+            </figure>
+            <figure class="art-fig">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/A_pencil_in_water.jpg" alt="A pencil partly submerged in a glass of water, appearing bent at the waterline due to light refraction." style="max-width: 280px;" />
+                <figcaption>ShineAXLVII, <em>A Pencil in Water</em>. Licensed CC BY-SA 4.0. Source: <a href="https://commons.wikimedia.org/wiki/File:A_pencil_in_water.jpg">commons.wikimedia.org</a></figcaption>
+            </figure>
+        </div>
+
+        <div class="optima-widget ow-select">
+            <div class="widget-kicker">&#9889; TRY IT &middot; EMPHASIS METHOD OR NON-DIGITAL TOOL?</div>
+            <div class="widget-question">Read each technique, decide which category fits best, then check your answer.</div>
+            <div class="widget-row" data-correct="tool" data-hint="Think about whether this happens in front of the lens before the photo is taken, or is a visual effect within the finished image. Try again.">
+                <div class="widget-row-prompt">A photographer holds a spiraled orange peel in front of the lens to create a natural border around the subject.</div>
+                <div class="widget-options">
+                    <button data-choice="method">Emphasis method (color/shape/size/detail/contrast/isolation)</button>
+                    <button data-choice="tool" data-fb="Right. This is framing, a non-digital editing tool used before the shot is taken.">Non-digital editing tool</button>
+                </div>
+            </div>
+            <div class="widget-row" data-correct="method" data-hint="Think about which of the six emphasis methods relies on getting close and blurring the background. Try again.">
+                <div class="widget-row-prompt">A photographer zooms in on a ladybug and blurs the background so only the ladybug is sharp.</div>
+                <div class="widget-options">
+                    <button data-choice="method" data-fb="Right. This is emphasis through detail, using sharp focus against a blurred background.">Emphasis method (color/shape/size/detail/contrast/isolation)</button>
+                    <button data-choice="tool">Non-digital editing tool</button>
+                </div>
+            </div>
+            <button class="widget-reset">Reset</button>
+        </div>
+    </div>
+
+    <!-- AI AWARENESS (factual) -->
+    <div class="callout c-warn">
+        <div class="ck">&#9888;&#65039; WORTH KNOWING &middot; AI IMAGE TOOLS</div>
+        <div class="cb">An AI image generator can produce a picture described as having a "blurred background" or "dramatic silhouette" from a text prompt. It cannot hold a real orange peel up to a real lens or find a real puddle to shoot a reflection in. The physical and compositional decisions behind this week's non-digital techniques are what your project grades.</div>
+    </div>
+
+    <!-- VOCABULARY -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128221; VOCABULARY</div>
+        <div class="vocab-grid">
+            <div class="vocab-card"><strong>Emphasis</strong>A principle of design that guides the eye to the focal point.</div>
+            <div class="vocab-card"><strong>Focal Point</strong>The most important part of an image, where the eye is meant to land.</div>
+            <div class="vocab-card"><strong>Depth of Field</strong>How much of a scene, front to back, appears in sharp focus.</div>
+            <div class="vocab-card"><strong>Non-Digital Editing</strong>Changing a photo's look using physical tools in front of the lens, before software.</div>
+            <div class="vocab-card"><strong>Filter (Photography)</strong>Anything placed in front of a lens to change the light.</div>
+            <div class="vocab-card"><strong>Framing (Photography)</strong>Shooting through an object to create a natural border around the subject.</div>
+            <div class="vocab-card"><strong>Reflection</strong>A mirrored image of the subject, found in water, glass, or shiny surfaces.</div>
+            <div class="vocab-card"><strong>Refraction</strong>The bending of light through a transparent object, distorting the subject.</div>
+        </div>
+    </div>
+
+    <!-- WHAT YOU'LL DO NEXT -->
+    <div style="background: #FFFFFF; border-top: 3px solid #0E1C42; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 16px;">&#10145;&#65039; WHAT YOU'LL DO NEXT (IN CANVAS)</div>
+        <div class="next-item"><div class="num learn">1</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Emphasis Method Match</strong> &middot; Week 4</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Match sample photos to the emphasis method (color, shape, size, detail, contrast, isolation) each one uses. Completion grade.</div></div></div>
+        <div class="next-item"><div class="num learn">2</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Discussion: DIY Tool Test</strong> &middot; Week 4</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Name one non-digital tool from the lesson you want to try, predict its effect, and respond to a classmate.</div></div></div>
+        <div class="next-item"><div class="num learn">3</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Quiz: Emphasis &amp; Non-Digital Editing</strong> &middot; Week 4</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">8 questions, auto-graded in Canvas.</div></div></div>
+        <div class="next-item"><div class="num create">4</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Art Lesson &amp; Reflection</strong> &middot; Week 4</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Photograph a subject using one emphasis method and one non-digital editing tool, then reflect on your choices. Your graded artwork this week.</div></div></div>
+    </div>
+
+    <!-- WRAP-UP -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128170; THE BIG IDEA</div>
+        <p style="font-size: 18px; color: #1a2340; line-height: 1.65; margin: 0;">Emphasis is a decision, not an accident, and some of the best editing decisions happen before you ever pick up a mouse. A well-placed orange peel, a puddle reflection, or one bright object in a muted scene can do more work than an hour in software. This week, practice building emphasis with your hands before you build it with your cursor.</p>
+    </div>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div style="background: #0E1C42; border-top: 3px solid #55C8E8; padding: 18px 34px; text-align: center;">
+    <div style="font-size: 18px; color: #ffffff; margin-bottom: 6px;"><span style="color: #55c8e8;">Optima Academy Online</span> &middot; DIGITAL ART IMAGING &middot; Quarter 2 &middot; Student Lesson Page</div>
+    <div style="font-size: 13px; color: rgba(255,255,255,0.65); margin-bottom: 4px;">Module 2 &middot; Week 4 &middot; Editing: Emphasis &amp; Non-Digital Editing</div>
+    <div style="font-size: 12px; color: rgba(255,255,255,0.4);">&copy; Optima Academy Online &middot; An Education Experience Company. Diagrams are original CSS/SVG concept illustrations. Photographs are public domain or openly licensed; see each caption for source.</div>
+</div>
+
+</div>
+
+<!-- ===== WIDGET RUNTIME — from optima-lesson-format template. One delegated listener drives every engine. ===== -->
+<script>
+(function () {
+  document.addEventListener('click', function (e) {
+    var reset = e.target.closest('.widget-reset');
+    if (reset) {
+      var w = reset.closest('.optima-widget');
+      w.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      w.querySelectorAll('.widget-feedback').forEach(function (f) { f.classList.remove('show'); f.textContent = ''; });
+      w.querySelectorAll('.row-feedback').forEach(function (f) { f.remove(); });
+      return;
+    }
+    var rBtn = e.target.closest('.ow-reflect .widget-options button');
+    if (rBtn) {
+      var rw = rBtn.closest('.optima-widget');
+      rw.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected'); });
+      rBtn.classList.add('selected');
+      var fb = rw.querySelector('.widget-feedback');
+      fb.textContent = rBtn.dataset.response || '';
+      fb.classList.add('show');
+      return;
+    }
+    var sBtn = e.target.closest('.ow-select .widget-row .widget-options button');
+    if (sBtn) {
+      var row = sBtn.closest('.widget-row');
+      var correct = row.dataset.correct;
+      row.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      var right = sBtn.dataset.choice === correct;
+      sBtn.classList.add(right ? 'correct' : 'incorrect');
+      var text = right ? (sBtn.dataset.fb || row.dataset.fb || 'Right.') : (sBtn.dataset.fb || row.dataset.hint || 'Not quite. Try again.');
+      var rf = row.querySelector('.row-feedback') || row.appendChild(document.createElement('div'));
+      rf.className = 'row-feedback ' + (right ? 'correct' : 'incorrect');
+      rf.textContent = text;
+      return;
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Digital Art Imaging &mdash; Week 1: Capturing the Light: Texture &amp; Movement</title>
+<style>
+    body { margin: 0; padding: 0; font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #f4f6fa; }
+    .canvas-frame { max-width: 1100px; margin: 0 auto; background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+
+    /* ===== WIDGET CSS — from optima-lesson-format/assets/lesson-interactive-template.html (byte-consistent) ===== */
+    .optima-widget { background: linear-gradient(135deg, #E8F6FB 0%, #F4F9FC 100%); border: 1px solid #C5DCE5; border-left: 5px solid #2196D0; border-radius: 8px; padding: 18px 22px; margin: 18px 0; }
+    .widget-kicker { font-size: 11px; color: #1B6A94; margin-bottom: 10px; letter-spacing: 0.4px; }
+    .widget-question { font-size: 17px; color: #0E1C42; margin-bottom: 14px; line-height: 1.55; }
+    .widget-row { background: #FFFFFF; border: 1px solid #D0D9E8; border-radius: 6px; padding: 12px 14px; margin-bottom: 10px; }
+    .widget-row-prompt { font-size: 15px; color: #0E1C42; margin-bottom: 8px; line-height: 1.5; font-style: italic; }
+    .widget-options { display: flex; flex-wrap: wrap; gap: 8px; }
+    .widget-options button { background: #FFFFFF; border: 1.5px solid #D0D9E8; border-radius: 8px; padding: 8px 14px; font-size: 14px; color: #0E1C42; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+    .widget-options button:hover { background: #F4F6FA; border-color: #55C8E8; }
+    .widget-options button.selected { background: #0E1C42; color: #FFFFFF; border-color: #0E1C42; }
+    .widget-options button.correct { background: #D8F0DD; border-color: #2A9D5C; color: #1A6B3D; }
+    .widget-options button.incorrect { background: #FDECEC; border-color: #C0392B; color: #8A1F16; }
+    .widget-feedback { background: #FFFFFF; border-left: 3px solid #C7922C; padding: 10px 14px; font-size: 15px; color: #1a2340; line-height: 1.55; margin: 10px 0; display: none; border-radius: 4px; }
+    .widget-feedback.show { display: block; }
+    .row-feedback { padding: 8px 12px; margin-top: 8px; font-size: 14px; border-radius: 4px; line-height: 1.5; }
+    .row-feedback.correct { background: #D8F0DD; border-left: 3px solid #2A9D5C; color: #1A6B3D; }
+    .row-feedback.incorrect { background: #FDECEC; border-left: 3px solid #C0392B; color: #8A1F16; }
+    .widget-reset { background: transparent; border: 1px solid #C7922C; color: #C7922C; border-radius: 6px; padding: 6px 12px; font-size: 12px; cursor: pointer; font-family: inherit; margin-top: 6px; }
+    .widget-reset:hover { background: #FDF3E3; }
+
+    /* ===== Art-course components (layered on the brand; teal/coral are activity accents only) ===== */
+    .art-fig { margin: 14px 0; text-align: center; }
+    .art-fig img { max-width: 100%; height: auto; border-radius: 6px; border: 1px solid #D0D9E8; }
+    .art-fig figcaption { font-size: 13px; color: #666; margin-top: 8px; line-height: 1.5; }
+    .art-fig figcaption a { color: #1B6A94; }
+    .el-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin: 16px 0; }
+    .el-card { border: 1px solid #D0D9E8; border-radius: 8px; overflow: hidden; }
+    .el-demo { height: 80px; display: flex; align-items: center; justify-content: center; }
+    .el-text { padding: 10px 13px; }
+    .el-text strong { color: #167567; display: block; margin-bottom: 3px; font-size: 16px; }
+    .el-text span { font-size: 14px; color: #1a2340; }
+    .callout { border-radius: 6px; padding: 14px 20px; margin: 16px 0; }
+    .callout .ck { font-size: 11px; margin-bottom: 8px; letter-spacing: 0.5px; }
+    .callout .cb { font-size: 16px; line-height: 1.6; color: #0E1C42; }
+    .c-help { background: #E8F6FB; border-left: 5px solid #2196D0; border-top: 3px solid #55C8E8; }
+    .c-help .ck { color: #1B6A94; }
+    .c-warn { background: #FDECEC; border-left: 5px solid #C0392B; border-top: 3px solid #E74C3C; }
+    .c-warn .ck { color: #8A1F16; }
+    .c-art { background: #E6F4F1; border-left: 5px solid #1B8A7A; }
+    .c-art .ck { color: #167567; }
+    .next-item { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+    .next-item .num { min-width: 30px; height: 30px; border-radius: 50%; color: #fff; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .num.learn { background: #1B8A7A; }
+    .num.create { background: #D9583B; }
+    .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+    .vocab-card { background: #EEF1F8; border-radius: 6px; padding: 10px 13px; font-size: 14px; color: #1a2340; }
+    .vocab-card strong { color: #0E1C42; display: block; margin-bottom: 2px; }
+    details { background: #FFFFFF; border: 1px solid #D0D9E8; border-left: 4px solid #C7922C; border-radius: 6px; padding: 12px 18px; margin: 14px 0; }
+    details summary { font-size: 16px; color: #0E1C42; cursor: pointer; }
+    details .ac-body { font-size: 16px; color: #1a2340; margin-top: 10px; padding-top: 10px; border-top: 1px solid #EEF1F8; line-height: 1.6; }
+    /* Pixel vs. smooth concept visual */
+    .pix-wrap { display: flex; flex-wrap: wrap; gap: 22px; align-items: center; justify-content: center; margin: 16px 0 6px; }
+    .pix-panel { text-align: center; }
+    .pix-label { font-size: 12px; color: #6b7a99; margin-top: 8px; }
+    .rvv { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+    .rvv > div { border: 1px solid #D0D9E8; border-radius: 8px; padding: 14px 16px; }
+    .rvv h4 { margin: 0 0 6px 0; font-size: 16px; }
+    .rvv p { margin: 0; font-size: 14px; color: #1a2340; line-height: 1.55; }
+    @media (max-width: 560px){ .rvv { grid-template-columns: 1fr; } }
+    /* Texture demo tiles */
+    .tex-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin: 14px 0; }
+    .tex-tile { border: 1px solid #D0D9E8; border-radius: 8px; overflow: hidden; text-align: center; }
+    .tex-swatch { height: 90px; }
+    .tex-name { font-size: 13px; color: #0e1c42; padding: 8px; }
+    /* Movement path diagram */
+    .move-wrap { text-align: center; margin: 16px 0 6px; }
+</style>
+</head>
+<body>
+<div class="canvas-frame">
+
+<!-- ===== HEADER ===== -->
+<div style="background: #0E1C42; border-bottom: 5px solid #55C8E8; padding: 22px 34px;">
+    <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 10px;">
+        <div style="width: 52px; height: 52px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><img src="https://raw.githubusercontent.com/optimaondemand/optima-assets/eeb0b335630058906d52f478028361d352253a93/images/Optima%20Final%20Circle%20-%20Owl%20Only.png" alt="Optima Academy" style="width: 50px; height: 40px; object-fit: contain;" /></div>
+        <div>
+            <div style="font-size: 28px; color: #ffffff; line-height: 1.2;">Optima Academy Online</div>
+            <div style="font-size: 12px; color: #55c8e8;">An Education Experience Company</div>
+        </div>
+    </div>
+    <div style="font-size: 36px; color: #ffffff; margin-bottom: 6px;">DIGITAL ART IMAGING</div>
+</div>
+
+<!-- ===== METADATA STRIP ===== -->
+<div style="background: #FFFFFF; border-bottom: 2px solid #D0D9E8; display: flex; flex-wrap: wrap;">
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Quarter / Week</div>
+        <div style="font-size: 17px; color: #0e1c42;">Q2 &middot; Module 2, Week 1</div>
+        <div style="font-size: 12px; color: #666;">Module 2: Capturing Light &amp; Editing</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Focus</div>
+        <div style="font-size: 17px; color: #0e1c42;">Capturing the Light: Texture &amp; Movement</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">This Week's Project</div>
+        <div style="font-size: 17px; color: #0e1c42; font-style: italic;">Mini Lessons &amp; Reflection</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Software</div>
+        <div style="font-size: 16px; color: #0e1c42;">Pixlr E (free, browser)</div>
+    </div>
+</div>
+
+<!-- ===== BODY WRAPPER ===== -->
+<div style="padding: 24px 34px;">
+
+    <!-- Lavender title strip -->
+    <div style="background: #EEF1F8; border-left: 5px solid #0E1C42; border-radius: 7px; padding: 18px 22px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #0e1c42; margin-bottom: 6px;">MODULE 2 &middot; WEEK 1</div>
+        <div style="font-size: 22px; color: #0e1c42; margin-bottom: 4px;">Capturing the Light: Texture &amp; Movement</div>
+        <div style="font-size: 16px; color: #666;">Lesson</div>
+    </div>
+
+    <!-- Essential Question -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128214; ESSENTIAL QUESTION</div>
+        <div style="font-size: 20px; color: #0e1c42; font-style: italic; margin-bottom: 10px;">How can a flat image make a viewer feel a surface or sense motion that is not actually there?</div>
+        <div style="font-size: 18px; color: #1a2340; line-height: 1.65;">A photograph cannot be touched and it cannot actually move. Yet a strong photo can make you feel like you could reach out and feel rough bark, or sense that a bird is still flying even though the picture is frozen. This week you study two principles that make a still image feel physical and alive: texture and movement.</div>
+    </div>
+
+    <!-- PART 1 · LOOK FIRST -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128064; PART 1 &middot; LOOK FIRST</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;"><strong>Texture</strong> describes the way a surface feels or appears to feel. In traditional art, texture can be <strong>actual</strong>: rough paint, thick clay, a bumpy canvas you could run your finger across. In digital art and photography, texture is always <strong>implied</strong>. You cannot physically touch a photo, but the image can convince your eyes of what the surface would feel like.</p>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Look at the swatches below. Each uses only shape, edge, and value to suggest a different implied texture, with no actual bumps or ridges anywhere on your screen.</p>
+
+        <div class="tex-grid">
+            <div class="tex-tile">
+                <svg class="tex-swatch" viewBox="0 0 150 90" width="100%" height="90" role="img" aria-label="A rough, gritty texture suggested by scattered irregular dark marks on a tan background.">
+                    <rect width="150" height="90" fill="#c9a877"/>
+                    <g fill="#8a6c42">
+                        <circle cx="18" cy="14" r="4"/><circle cx="40" cy="30" r="3"/><circle cx="65" cy="12" r="5"/><circle cx="90" cy="26" r="3"/><circle cx="112" cy="16" r="4"/><circle cx="130" cy="34" r="3"/>
+                        <circle cx="25" cy="50" r="3"/><circle cx="50" cy="60" r="5"/><circle cx="75" cy="48" r="3"/><circle cx="100" cy="58" r="4"/><circle cx="125" cy="52" r="3"/>
+                        <circle cx="15" cy="76" r="4"/><circle cx="42" cy="82" r="3"/><circle cx="70" cy="74" r="4"/><circle cx="95" cy="80" r="3"/><circle cx="120" cy="78" r="5"/>
+                    </g>
+                </svg>
+                <div class="tex-name">Rough</div>
+            </div>
+            <div class="tex-tile">
+                <svg class="tex-swatch" viewBox="0 0 150 90" width="100%" height="90" role="img" aria-label="A slimy, wet texture suggested by a smooth gradient with small round highlight dots like water droplets.">
+                    <defs><linearGradient id="wetgrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#7fb8a3"/><stop offset="100%" stop-color="#3d7a63"/></linearGradient></defs>
+                    <rect width="150" height="90" fill="url(#wetgrad)"/>
+                    <g fill="#eafaf3" opacity="0.85">
+                        <circle cx="30" cy="24" r="4"/><circle cx="60" cy="40" r="3"/><circle cx="95" cy="20" r="5"/><circle cx="120" cy="50" r="3"/><circle cx="45" cy="65" r="4"/><circle cx="80" cy="70" r="3"/>
+                    </g>
+                </svg>
+                <div class="tex-name">Slimy</div>
+            </div>
+            <div class="tex-tile">
+                <svg class="tex-swatch" viewBox="0 0 150 90" width="100%" height="90" role="img" aria-label="A furry, soft texture suggested by many short thin overlapping lines like strands of fur.">
+                    <rect width="150" height="90" fill="#d8c7a3"/>
+                    <g stroke="#9c8256" stroke-width="1.5">
+                        <line x1="10" y1="10" x2="6" y2="30"/><line x1="20" y1="8" x2="17" y2="30"/><line x1="30" y1="10" x2="27" y2="32"/><line x1="40" y1="8" x2="38" y2="30"/><line x1="50" y1="10" x2="47" y2="32"/><line x1="60" y1="8" x2="58" y2="30"/><line x1="70" y1="10" x2="67" y2="30"/><line x1="80" y1="8" x2="78" y2="32"/><line x1="90" y1="10" x2="87" y2="30"/><line x1="100" y1="8" x2="98" y2="32"/><line x1="110" y1="10" x2="107" y2="30"/><line x1="120" y1="8" x2="118" y2="32"/><line x1="130" y1="10" x2="127" y2="32"/><line x1="140" y1="8" x2="138" y2="30"/>
+                        <line x1="14" y1="45" x2="10" y2="65"/><line x1="26" y1="43" x2="23" y2="65"/><line x1="38" y1="45" x2="36" y2="67"/><line x1="50" y1="43" x2="48" y2="65"/><line x1="62" y1="45" x2="59" y2="67"/><line x1="74" y1="43" x2="72" y2="65"/><line x1="86" y1="45" x2="83" y2="65"/><line x1="98" y1="43" x2="96" y2="67"/><line x1="110" y1="45" x2="107" y2="65"/><line x1="122" y1="43" x2="120" y2="67"/><line x1="134" y1="45" x2="131" y2="65"/>
+                    </g>
+                </svg>
+                <div class="tex-name">Furry</div>
+            </div>
+            <div class="tex-tile">
+                <svg class="tex-swatch" viewBox="0 0 150 90" width="100%" height="90" role="img" aria-label="A bumpy, honeycomb texture suggested by a grid of hexagon outlines.">
+                    <rect width="150" height="90" fill="#f0c34a"/>
+                    <g fill="none" stroke="#c99a1f" stroke-width="2">
+                        <polygon points="20,10 32,17 32,31 20,38 8,31 8,17"/>
+                        <polygon points="44,10 56,17 56,31 44,38 32,31 32,17"/>
+                        <polygon points="68,10 80,17 80,31 68,38 56,31 56,17"/>
+                        <polygon points="92,10 104,17 104,31 92,38 80,31 80,17"/>
+                        <polygon points="116,10 128,17 128,31 116,38 104,31 104,17"/>
+                        <polygon points="32,38 44,45 44,59 32,66 20,59 20,45"/>
+                        <polygon points="56,38 68,45 68,59 56,66 44,59 44,45"/>
+                        <polygon points="80,38 92,45 92,59 80,66 68,59 68,45"/>
+                        <polygon points="104,38 116,45 116,59 104,66 92,59 92,45"/>
+                    </g>
+                </svg>
+                <div class="tex-name">Bumpy</div>
+            </div>
+            <div class="tex-tile">
+                <svg class="tex-swatch" viewBox="0 0 150 90" width="100%" height="90" role="img" aria-label="A smooth, calm texture suggested by soft horizontal color bands like still water.">
+                    <defs><linearGradient id="smoothgrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fce8c9"/><stop offset="50%" stop-color="#bcd9e6"/><stop offset="100%" stop-color="#7fa9c2"/></linearGradient></defs>
+                    <rect width="150" height="90" fill="url(#smoothgrad)"/>
+                    <line x1="0" y1="45" x2="150" y2="45" stroke="#ffffff" stroke-width="1" opacity="0.5"/>
+                    <line x1="0" y1="55" x2="150" y2="55" stroke="#ffffff" stroke-width="1" opacity="0.4"/>
+                    <line x1="0" y1="65" x2="150" y2="65" stroke="#ffffff" stroke-width="1" opacity="0.3"/>
+                </svg>
+                <div class="tex-name">Smooth</div>
+            </div>
+        </div>
+        <p style="font-size: 14px; color: #6b7a99; margin: 0;">Concept diagrams. None of these swatches have any actual texture. Your screen is flat glass. The illusion comes entirely from shape, edge, and value choices.</p>
+
+        <div class="optima-widget ow-reflect">
+            <div class="widget-kicker">&#128173; QUICK CHECK-IN &middot; NO WRONG ANSWER</div>
+            <div class="widget-question">Which implied texture above do you think would be hardest to photograph convincingly, and why?</div>
+            <div class="widget-options">
+                <button data-response="Rough textures rely on visible small shadows, so photographers often use side lighting to catch every bump.">Rough</button>
+                <button data-response="Slimy or wet textures depend on catching a highlight in the right spot. Too much or too little light and the wet look disappears.">Slimy</button>
+                <button data-response="Furry textures need sharp focus on individual strands plus a bit of backlighting to separate the fur from the background.">Furry</button>
+                <button data-response="Smooth textures rely on calm, even light and a still subject. Any motion blur or harsh shadow breaks the calm feeling.">Smooth</button>
+            </div>
+            <div class="widget-feedback"></div>
+            <button class="widget-reset">Reset</button>
+        </div>
+    </div>
+
+    <!-- PART 2 · TEXTURE IN PHOTOGRAPHY -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128248; PART 2 &middot; TEXTURE IN PHOTOGRAPHY</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Photographers use implied texture to build mood, focus attention, and tell a story, all without a single real bump on the page. A few real examples:</p>
+
+        <ul style="font-size: 17px; color: #1a2340; line-height: 1.75; margin: 0 0 12px 0; padding-left: 22px;">
+            <li>A macro (extreme close-up) photo of a chameleon's skin uses a <strong>polychromatic</strong> color scheme (many colors) to make its small bumps read as coarse and reptilian.</li>
+            <li>A photo of a snail on a leaf with water droplets uses spiral lines in the shell and a <strong>monochromatic</strong> palette (one color, different values) to feel slick and wet.</li>
+            <li>A photo of wolves centered in the frame, breaking the rule of thirds on purpose, draws attention to their soft fur; bright eyes contrast against neutral fur colors to sharpen the effect.</li>
+            <li>A honeycomb next to a bee combines two different textures (bumpy wax, delicate insect) in one frame to tell a fuller visual story.</li>
+            <li>Smooth rocks in still water, lit by a gentle sunrise, feel calm because the texture itself (smooth) matches the mood (peaceful).</li>
+        </ul>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Notice the pattern: the photographer's <strong>lighting and color choice</strong> is what sells the texture, not the subject alone. The same chameleon photographed with flat front lighting would lose most of its bumpy feel.</p>
+
+        <figure class="art-fig">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/2/23/Pine_tree_bark_texture.jpg" alt="Close-up photograph of deeply grooved pine tree bark, its ridges and shadows creating a strong implied rough texture." />
+            <figcaption>Titus Tscharntke, <em>Pine Tree Bark Texture</em>, 2013. Public domain. Source: <a href="https://commons.wikimedia.org/wiki/File:Pine_tree_bark_texture.jpg">commons.wikimedia.org</a></figcaption>
+        </figure>
+
+        <div class="callout c-art">
+            <div class="ck">&#127912; CAPTURE IT YOURSELF</div>
+            <div class="cb">To photograph texture on your own device: get close (macro or zoomed in), use side lighting so small ridges cast tiny shadows, and try both a busy multi-color scheme and a simple one-color scheme on the same subject to see which reads stronger.</div>
+        </div>
+    </div>
+
+    <!-- PART 3 · MOVEMENT -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#127939; PART 3 &middot; MOVEMENT</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;"><strong>Movement</strong> is a principle of art that guides the viewer's eye and creates the feeling that something is happening. Artists use line, shape, color, and texture to make eyes travel across an image. Photographers can capture real motion in the moment, and digital artists can also build the illusion of motion using design tools. There are three common types.</p>
+
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 16px 0 6px 0;">Physical movement</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Physical movement shows actual motion through space, like a ball bouncing off the ground. In a photo this is often captured as blur; in a digital drawing it can be shown with a dotted or dashed path line tracing where the object has been.</p>
+
+        <div class="move-wrap">
+            <svg width="320" height="140" viewBox="0 0 320 140" role="img" aria-label="A diagram of a bouncing ball. A dashed curved line arcs from upper left, down to the ground, and back up to the right, showing the ball's path.">
+                <rect width="320" height="140" fill="#EEF1F8"/>
+                <line x1="10" y1="120" x2="310" y2="120" stroke="#0e1c42" stroke-width="2"/>
+                <path d="M 30 40 Q 90 120 150 120 Q 210 120 270 50" fill="none" stroke="#D9583B" stroke-width="2" stroke-dasharray="6,6"/>
+                <circle cx="30" cy="40" r="12" fill="#D9583B"/>
+                <circle cx="150" cy="112" r="10" fill="#D9583B" opacity="0.55"/>
+                <circle cx="270" cy="50" r="12" fill="#D9583B" opacity="0.85"/>
+            </svg>
+        </div>
+        <p style="font-size: 14px; color: #6b7a99; margin: 0 0 10px 0; text-align: center;">Concept diagram. The dashed line is the ball's path, from the air, to the ground, and back up.</p>
+
+        <details>
+            <summary>Before you look: sketch how you would build this bounce path in Pixlr E. What three tools would you need? Write your answer, then click to check.</summary>
+            <div class="ac-body">Draw a horizontal line for the ground with the line tool. Use the ellipse tool to make the ball, filled with a bright color so it stands out. Then use the line tool again for the diagonal entry and exit paths, switching the stroke setting to dashed or dotted. For a curved trail, duplicate small ellipses at shrinking opacity along the path.</div>
+        </details>
+
+        <figure class="art-fig">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Tube_train_motion_blur_%28Unsplash%29.jpg" alt="A subway train streaked with motion blur as it passes through a station, while the platform and waiting passengers stay sharp." />
+            <figcaption>Photograph, Euston station, London, 2015. Public domain (CC0, Unsplash). Source: <a href="https://commons.wikimedia.org/wiki/File:Tube_train_motion_blur_(Unsplash).jpg">commons.wikimedia.org</a></figcaption>
+        </figure>
+        <p style="font-size: 14px; color: #6b7a99; margin: 0 0 10px 0;">A slow shutter speed blurred the moving train into streaks of light while the stationary platform stayed sharp: physical movement captured directly, not implied.</p>
+
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 20px 0 6px 0;">Implied movement</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Implied movement freezes a single moment but suggests the motion before and after it. A bird photographed mid-flight is frozen, but its angled wings tell you it was moving a second ago and will keep moving a second from now. Digitally, artists build this by duplicating and rotating simple shapes (like triangles for wings), then lowering the opacity on some copies to suggest past and future position.</p>
+
+        <figure class="art-fig">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Bird_taking_off_slow_motion.jpg" alt="A cormorant frozen mid-takeoff over water, wings angled and muscles taut, suggesting the motion just before and after the moment captured." />
+            <figcaption>FUBARMAXUSMC, <em>Neotropic Cormorant taking off</em>, Guatemala, 2010. Licensed CC BY-SA 4.0. Source: <a href="https://commons.wikimedia.org/wiki/File:Bird_taking_off_slow_motion.jpg">commons.wikimedia.org</a></figcaption>
+        </figure>
+
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 20px 0 6px 0;">Directional movement</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Directional movement does not show something moving; it points your eye somewhere on purpose, the way an arrow does. A photographer creates this with leading lines (a path, a fence, a shoreline) that lead the eye toward the subject. A digital artist can build a literal arrow shape from a triangle and rectangle to the same effect.</p>
+
+        <figure class="art-fig">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/67/Straight_road.jpg" alt="A long, perfectly straight road stretching to the horizon, its edges converging and leading the eye toward a single vanishing point." />
+            <figcaption>bri v, <em>Straight Road</em>, 2005. Licensed CC BY 2.0. Source: <a href="https://commons.wikimedia.org/wiki/File:Straight_road.jpg">commons.wikimedia.org</a></figcaption>
+        </figure>
+
+        <div class="optima-widget ow-select">
+            <div class="widget-kicker">&#9889; TRY IT &middot; TEXTURE OR MOVEMENT?</div>
+            <div class="widget-question">Read each photo description, decide which principle is doing the most work, then check your answer.</div>
+            <div class="widget-row" data-correct="movement" data-hint="Think about what the angled wings are doing for the viewer's eye. Try again.">
+                <div class="widget-row-prompt">A hawk is photographed mid-flight, wings angled back, frozen in one instant.</div>
+                <div class="widget-options">
+                    <button data-choice="texture">Texture</button>
+                    <button data-choice="movement" data-fb="Right. This is implied movement: a frozen moment that still suggests motion before and after it.">Movement</button>
+                </div>
+            </div>
+            <div class="widget-row" data-correct="texture" data-hint="Think about what your eyes are being convinced to feel, not where your eye travels. Try again.">
+                <div class="widget-row-prompt">A close-up of tree bark uses harsh side lighting to make every ridge cast a small shadow.</div>
+                <div class="widget-options">
+                    <button data-choice="texture" data-fb="Right. The side lighting is selling implied texture, the illusion that you could feel the rough bark.">Texture</button>
+                    <button data-choice="movement">Movement</button>
+                </div>
+            </div>
+            <button class="widget-reset">Reset</button>
+        </div>
+    </div>
+
+    <!-- AI AWARENESS (factual) -->
+    <div class="callout c-warn">
+        <div class="ck">&#9888;&#65039; WORTH KNOWING &middot; AI IMAGE TOOLS</div>
+        <div class="cb">An AI image generator can produce a texture-covered surface or a "motion blur" effect from a text prompt. It cannot go outside, find the chameleon or the bark, choose the lighting angle, or decide where the ball's path should curve on your page. This week's assignment is graded on those decisions, made by you with your own camera and your own layers in Pixlr E.</div>
+    </div>
+
+    <!-- VOCABULARY -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128221; VOCABULARY</div>
+        <div class="vocab-grid">
+            <div class="vocab-card"><strong>Texture</strong>How a surface feels or appears to feel.</div>
+            <div class="vocab-card"><strong>Implied Texture</strong>The illusion of a surface's feel, created without any actual bumps or ridges.</div>
+            <div class="vocab-card"><strong>Monochromatic</strong>Using one color at different values.</div>
+            <div class="vocab-card"><strong>Polychromatic</strong>Using many colors in one image.</div>
+            <div class="vocab-card"><strong>Movement</strong>A principle of art that guides the viewer's eye and suggests motion.</div>
+            <div class="vocab-card"><strong>Physical Movement</strong>Actual motion through space, often shown as blur or a path line.</div>
+            <div class="vocab-card"><strong>Implied Movement</strong>A frozen moment that still suggests motion before and after it.</div>
+            <div class="vocab-card"><strong>Directional Movement</strong>Lines or shapes that point the viewer's eye toward a subject.</div>
+        </div>
+    </div>
+
+    <!-- WHAT YOU'LL DO NEXT -->
+    <div style="background: #FFFFFF; border-top: 3px solid #0E1C42; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 16px;">&#10145;&#65039; WHAT YOU'LL DO NEXT (IN CANVAS)</div>
+        <div class="next-item"><div class="num learn">1</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Mini Lesson: Spotting Texture and Movement</strong> &middot; Week 1</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Identify the type of implied texture or movement in a set of sample photos. Completion grade.</div></div></div>
+        <div class="next-item"><div class="num learn">2</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Discussion: Texture and Mood</strong> &middot; Week 1</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Name a texture and the mood it creates, with one example, and respond to a classmate.</div></div></div>
+        <div class="next-item"><div class="num learn">3</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Quiz: Texture &amp; Movement</strong> &middot; Week 1</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">8 questions, auto-graded in Canvas.</div></div></div>
+        <div class="next-item"><div class="num create">4</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Mini Lessons &amp; Reflection</strong> &middot; Week 1</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Photograph texture and movement yourself, then write a short reflection connecting your choices to what you learned. Your graded artwork this week.</div></div></div>
+    </div>
+
+    <!-- WRAP-UP -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128170; THE BIG IDEA</div>
+        <p style="font-size: 18px; color: #1a2340; line-height: 1.65; margin: 0;">Texture and movement are both illusions built by light, shape, and timing, not by anything actually present on the page. A photographer who understands this stops hoping a good shot will happen and starts building one on purpose: choosing the angle of light that will fake a rough surface, or the exact instant that will fake a moment in motion.</p>
+    </div>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div style="background: #0E1C42; border-top: 3px solid #55C8E8; padding: 18px 34px; text-align: center;">
+    <div style="font-size: 18px; color: #ffffff; margin-bottom: 6px;"><span style="color: #55c8e8;">Optima Academy Online</span> &middot; DIGITAL ART IMAGING &middot; Quarter 2 &middot; Student Lesson Page</div>
+    <div style="font-size: 13px; color: rgba(255,255,255,0.65); margin-bottom: 4px;">Module 2 &middot; Week 1 &middot; Capturing the Light: Texture &amp; Movement</div>
+    <div style="font-size: 12px; color: rgba(255,255,255,0.4);">&copy; Optima Academy Online &middot; An Education Experience Company. Diagrams are original CSS/SVG concept illustrations. Photographs are public domain or openly licensed; see each caption for source.</div>
+</div>
+
+</div>
+
+<!-- ===== WIDGET RUNTIME — from optima-lesson-format template. One delegated listener drives every engine. ===== -->
+<script>
+(function () {
+  document.addEventListener('click', function (e) {
+    var reset = e.target.closest('.widget-reset');
+    if (reset) {
+      var w = reset.closest('.optima-widget');
+      w.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      w.querySelectorAll('.widget-feedback').forEach(function (f) { f.classList.remove('show'); f.textContent = ''; });
+      w.querySelectorAll('.row-feedback').forEach(function (f) { f.remove(); });
+      return;
+    }
+    var rBtn = e.target.closest('.ow-reflect .widget-options button');
+    if (rBtn) {
+      var rw = rBtn.closest('.optima-widget');
+      rw.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected'); });
+      rBtn.classList.add('selected');
+      var fb = rw.querySelector('.widget-feedback');
+      fb.textContent = rBtn.dataset.response || '';
+      fb.classList.add('show');
+      return;
+    }
+    var sBtn = e.target.closest('.ow-select .widget-row .widget-options button');
+    if (sBtn) {
+      var row = sBtn.closest('.widget-row');
+      var correct = row.dataset.correct;
+      row.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      var right = sBtn.dataset.choice === correct;
+      sBtn.classList.add(right ? 'correct' : 'incorrect');
+      var text = right ? (sBtn.dataset.fb || row.dataset.fb || 'Right.') : (sBtn.dataset.fb || row.dataset.hint || 'Not quite. Try again.');
+      var rf = row.querySelector('.row-feedback') || row.appendChild(document.createElement('div'));
+      rf.className = 'row-feedback ' + (right ? 'correct' : 'incorrect');
+      rf.textContent = text;
+      return;
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

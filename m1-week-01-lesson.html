@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Digital Art Imaging &mdash; Week 1: What Is Digital Art?</title>
+<style>
+    body { margin: 0; padding: 0; font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #f4f6fa; }
+    .canvas-frame { max-width: 1100px; margin: 0 auto; background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+
+    /* ===== WIDGET CSS — from optima-lesson-format/assets/lesson-interactive-template.html (byte-consistent) ===== */
+    .optima-widget { background: linear-gradient(135deg, #E8F6FB 0%, #F4F9FC 100%); border: 1px solid #C5DCE5; border-left: 5px solid #2196D0; border-radius: 8px; padding: 18px 22px; margin: 18px 0; }
+    .widget-kicker { font-size: 11px; color: #1B6A94; margin-bottom: 10px; letter-spacing: 0.4px; }
+    .widget-question { font-size: 17px; color: #0E1C42; margin-bottom: 14px; line-height: 1.55; }
+    .widget-row { background: #FFFFFF; border: 1px solid #D0D9E8; border-radius: 6px; padding: 12px 14px; margin-bottom: 10px; }
+    .widget-row-prompt { font-size: 15px; color: #0E1C42; margin-bottom: 8px; line-height: 1.5; font-style: italic; }
+    .widget-options { display: flex; flex-wrap: wrap; gap: 8px; }
+    .widget-options button { background: #FFFFFF; border: 1.5px solid #D0D9E8; border-radius: 8px; padding: 8px 14px; font-size: 14px; color: #0E1C42; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+    .widget-options button:hover { background: #F4F6FA; border-color: #55C8E8; }
+    .widget-options button.selected { background: #0E1C42; color: #FFFFFF; border-color: #0E1C42; }
+    .widget-options button.correct { background: #D8F0DD; border-color: #2A9D5C; color: #1A6B3D; }
+    .widget-options button.incorrect { background: #FDECEC; border-color: #C0392B; color: #8A1F16; }
+    .widget-feedback { background: #FFFFFF; border-left: 3px solid #C7922C; padding: 10px 14px; font-size: 15px; color: #1a2340; line-height: 1.55; margin: 10px 0; display: none; border-radius: 4px; }
+    .widget-feedback.show { display: block; }
+    .row-feedback { padding: 8px 12px; margin-top: 8px; font-size: 14px; border-radius: 4px; line-height: 1.5; }
+    .row-feedback.correct { background: #D8F0DD; border-left: 3px solid #2A9D5C; color: #1A6B3D; }
+    .row-feedback.incorrect { background: #FDECEC; border-left: 3px solid #C0392B; color: #8A1F16; }
+    .widget-reset { background: transparent; border: 1px solid #C7922C; color: #C7922C; border-radius: 6px; padding: 6px 12px; font-size: 12px; cursor: pointer; font-family: inherit; margin-top: 6px; }
+    .widget-reset:hover { background: #FDF3E3; }
+
+    /* ===== Art-course components (layered on the brand; teal/coral are activity accents only) ===== */
+    .art-fig { margin: 14px 0; text-align: center; }
+    .art-fig img { max-width: 100%; height: auto; border-radius: 6px; border: 1px solid #D0D9E8; }
+    .art-fig figcaption { font-size: 13px; color: #666; margin-top: 8px; line-height: 1.5; }
+    .art-fig figcaption a { color: #1B6A94; }
+    .el-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin: 16px 0; }
+    .el-card { border: 1px solid #D0D9E8; border-radius: 8px; overflow: hidden; }
+    .el-demo { height: 80px; display: flex; align-items: center; justify-content: center; }
+    .el-text { padding: 10px 13px; }
+    .el-text strong { color: #167567; display: block; margin-bottom: 3px; font-size: 16px; }
+    .el-text span { font-size: 14px; color: #1a2340; }
+    .callout { border-radius: 6px; padding: 14px 20px; margin: 16px 0; }
+    .callout .ck { font-size: 11px; margin-bottom: 8px; letter-spacing: 0.5px; }
+    .callout .cb { font-size: 16px; line-height: 1.6; color: #0E1C42; }
+    .c-help { background: #E8F6FB; border-left: 5px solid #2196D0; border-top: 3px solid #55C8E8; }
+    .c-help .ck { color: #1B6A94; }
+    .c-warn { background: #FDECEC; border-left: 5px solid #C0392B; border-top: 3px solid #E74C3C; }
+    .c-warn .ck { color: #8A1F16; }
+    .c-art { background: #E6F4F1; border-left: 5px solid #1B8A7A; }
+    .c-art .ck { color: #167567; }
+    .next-item { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+    .next-item .num { min-width: 30px; height: 30px; border-radius: 50%; color: #fff; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .num.learn { background: #1B8A7A; }
+    .num.create { background: #D9583B; }
+    .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+    .vocab-card { background: #EEF1F8; border-radius: 6px; padding: 10px 13px; font-size: 14px; color: #1a2340; }
+    .vocab-card strong { color: #0E1C42; display: block; margin-bottom: 2px; }
+    details { background: #FFFFFF; border: 1px solid #D0D9E8; border-left: 4px solid #C7922C; border-radius: 6px; padding: 12px 18px; margin: 14px 0; }
+    details summary { font-size: 16px; color: #0E1C42; cursor: pointer; }
+    details .ac-body { font-size: 16px; color: #1a2340; margin-top: 10px; padding-top: 10px; border-top: 1px solid #EEF1F8; line-height: 1.6; }
+    /* Pixel vs. smooth concept visual */
+    .pix-wrap { display: flex; flex-wrap: wrap; gap: 22px; align-items: center; justify-content: center; margin: 16px 0 6px; }
+    .pix-panel { text-align: center; }
+    .pix-label { font-size: 12px; color: #6b7a99; margin-top: 8px; }
+    .rvv { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+    .rvv > div { border: 1px solid #D0D9E8; border-radius: 8px; padding: 14px 16px; }
+    .rvv h4 { margin: 0 0 6px 0; font-size: 16px; }
+    .rvv p { margin: 0; font-size: 14px; color: #1a2340; line-height: 1.55; }
+    @media (max-width: 560px){ .rvv { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="canvas-frame">
+
+<!-- ===== HEADER ===== -->
+<div style="background: #0E1C42; border-bottom: 5px solid #55C8E8; padding: 22px 34px;">
+    <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 10px;">
+        <div style="width: 52px; height: 52px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><img src="https://raw.githubusercontent.com/optimaondemand/optima-assets/eeb0b335630058906d52f478028361d352253a93/images/Optima%20Final%20Circle%20-%20Owl%20Only.png" alt="Optima Academy" style="width: 50px; height: 40px; object-fit: contain;" /></div>
+        <div>
+            <div style="font-size: 28px; color: #ffffff; line-height: 1.2;">Optima Academy Online</div>
+            <div style="font-size: 12px; color: #55c8e8;">An Education Experience Company</div>
+        </div>
+    </div>
+    <div style="font-size: 36px; color: #ffffff; margin-bottom: 6px;">DIGITAL ART IMAGING</div>
+</div>
+
+<!-- ===== METADATA STRIP ===== -->
+<div style="background: #FFFFFF; border-bottom: 2px solid #D0D9E8; display: flex; flex-wrap: wrap;">
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Quarter / Week</div>
+        <div style="font-size: 17px; color: #0e1c42;">Q1 &middot; Module 1, Week 1</div>
+        <div style="font-size: 12px; color: #666;">Module 1: Digital Imaging Foundations</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Focus</div>
+        <div style="font-size: 17px; color: #0e1c42;">What Is Digital Art?</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">This Week's Project</div>
+        <div style="font-size: 17px; color: #0e1c42; font-style: italic;">Creating Digital Art</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Software</div>
+        <div style="font-size: 16px; color: #0e1c42;">Pixlr E (free, browser)</div>
+    </div>
+</div>
+
+<!-- ===== BODY WRAPPER ===== -->
+<div style="padding: 24px 34px;">
+
+    <!-- Lavender title strip -->
+    <div style="background: #EEF1F8; border-left: 5px solid #0E1C42; border-radius: 7px; padding: 18px 22px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #0e1c42; margin-bottom: 6px;">MODULE 1 &middot; WEEK 1</div>
+        <div style="font-size: 22px; color: #0e1c42; margin-bottom: 4px;">What Is Digital Art?</div>
+        <div style="font-size: 16px; color: #666;">Lesson</div>
+    </div>
+
+    <!-- Essential Question -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128214; ESSENTIAL QUESTION</div>
+        <div style="font-size: 20px; color: #0e1c42; font-style: italic; margin-bottom: 10px;">How does technology influence the way artists create, share, and experience art in the digital age?</div>
+        <div style="font-size: 18px; color: #1a2340; line-height: 1.65;">When you think of digital art, what comes to mind? Maybe a video game, a filter on your phone, or a design you scrolled past this morning. Every one of those was made by an artist making choices. This year you will learn to make those choices on purpose, and this week you begin by learning what "digital art" actually means.</div>
+    </div>
+
+    <!-- PART 1 · LOOK FIRST -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128064; PART 1 &middot; LOOK FIRST</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Every image on a screen is built from a grid of tiny colored squares called <strong>pixels</strong>. From a normal distance your eye blends them into a smooth picture. Zoom in far enough and the grid appears. Look at the same simple image below at two zoom levels.</p>
+
+        <div class="pix-wrap">
+            <div class="pix-panel">
+                <svg width="150" height="150" viewBox="0 0 150 150" role="img" aria-label="A smooth teal heart shape as your eye normally sees it on screen.">
+                    <rect width="150" height="150" fill="#EEF1F8"/>
+                    <path d="M75 128 C 20 86, 28 40, 60 40 C 72 40, 75 52, 75 56 C 75 52, 78 40, 90 40 C 122 40, 130 86, 75 128 Z" fill="#1B8A7A"/>
+                </svg>
+                <div class="pix-label">What your eye sees</div>
+            </div>
+            <div style="font-size: 26px; color: #6b7a99;">&#8594;</div>
+            <div class="pix-panel">
+                <svg width="150" height="150" viewBox="0 0 10 10" shape-rendering="crispEdges" role="img" aria-label="The same heart shown as a coarse 10 by 10 grid of pixels.">
+                    <rect width="10" height="10" fill="#EEF1F8"/>
+                    <g fill="#1B8A7A">
+                        <rect x="2" y="2" width="1" height="1"/><rect x="3" y="2" width="1" height="1"/><rect x="6" y="2" width="1" height="1"/><rect x="7" y="2" width="1" height="1"/>
+                        <rect x="1" y="3" width="1" height="1"/><rect x="2" y="3" width="1" height="1"/><rect x="3" y="3" width="1" height="1"/><rect x="4" y="3" width="1" height="1"/><rect x="5" y="3" width="1" height="1"/><rect x="6" y="3" width="1" height="1"/><rect x="7" y="3" width="1" height="1"/><rect x="8" y="3" width="1" height="1"/>
+                        <rect x="1" y="4" width="1" height="1"/><rect x="2" y="4" width="1" height="1"/><rect x="3" y="4" width="1" height="1"/><rect x="4" y="4" width="1" height="1"/><rect x="5" y="4" width="1" height="1"/><rect x="6" y="4" width="1" height="1"/><rect x="7" y="4" width="1" height="1"/><rect x="8" y="4" width="1" height="1"/>
+                        <rect x="2" y="5" width="1" height="1"/><rect x="3" y="5" width="1" height="1"/><rect x="4" y="5" width="1" height="1"/><rect x="5" y="5" width="1" height="1"/><rect x="6" y="5" width="1" height="1"/><rect x="7" y="5" width="1" height="1"/>
+                        <rect x="3" y="6" width="1" height="1"/><rect x="4" y="6" width="1" height="1"/><rect x="5" y="6" width="1" height="1"/><rect x="6" y="6" width="1" height="1"/>
+                        <rect x="4" y="7" width="1" height="1"/><rect x="5" y="7" width="1" height="1"/>
+                    </g>
+                </svg>
+                <div class="pix-label">Zoomed in: the pixel grid</div>
+            </div>
+        </div>
+        <p style="font-size: 14px; color: #6b7a99; margin: 0;">Concept diagram. The number of pixels in an image is its <strong>resolution</strong>. More pixels mean a sharper, more detailed image.</p>
+
+        <div class="optima-widget ow-reflect">
+            <div class="widget-kicker">&#128173; QUICK CHECK-IN &middot; NO WRONG ANSWER</div>
+            <div class="widget-question">Think about the last piece of digital art you noticed. Where did you see it?</div>
+            <div class="widget-options">
+                <button data-response="Games are one of the oldest homes of digital art. Someone designed every character, color, and background you move through.">In a video game</button>
+                <button data-response="Social feeds are full of digital art: photography, illustration, motion graphics, typography. An artist made choices behind each one.">Scrolling social media</button>
+                <button data-response="Filters and photo apps are digital editing tools. You have already been doing a simple version of this course's work.">A photo filter or editing app</button>
+                <button data-response="Posters, packaging, and ads are graphic design, a major branch of digital art. You will build your own this year.">A poster, ad, or design</button>
+            </div>
+            <div class="widget-feedback"></div>
+            <button class="widget-reset">Reset</button>
+        </div>
+    </div>
+
+    <!-- PART 2 · WHAT DIGITAL ART IS -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128218; PART 2 &middot; WHAT DIGITAL ART IS</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;"><strong>Digital art</strong> is any artwork that uses digital technology at any stage of the creative process. That could mean:</p>
+        <ul style="font-size: 17px; color: #1a2340; line-height: 1.7; margin: 0 0 12px 0; padding-left: 22px;">
+            <li>Drawing directly on a tablet or computer</li>
+            <li>Scanning a hand-drawn sketch and editing it on screen</li>
+            <li>Building an image completely from software</li>
+        </ul>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">When an artwork is meant to be viewed on a screen, website, or app, it is called <strong>digital imaging</strong>. Artists have been mixing art and technology for decades. Today it is hard to find art that has <em>not</em> been touched by technology, whether it is a digital photo of a painting or a virtual museum tour.</p>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 14px 0 8px 0;">Almost every digital image is one of two kinds. Knowing which one you are working in changes how you edit it.</p>
+        <div class="rvv">
+            <div style="border-top: 3px solid #1B8A7A;">
+                <h4 style="color:#167567;">Raster (pixel) images</h4>
+                <p>Made of a fixed grid of pixels. Photographs and most painted digital art are raster. They look great at their true size but turn blocky if you enlarge them too far. Pixlr E, which you will use in this course, is a raster editor.</p>
+            </div>
+            <div style="border-top: 3px solid #D9583B;">
+                <h4 style="color:#c0472e;">Vector images</h4>
+                <p>Made of math-defined lines and shapes instead of pixels. Logos and clean graphics are often vector because they stay crisp at any size, from a business card to a billboard.</p>
+            </div>
+        </div>
+
+        <div class="callout c-help">
+            <div class="ck">&#128161; YOUR SOFTWARE THIS COURSE</div>
+            <div class="cb">This course uses <strong>Pixlr E</strong>, a free image editor that runs in your web browser with nothing to install. Open it at <a href="https://pixlr.com/e/">pixlr.com/e</a>. It works on the same layers-and-tools model as professional software, so the skills you build here transfer directly to industry-standard programs. You will set it up in this week's first assignment.</div>
+        </div>
+    </div>
+
+    <!-- PART 3 · HOW TECH AND ART WORK TOGETHER -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128269; PART 3 &middot; HOW TECHNOLOGY AND ART WORK TOGETHER</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Technology has changed art in four big ways. As you read, notice that in every case a human artist is still making the decisions. The tools are new; the thinking is the same craft artists have practiced for centuries.</p>
+
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 16px 0 6px 0;">1. Preserving art</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Museums scan and photograph fragile paintings to detect damage early and plan restorations. Digital records also let you study a masterpiece up close from anywhere. The image below is a public-domain scan released by the Art Institute of Chicago.</p>
+
+        <figure class="art-fig">
+            <img src="https://www.artic.edu/iiif/2/6644829f-f292-c5c4-a73c-0356a6fdbf0d/full/843,/0/default.jpg" alt="The Bedroom by Vincent van Gogh: a small room with a wooden bed, two chairs, a window, and framed pictures on a blue wall." />
+            <figcaption>Vincent van Gogh (Dutch, 1853&ndash;1890), <em>The Bedroom</em>, 1889. Oil on canvas. Art Institute of Chicago, Helen Birch Bartlett Memorial Collection. Public domain. Source: <a href="https://www.artic.edu/artworks/28560">artic.edu/artworks/28560</a></figcaption>
+        </figure>
+
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 16px 0 6px 0;">2. Pushing creative boundaries</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Some artists build their work around a new technology. Andy Warhol used <strong>screen printing</strong>, a process that begins with a photograph, to repeat the same image in different colors and explore fame and mass production. You can view his <em>Marilyn Diptych</em> on the museum's own site: <a href="https://www.tate.org.uk/art/artworks/warhol-marilyn-diptych-t03093">Tate &middot; Warhol, Marilyn Diptych</a>.</p>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Warhol was not the first artist to build a career on a repeatable printing process. Decades earlier, Henri de Toulouse-Lautrec used <strong>lithography</strong>, printing from a flat stone or plate, to produce the same poster image by the thousands for the streets of Paris.</p>
+
+        <figure class="art-fig">
+            <img src="https://www.artic.edu/iiif/2/1d82da66-d99e-f4f6-d5fc-56b22b6678ba/full/843,/0/default.jpg" alt="Moulin Rouge, La Goulue by Toulouse-Lautrec: a color lithograph poster showing a dancer in silhouette in the foreground and a crowd watching a high-kicking cancan dancer under gaslight, printed in flat bold shapes of black, red, and yellow." />
+            <figcaption>Henri de Toulouse-Lautrec (French, 1864&ndash;1901), <em>Moulin Rouge, La Goulue</em>, 1891. Color lithograph, printed in about 3,000 copies to advertise a Paris dance hall. Art Institute of Chicago. Public domain. Source: <a href="https://www.artic.edu/artworks/82287/moulin-rouge-la-goulue">artic.edu/artworks/82287</a></figcaption>
+        </figure>
+        <p style="font-size: 14px; color: #6b7a99; margin: 0 0 10px 0;">Lithography let Toulouse-Lautrec print the same striking image over and over, the same repeatable-imagery idea Warhol later pushed further with screen printing.</p>
+
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 16px 0 6px 0;">3. Creating immersive experiences</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Technology also changes how we <em>experience</em> art. The collective teamLab builds room-sized digital installations you can walk through, where projected flowers bloom and fade around you. Explore their work here: <a href="https://www.teamlab.art/">teamlab.art</a>. Later this year you will make and share art inside a virtual space of your own.</p>
+
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 16px 0 6px 0;">4. Art in the digital world</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Digital art can be edited, erased, and redone endlessly, which frees artists to take risks and experiment. Because a file can be copied and shared instantly, questions of ownership and permission matter more than ever, which leads to the guidelines below.</p>
+
+        <div class="optima-widget ow-select">
+            <div class="widget-kicker">&#9889; TRY IT &middot; DIGITAL OR NOT?</div>
+            <div class="widget-question">Read each case, decide, then check your answer.</div>
+            <div class="widget-row" data-correct="yes" data-hint="Scanning is a digital step in the process. Try again.">
+                <div class="widget-row-prompt">An artist draws a sketch on paper, scans it, then paints over it in Pixlr E. Is the finished piece digital art?</div>
+                <div class="widget-options">
+                    <button data-choice="yes" data-fb="Correct. Digital art uses digital technology at any stage. Scanning and editing on screen both count.">Yes</button>
+                    <button data-choice="no">No</button>
+                </div>
+            </div>
+            <div class="widget-row" data-correct="raster" data-hint="Think about which format is built from a grid of pixels. Try again.">
+                <div class="widget-row-prompt">A photographer wants to enlarge a photo to poster size without it turning blocky is hardest in which format?</div>
+                <div class="widget-options">
+                    <button data-choice="vector">Vector</button>
+                    <button data-choice="raster" data-fb="Right. Raster images are a fixed grid of pixels, so enlarging them past their resolution makes the pixels visible.">Raster</button>
+                </div>
+            </div>
+            <button class="widget-reset">Reset</button>
+        </div>
+    </div>
+
+    <!-- RESPONSIBLE DIGITAL ARTIST -->
+    <div class="callout c-art">
+        <div class="ck">&#127912; BEING A RESPONSIBLE DIGITAL ARTIST</div>
+        <div class="cb"><strong>Use your own images.</strong> If practice photos are provided, use them; otherwise take your own. <strong>Be original.</strong> Your work does not have to be perfect, but it should be yours. <strong>Avoid plagiarism.</strong> Copying someone else's artwork or photo and presenting it as your own, even with small edits, is plagiarism; if an idea or image is not yours, say where it came from. <strong>Think before you post.</strong> Once art is online it can stay there, and that includes comments: keep critiques and replies to classmates specific and respectful, the way you would want to be treated. <strong>Check your sources.</strong> Before you use a fact or image you find online, confirm it comes from a museum, a real artist's own site, or another source you trust, not just the first result in a search. <strong>Respect other artists</strong> and their privacy: do not use or share images of people or others' work without permission. <strong>Sign and date your art</strong> to show it is yours.</div>
+    </div>
+
+    <!-- AI AWARENESS (factual) -->
+    <div class="callout c-warn">
+        <div class="ck">&#9888;&#65039; WORTH KNOWING &middot; AI IMAGE TOOLS</div>
+        <div class="cb">AI image generators can produce a picture from a text prompt in seconds and can be useful for gathering ideas. They cannot make the compositional decisions this course is teaching you: what to include, how to arrange it, where the light falls, which colors carry the mood. Those decisions, and the work you produce with your own tools, are what is graded here.</div>
+    </div>
+
+    <!-- VOCABULARY -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128221; VOCABULARY</div>
+        <div class="vocab-grid">
+            <div class="vocab-card"><strong>Digital Art</strong>Any artwork that uses digital technology at some stage of creation.</div>
+            <div class="vocab-card"><strong>Digital Imaging</strong>Artwork made to be viewed on a screen, website, or app.</div>
+            <div class="vocab-card"><strong>Pixel</strong>One of the tiny colored squares that make up a screen image.</div>
+            <div class="vocab-card"><strong>Resolution</strong>The number of pixels in an image; more pixels mean more detail.</div>
+            <div class="vocab-card"><strong>Raster Image</strong>An image built from a fixed grid of pixels (photos, digital paintings).</div>
+            <div class="vocab-card"><strong>Vector Image</strong>An image built from math-defined lines and shapes; stays crisp at any size.</div>
+            <div class="vocab-card"><strong>Screen Printing</strong>A process, starting from a photo or stencil, that presses ink through a mesh screen.</div>
+            <div class="vocab-card"><strong>Composition</strong>How the parts of an artwork are arranged.</div>
+        </div>
+    </div>
+
+    <!-- WHAT YOU'LL DO NEXT -->
+    <div style="background: #FFFFFF; border-top: 3px solid #0E1C42; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 16px;">&#10145;&#65039; WHAT YOU'LL DO NEXT (IN CANVAS)</div>
+        <div class="next-item"><div class="num learn">1</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Set Up Pixlr E and Your Portfolio Folder</strong> &middot; Week 1</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Open Pixlr E, create a blank canvas, and make your OneDrive portfolio folder. Completion grade.</div></div></div>
+        <div class="next-item"><div class="num learn">2</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Discussion: Imaging Foundations</strong> &middot; Week 1</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Name one way technology has changed art, with a specific example, and respond to a classmate.</div></div></div>
+        <div class="next-item"><div class="num learn">3</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Quiz: Foundations of Digital Art</strong> &middot; Week 1</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">8 questions, auto-graded in Canvas.</div></div></div>
+        <div class="next-item"><div class="num create">4</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Project: Creating Digital Art</strong> &middot; Week 1</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Make your first digital piece in Pixlr E: a signed, dated "This Is Me as a Digital Artist" cover image. Your graded artwork this week.</div></div></div>
+    </div>
+
+    <!-- WRAP-UP -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128170; THE BIG IDEA</div>
+        <p style="font-size: 18px; color: #1a2340; line-height: 1.65; margin: 0;">Digital art is not a shortcut; it is a new set of tools for the same old goal, saying something with an image. Technology preserves art, pushes it further, surrounds us with it, and spreads it instantly. Your job this year is to be the artist behind the tool: the one making the choices. This week, you make your first ones.</p>
+    </div>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div style="background: #0E1C42; border-top: 3px solid #55C8E8; padding: 18px 34px; text-align: center;">
+    <div style="font-size: 18px; color: #ffffff; margin-bottom: 6px;"><span style="color: #55c8e8;">Optima Academy Online</span> &middot; DIGITAL ART IMAGING &middot; Quarter 1 &middot; Student Lesson Page</div>
+    <div style="font-size: 13px; color: rgba(255,255,255,0.65); margin-bottom: 4px;">Module 1 &middot; Week 1 &middot; What Is Digital Art?</div>
+    <div style="font-size: 12px; color: rgba(255,255,255,0.4);">&copy; Optima Academy Online &middot; An Education Experience Company. Artwork shown is in the public domain; see caption for source.</div>
+</div>
+
+</div>
+
+<!-- ===== WIDGET RUNTIME — from optima-lesson-format template. One delegated listener drives every engine. ===== -->
+<script>
+(function () {
+  document.addEventListener('click', function (e) {
+    var reset = e.target.closest('.widget-reset');
+    if (reset) {
+      var w = reset.closest('.optima-widget');
+      w.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      w.querySelectorAll('.widget-feedback').forEach(function (f) { f.classList.remove('show'); f.textContent = ''; });
+      w.querySelectorAll('.row-feedback').forEach(function (f) { f.remove(); });
+      return;
+    }
+    var rBtn = e.target.closest('.ow-reflect .widget-options button');
+    if (rBtn) {
+      var rw = rBtn.closest('.optima-widget');
+      rw.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected'); });
+      rBtn.classList.add('selected');
+      var fb = rw.querySelector('.widget-feedback');
+      fb.textContent = rBtn.dataset.response || '';
+      fb.classList.add('show');
+      return;
+    }
+    var sBtn = e.target.closest('.ow-select .widget-row .widget-options button');
+    if (sBtn) {
+      var row = sBtn.closest('.widget-row');
+      var correct = row.dataset.correct;
+      row.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      var right = sBtn.dataset.choice === correct;
+      sBtn.classList.add(right ? 'correct' : 'incorrect');
+      var text = right ? (sBtn.dataset.fb || row.dataset.fb || 'Right.') : (sBtn.dataset.fb || row.dataset.hint || 'Not quite. Try again.');
+      var rf = row.querySelector('.row-feedback') || row.appendChild(document.createElement('div'));
+      rf.className = 'row-feedback ' + (right ? 'correct' : 'incorrect');
+      rf.textContent = text;
+      return;
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

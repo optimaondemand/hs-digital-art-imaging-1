@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Digital Art Imaging &mdash; Week 6: History of Photography &amp; Taking Digital Photographs</title>
+<style>
+    body { margin: 0; padding: 0; font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #f4f6fa; }
+    .canvas-frame { max-width: 1100px; margin: 0 auto; background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+
+    /* ===== WIDGET CSS — from optima-lesson-format/assets/lesson-interactive-template.html (byte-consistent) ===== */
+    .optima-widget { background: linear-gradient(135deg, #E8F6FB 0%, #F4F9FC 100%); border: 1px solid #C5DCE5; border-left: 5px solid #2196D0; border-radius: 8px; padding: 18px 22px; margin: 18px 0; }
+    .widget-kicker { font-size: 11px; color: #1B6A94; margin-bottom: 10px; letter-spacing: 0.4px; }
+    .widget-question { font-size: 17px; color: #0E1C42; margin-bottom: 14px; line-height: 1.55; }
+    .widget-row { background: #FFFFFF; border: 1px solid #D0D9E8; border-radius: 6px; padding: 12px 14px; margin-bottom: 10px; }
+    .widget-row-prompt { font-size: 15px; color: #0E1C42; margin-bottom: 8px; line-height: 1.5; font-style: italic; }
+    .widget-options { display: flex; flex-wrap: wrap; gap: 8px; }
+    .widget-options button { background: #FFFFFF; border: 1.5px solid #D0D9E8; border-radius: 8px; padding: 8px 14px; font-size: 14px; color: #0E1C42; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+    .widget-options button:hover { background: #F4F6FA; border-color: #55C8E8; }
+    .widget-options button.selected { background: #0E1C42; color: #FFFFFF; border-color: #0E1C42; }
+    .widget-options button.correct { background: #D8F0DD; border-color: #2A9D5C; color: #1A6B3D; }
+    .widget-options button.incorrect { background: #FDECEC; border-color: #C0392B; color: #8A1F16; }
+    .widget-feedback { background: #FFFFFF; border-left: 3px solid #C7922C; padding: 10px 14px; font-size: 15px; color: #1a2340; line-height: 1.55; margin: 10px 0; display: none; border-radius: 4px; }
+    .widget-feedback.show { display: block; }
+    .row-feedback { padding: 8px 12px; margin-top: 8px; font-size: 14px; border-radius: 4px; line-height: 1.5; }
+    .row-feedback.correct { background: #D8F0DD; border-left: 3px solid #2A9D5C; color: #1A6B3D; }
+    .row-feedback.incorrect { background: #FDECEC; border-left: 3px solid #C0392B; color: #8A1F16; }
+    .widget-reset { background: transparent; border: 1px solid #C7922C; color: #C7922C; border-radius: 6px; padding: 6px 12px; font-size: 12px; cursor: pointer; font-family: inherit; margin-top: 6px; }
+    .widget-reset:hover { background: #FDF3E3; }
+
+    /* ===== Art-course components (layered on the brand; teal/coral are activity accents only) ===== */
+    .art-fig { margin: 14px 0; text-align: center; }
+    .art-fig img { max-width: 100%; height: auto; border-radius: 6px; border: 1px solid #D0D9E8; }
+    .art-fig figcaption { font-size: 13px; color: #666; margin-top: 8px; line-height: 1.5; }
+    .art-fig figcaption a { color: #1B6A94; }
+    .el-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin: 16px 0; }
+    .el-card { border: 1px solid #D0D9E8; border-radius: 8px; overflow: hidden; }
+    .el-demo { height: 80px; display: flex; align-items: center; justify-content: center; }
+    .el-text { padding: 10px 13px; }
+    .el-text strong { color: #167567; display: block; margin-bottom: 3px; font-size: 16px; }
+    .el-text span { font-size: 14px; color: #1a2340; }
+    .callout { border-radius: 6px; padding: 14px 20px; margin: 16px 0; }
+    .callout .ck { font-size: 11px; margin-bottom: 8px; letter-spacing: 0.5px; }
+    .callout .cb { font-size: 16px; line-height: 1.6; color: #0E1C42; }
+    .c-help { background: #E8F6FB; border-left: 5px solid #2196D0; border-top: 3px solid #55C8E8; }
+    .c-help .ck { color: #1B6A94; }
+    .c-warn { background: #FDECEC; border-left: 5px solid #C0392B; border-top: 3px solid #E74C3C; }
+    .c-warn .ck { color: #8A1F16; }
+    .c-art { background: #E6F4F1; border-left: 5px solid #1B8A7A; }
+    .c-art .ck { color: #167567; }
+    .next-item { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+    .next-item .num { min-width: 30px; height: 30px; border-radius: 50%; color: #fff; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .num.learn { background: #1B8A7A; }
+    .num.create { background: #D9583B; }
+    .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+    .vocab-card { background: #EEF1F8; border-radius: 6px; padding: 10px 13px; font-size: 14px; color: #1a2340; }
+    .vocab-card strong { color: #0E1C42; display: block; margin-bottom: 2px; }
+    details { background: #FFFFFF; border: 1px solid #D0D9E8; border-left: 4px solid #C7922C; border-radius: 6px; padding: 12px 18px; margin: 14px 0; }
+    details summary { font-size: 16px; color: #0E1C42; cursor: pointer; }
+    details .ac-body { font-size: 16px; color: #1a2340; margin-top: 10px; padding-top: 10px; border-top: 1px solid #EEF1F8; line-height: 1.6; }
+    /* Pixel vs. smooth concept visual */
+    .pix-wrap { display: flex; flex-wrap: wrap; gap: 22px; align-items: center; justify-content: center; margin: 16px 0 6px; }
+    .pix-panel { text-align: center; }
+    .pix-label { font-size: 12px; color: #6b7a99; margin-top: 8px; }
+    .rvv { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+    .rvv > div { border: 1px solid #D0D9E8; border-radius: 8px; padding: 14px 16px; }
+    .rvv h4 { margin: 0 0 6px 0; font-size: 16px; }
+    .rvv p { margin: 0; font-size: 14px; color: #1a2340; line-height: 1.55; }
+    @media (max-width: 560px){ .rvv { grid-template-columns: 1fr; } }
+    /* Timeline (week 6 only) */
+    .timeline { border-left: 3px solid #D0D9E8; margin: 18px 0 18px 10px; padding-left: 22px; }
+    .tl-item { position: relative; margin-bottom: 20px; }
+    .tl-item::before { content: ""; position: absolute; left: -28px; top: 4px; width: 12px; height: 12px; border-radius: 50%; background: #1B8A7A; }
+    .tl-year { font-size: 13px; color: #167567; margin-bottom: 2px; }
+    .tl-title { font-size: 17px; color: #0e1c42; margin-bottom: 4px; }
+    .tl-body { font-size: 15px; color: #1a2340; line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="canvas-frame">
+
+<!-- ===== HEADER ===== -->
+<div style="background: #0E1C42; border-bottom: 5px solid #55C8E8; padding: 22px 34px;">
+    <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 10px;">
+        <div style="width: 52px; height: 52px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><img src="https://raw.githubusercontent.com/optimaondemand/optima-assets/eeb0b335630058906d52f478028361d352253a93/images/Optima%20Final%20Circle%20-%20Owl%20Only.png" alt="Optima Academy" style="width: 50px; height: 40px; object-fit: contain;" /></div>
+        <div>
+            <div style="font-size: 28px; color: #ffffff; line-height: 1.2;">Optima Academy Online</div>
+            <div style="font-size: 12px; color: #55c8e8;">An Education Experience Company</div>
+        </div>
+    </div>
+    <div style="font-size: 36px; color: #ffffff; margin-bottom: 6px;">DIGITAL ART IMAGING</div>
+</div>
+
+<!-- ===== METADATA STRIP ===== -->
+<div style="background: #FFFFFF; border-bottom: 2px solid #D0D9E8; display: flex; flex-wrap: wrap;">
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Quarter / Week</div>
+        <div style="font-size: 17px; color: #0e1c42;">Q1 &middot; Module 1, Week 6</div>
+        <div style="font-size: 12px; color: #666;">Module 1: Digital Imaging Foundations</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Focus</div>
+        <div style="font-size: 17px; color: #0e1c42;">History of Photography &amp; Taking Digital Photographs</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">This Week's Project</div>
+        <div style="font-size: 17px; color: #0e1c42; font-style: italic;">An Intentional Photograph</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Software</div>
+        <div style="font-size: 16px; color: #0e1c42;">Pixlr E (free, browser) + camera/phone</div>
+    </div>
+</div>
+
+<!-- ===== BODY WRAPPER ===== -->
+<div style="padding: 24px 34px;">
+
+    <!-- Lavender title strip -->
+    <div style="background: #EEF1F8; border-left: 5px solid #0E1C42; border-radius: 7px; padding: 18px 22px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #0e1c42; margin-bottom: 6px;">MODULE 1 &middot; WEEK 6</div>
+        <div style="font-size: 22px; color: #0e1c42; margin-bottom: 4px;">History of Photography &amp; Taking Digital Photographs</div>
+        <div style="font-size: 16px; color: #666;">Lesson</div>
+    </div>
+
+    <!-- Essential Question -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128214; ESSENTIAL QUESTION</div>
+        <div style="font-size: 20px; color: #0e1c42; font-style: italic; margin-bottom: 10px;">How did photography go from a hours-long chemical process to an instant tap on a phone screen, and what stayed the same along the way?</div>
+        <div style="font-size: 18px; color: #1a2340; line-height: 1.65;">The phone in your pocket can capture, edit, and share a photo in seconds. That took nearly two centuries to build. Knowing the path photography traveled helps you see your own camera, and your own photographs, differently.</div>
+    </div>
+
+    <!-- PART 1 · LOOK FIRST -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128064; PART 1 &middot; LOOK FIRST</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Long before cameras existed, artists and scientists used a <strong>camera obscura</strong>: a dark box or room with a small hole that projected an image of the outside world onto a surface inside. The problem was permanence. The image could not be captured; it faded the moment the light changed.</p>
+
+        <figure class="art-fig">
+            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Camera%20Obscura%20box18thCentury.jpg" alt="An 18th-century box-type camera obscura: a wooden box with a lens that projects the outside scene, upside down, onto a viewing surface inside." style="max-width:380px;" />
+            <figcaption>An 18th-century box-type <em>camera obscura</em>. Light enters through the lens and projects the outside scene onto a surface inside. Public domain. Source: <a href="https://commons.wikimedia.org/wiki/File:Camera_Obscura_box18thCentury.jpg">Wikimedia Commons</a></figcaption>
+        </figure>
+
+        <div class="optima-widget ow-reflect">
+            <div class="widget-kicker">&#128173; QUICK CHECK-IN &middot; NO WRONG ANSWER</div>
+            <div class="widget-question">A camera obscura could project an image but not save it. If you had one and no way to record what you saw, what would you do with it?</div>
+            <div class="widget-options">
+                <button data-response="That is exactly what painters did for centuries: they traced or sketched the projected image by hand. The camera obscura was an art tool long before it was a photography tool.">Trace or sketch the projected image by hand</button>
+                <button data-response="That instinct, wanting a permanent copy, is exactly what drove inventors for decades to search for a light-sensitive material that could hold the image.">Look for a way to make the image permanent</button>
+                <button data-response="Fair. Without a way to capture it, a camera obscura is closer to a toy or a curiosity than a tool, which is part of why photography took so long to become practical.">Just enjoy it as a curiosity, nothing more</button>
+            </div>
+            <div class="widget-feedback"></div>
+            <button class="widget-reset">Reset</button>
+        </div>
+    </div>
+
+    <!-- PART 2 · A TIMELINE OF PHOTOGRAPHY -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128218; PART 2 &middot; A TIMELINE OF PHOTOGRAPHY</div>
+
+        <div class="timeline">
+            <div class="tl-item">
+                <div class="tl-year">1826 to 1827 A.D.</div>
+                <div class="tl-title">The First Permanent Photograph</div>
+                <div class="tl-body">French inventor <strong>Joseph Nicephore Niepce</strong> used a camera obscura and a pewter plate coated with a light-sensitive material called bitumen of Judea. After several hours of sunlight exposure, the hardened areas held an image while the rest washed away. The result, titled <em>View from the Window at Le Gras</em>, is considered the first photograph in history.
+                <figure class="art-fig" style="margin: 12px 0 0;">
+                    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/View%20from%20the%20Window%20at%20Le%20Gras,%20Joseph%20Nic%C3%A9phore%20Ni%C3%A9pce,%20uncompressed%20UMN%20source.png" alt="View from the Window at Le Gras: a grainy, blurred view of sunlit rooftops and countryside, the first permanent photograph." style="max-width:300px;" />
+                    <figcaption>Joseph Nicephore Niepce, <em>View from the Window at Le Gras</em>, 1826 to 1827. The first permanent photograph. Public domain. Source: <a href="https://commons.wikimedia.org/wiki/File:View_from_the_Window_at_Le_Gras,_Joseph_Nic%C3%A9phore_Ni%C3%A9pce,_uncompressed_UMN_source.png">Wikimedia Commons</a></figcaption>
+                </figure>
+                </div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-year">1839 A.D.</div>
+                <div class="tl-title">The Daguerreotype</div>
+                <div class="tl-body">Niepce's partner, <strong>Louis-Jacques-Mande Daguerre</strong>, improved the process using a polished, silver-coated copper plate made light-sensitive with iodine vapor, developed with mercury vapor, and fixed with a salt solution. Each daguerreotype was one of a kind since there were no negatives to make duplicates from. It became the first commercially successful photographic process, and studio portraits made photography both an art and a business.
+                <figure class="art-fig" style="margin: 12px 0 0;">
+                    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/1839%20Self-portrait%20by%20Robert%20Cornelius.jpg" alt="Robert Cornelius self-portrait, 1839: a young man with tousled hair and folded arms, one of the earliest photographic portraits." style="max-width:250px;" />
+                    <figcaption>Robert Cornelius, self-portrait, 1839. Made by the daguerreotype process, it is one of the earliest photographic portraits. Public domain. Source: <a href="https://commons.wikimedia.org/wiki/File:1839_Self-portrait_by_Robert_Cornelius.jpg">Wikimedia Commons</a></figcaption>
+                </figure>
+                </div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-year">1888 A.D.</div>
+                <div class="tl-title">The Kodak Revolution</div>
+                <div class="tl-body"><strong>George Eastman</strong> released the Kodak camera preloaded with film for 100 exposures. Customers mailed the whole camera back to Kodak, which developed the film, made prints, and reloaded it. Kodak's slogan, "You press the button, we do the rest," made photography accessible to everyday people instead of only trained professionals. Eastman's roll film also replaced heavy glass plates and later led to motion pictures.
+                <figure class="art-fig" style="margin: 12px 0 0;">
+                    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Kodak%20ad%201888.GIF" alt="An 1888 Kodak advertisement showing the round-image box camera and the slogan about pressing the button." style="max-width:300px;" />
+                    <figcaption>Kodak advertisement, 1888, with the slogan "You press the button, we do the rest." Public domain. Source: <a href="https://commons.wikimedia.org/wiki/File:Kodak_ad_1888.GIF">Wikimedia Commons</a></figcaption>
+                </figure>
+                </div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-year">Mid-1900s A.D.</div>
+                <div class="tl-title">The SLR Camera</div>
+                <div class="tl-body">SLR stands for <strong>Single-Lens Reflex</strong>. A mirror and prism system let photographers see through the viewfinder exactly what the lens saw; the mirror flipped up at the moment of exposure to let light reach the film. The first practical 35mm SLRs appeared in the 1950s and 1960s from companies like Nikon, Canon, and Pentax, offering interchangeable lenses and manual control. The SLR became the standard for professional and artistic photography, and its design later carried over into digital SLRs (DSLRs).</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-year">1975 A.D.</div>
+                <div class="tl-title">The First Digital Camera</div>
+                <div class="tl-body">Engineer <strong>Steven Sasson</strong>, working at Kodak, built the first digital camera. It weighed 8 pounds and recorded black-and-white images to a cassette tape, taking 23 seconds per photo. Kodak did not market it, fearing it would threaten film sales, but the idea did not disappear.</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-year">1990s to 2000s A.D.</div>
+                <div class="tl-title">Digital Cameras Take Over</div>
+                <div class="tl-body">Digital cameras became practical: memory cards replaced film, photos could be viewed instantly on a screen, and software like Adobe Photoshop opened new editing possibilities. By the 2000s, digital cameras had mostly replaced film cameras in everyday use.</div>
+            </div>
+            <div class="tl-item">
+                <div class="tl-year">2000 A.D. to Today</div>
+                <div class="tl-title">Smartphones and Computational Photography</div>
+                <div class="tl-body">In 2000, the Sharp J-SH04, the first phone with a built-in camera, was released in Japan. By the 2010s, smartphones carried high-resolution sensors and advanced lenses. Today's smartphones use artificial intelligence and computational photography to automatically adjust lighting, focus, and color, and instant sharing has turned photography into a tool for communication, self-expression, and social activism.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PART 3 · TAKING A GOOD DIGITAL PHOTOGRAPH -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128269; PART 3 &middot; TAKING A GOOD DIGITAL PHOTOGRAPH</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Every photographer in that timeline eventually had to make the same decision you make every time you raise a camera: what to include, and how. Being <strong>intentional</strong> means thinking ahead about the picture you want before you press the shutter, then using your technical skill to make it real. Not every photo needs this. Quick snapshots happen in the moment. But your best work will come from planning.</p>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">The single best way to improve is practice. The more you shoot, including the shots that do not work, the faster you learn what does. Mistakes teach you exactly as much as successes do.</p>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 14px 0 8px 0;"><strong>Orientation</strong> is the direction you hold your camera or device, and it changes how your photo is displayed:</p>
+        <div class="rvv">
+            <div style="border-top: 3px solid #1B8A7A;">
+                <h4 style="color:#167567;">Landscape orientation</h4>
+                <p>The photo is wider than it is tall. Good for scenery, groups, and anything that spreads out horizontally.</p>
+            </div>
+            <div style="border-top: 3px solid #D9583B;">
+                <h4 style="color:#c0472e;">Portrait orientation</h4>
+                <p>The photo is taller than it is wide. Good for a single upright subject, like a person or a tall object.</p>
+            </div>
+        </div>
+
+        <div class="pix-wrap">
+            <div class="pix-panel">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Adams_The_Tetons_and_the_Snake_River.jpg" alt="The Tetons and the Snake River by Ansel Adams: a wide mountain valley scene, much wider than it is tall." style="width:220px; height:auto; border-radius:6px; border:1px solid #D0D9E8;" />
+                <div class="pix-label">Landscape: wider than tall</div>
+            </div>
+            <div class="pix-panel">
+                <img src="https://images.metmuseum.org/CRDImages/ph/original/DT1121.jpg" alt="Julia Jackson by Julia Margaret Cameron: a close head-and-shoulders portrait, taller than it is wide, against a plain dark background." style="width:150px; height:auto; border-radius:6px; border:1px solid #D0D9E8;" />
+                <div class="pix-label">Portrait: taller than wide</div>
+            </div>
+        </div>
+        <p style="font-size: 14px; color: #6b7a99; margin: 0 0 10px 0;">Left: Ansel Adams, <em>The Tetons and the Snake River</em>, 1942 (National Park Service, public domain, source: <a href="https://commons.wikimedia.org/wiki/File:Adams_The_Tetons_and_the_Snake_River.jpg">Wikimedia Commons</a>). Right: Julia Margaret Cameron (British, 1815&ndash;1879), <em>Julia Jackson</em>, 1867, albumen silver print, Metropolitan Museum of Art, public domain (source: <a href="https://www.metmuseum.org/art/collection/search/267426">metmuseum.org</a>).</p>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 14px 0 10px 0;">Beyond orientation, <strong>composition</strong>, how all the visual elements are arranged, decides whether a photo reads as art. That means paying attention to everything in the frame: placement, colors, shapes, lines, and the space around your subject. Two techniques help you control what the viewer notices:</p>
+
+        <div class="rvv">
+            <div style="border-top: 3px solid #1B8A7A;">
+                <h4 style="color:#167567;">Inclusion</h4>
+                <p>Purposely keeping certain background elements in the frame because they add visual interest or tell part of the story. You can practice this by placing your subject in a setting that adds context, like outdoors, or by shifting your own position to find a background that enhances the image.</p>
+            </div>
+            <div style="border-top: 3px solid #D9583B;">
+                <h4 style="color:#c0472e;">Exclusion</h4>
+                <p>Removing or avoiding anything that distracts from your subject: clearing clutter from the background, changing your orientation, or moving to a simpler location. Some photographers blur the background using depth of field to eliminate distractions while keeping the subject sharp.</p>
+            </div>
+        </div>
+
+        <div class="pix-wrap">
+            <div class="pix-panel">
+                <img src="https://images.metmuseum.org/CRDImages/ph/original/DP295213.jpg" alt="Charles Hay Cameron, Esq., in His Garden at Freshwater by Julia Margaret Cameron: an older man seated outdoors, surrounded by garden plants and trees that give the portrait a sense of place." style="width:170px; height:auto; border-radius:6px; border:1px solid #D0D9E8;" />
+                <div class="pix-label">Inclusion: the garden adds context</div>
+            </div>
+            <div class="pix-panel">
+                <img src="https://images.metmuseum.org/CRDImages/ph/original/DT1121.jpg" alt="Julia Jackson by Julia Margaret Cameron: a close portrait against a plain, undetailed background with nothing to distract from the face." style="width:150px; height:auto; border-radius:6px; border:1px solid #D0D9E8;" />
+                <div class="pix-label">Exclusion: a plain background isolates the subject</div>
+            </div>
+        </div>
+        <p style="font-size: 14px; color: #6b7a99; margin: 0 0 10px 0;">Both by Julia Margaret Cameron (British, 1815&ndash;1879), Metropolitan Museum of Art, public domain. Left: <em>Charles Hay Cameron, Esq., in His Garden at Freshwater</em>, 1865&ndash;67 (source: <a href="https://www.metmuseum.org/art/collection/search/268719">metmuseum.org</a>). Right: <em>Julia Jackson</em>, 1867 (source: <a href="https://www.metmuseum.org/art/collection/search/267426">metmuseum.org</a>).</p>
+
+        <div class="callout c-help">
+            <div class="ck">&#128161; A QUICK PRE-SHOT CHECKLIST</div>
+            <div class="cb">Before you tap the shutter: Decide your subject. Choose landscape or portrait orientation on purpose. Scan the whole frame, not just the subject, and decide what you are including or excluding. Then shoot more than one version.</div>
+        </div>
+
+        <div class="optima-widget ow-select">
+            <div class="widget-kicker">&#9889; TRY IT &middot; HISTORY AND TECHNIQUE CHECK</div>
+            <div class="widget-question">Read each item, decide, then check your answer.</div>
+            <div class="widget-row" data-correct="daguerre" data-hint="Think about who improved Niepce's process and made it commercially successful. Try again.">
+                <div class="widget-row-prompt">Which inventor introduced the daguerreotype in 1839, using a silver-coated copper plate?</div>
+                <div class="widget-options">
+                    <button data-choice="eastman">George Eastman</button>
+                    <button data-choice="sasson">Steven Sasson</button>
+                    <button data-choice="daguerre" data-fb="Correct. Louis-Jacques-Mande Daguerre improved Niepce's process and introduced the daguerreotype in 1839.">Louis-Jacques-Mande Daguerre</button>
+                </div>
+            </div>
+            <div class="widget-row" data-correct="exclusion" data-hint="Think about which term means removing distractions, not adding context. Try again.">
+                <div class="widget-row-prompt">A photographer blurs a cluttered background so only their subject stays sharp. This is an example of:</div>
+                <div class="widget-options">
+                    <button data-choice="inclusion">Inclusion</button>
+                    <button data-choice="exclusion" data-fb="Right. Exclusion removes or de-emphasizes anything that distracts from the subject.">Exclusion</button>
+                    <button data-choice="orientation">Orientation</button>
+                </div>
+            </div>
+            <button class="widget-reset">Reset</button>
+        </div>
+    </div>
+
+    <!-- AI AWARENESS (factual) -->
+    <div class="callout c-warn">
+        <div class="ck">&#9888;&#65039; WORTH KNOWING &middot; COMPUTATIONAL PHOTOGRAPHY</div>
+        <div class="cb">Modern smartphones use AI to blend multiple exposures, sharpen faces, and adjust color automatically the moment you take a photo. This is useful, but it works after you have already decided where to stand, how to orient the camera, and what to include or exclude. Those framing decisions are yours, and they are what separates an intentional photograph from a lucky one.</div>
+    </div>
+
+    <!-- VOCABULARY -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128221; VOCABULARY</div>
+        <div class="vocab-grid">
+            <div class="vocab-card"><strong>Camera Obscura</strong>A dark box or room with a small hole that projects an image but cannot save it.</div>
+            <div class="vocab-card"><strong>Daguerreotype</strong>An early one-of-a-kind photographic process introduced in 1839 using a silver-coated plate.</div>
+            <div class="vocab-card"><strong>SLR</strong>Single-Lens Reflex; a camera design using a mirror and prism so you see exactly what the lens sees.</div>
+            <div class="vocab-card"><strong>Intentional</strong>Thinking ahead about the picture you want, then using technical skill to create it.</div>
+            <div class="vocab-card"><strong>Orientation</strong>The direction a camera or device is held: landscape (wider than tall) or portrait (taller than wide).</div>
+            <div class="vocab-card"><strong>Composition</strong>How the visual elements of a photograph are arranged.</div>
+            <div class="vocab-card"><strong>Inclusion</strong>Purposely keeping background elements that add interest or context.</div>
+            <div class="vocab-card"><strong>Exclusion</strong>Removing or avoiding anything that distracts from the subject.</div>
+        </div>
+    </div>
+
+    <!-- WHAT YOU'LL DO NEXT -->
+    <div style="background: #FFFFFF; border-top: 3px solid #0E1C42; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 16px;">&#10145;&#65039; WHAT YOU'LL DO NEXT (IN CANVAS)</div>
+        <div class="next-item"><div class="num learn">1</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Exercise: Photography Timeline Match</strong> &middot; Week 6</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Match each invention (camera obscura, daguerreotype, Kodak camera, SLR, digital camera, smartphone) to its correct era. Completion grade.</div></div></div>
+        <div class="next-item"><div class="num learn">2</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Quiz: History of Photography &amp; Taking Digital Photographs</strong> &middot; Week 6</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">8 questions, auto-graded in Canvas.</div></div></div>
+        <div class="next-item"><div class="num create">3</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Art Lesson &amp; Reflection: An Intentional Photograph</strong> &middot; Week 6</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Shoot two versions of the same subject, one using inclusion and one using exclusion, and reflect on the difference. Your graded artwork this week.</div></div></div>
+    </div>
+
+    <!-- WRAP-UP -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128170; THE BIG IDEA</div>
+        <p style="font-size: 18px; color: #1a2340; line-height: 1.65; margin: 0;">Photography took nearly two hundred years to go from a fading projection in a dark box to an instant image on a screen, but the goal never changed: capturing a moment on purpose. Every camera in that history, from a pewter plate exposed for hours to the phone in your pocket, asked its user the same question: what do you want to remember, and how do you want it framed?</p>
+    </div>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div style="background: #0E1C42; border-top: 3px solid #55C8E8; padding: 18px 34px; text-align: center;">
+    <div style="font-size: 18px; color: #ffffff; margin-bottom: 6px;"><span style="color: #55c8e8;">Optima Academy Online</span> &middot; DIGITAL ART IMAGING &middot; Quarter 1 &middot; Student Lesson Page</div>
+    <div style="font-size: 13px; color: rgba(255,255,255,0.65); margin-bottom: 4px;">Module 1 &middot; Week 6 &middot; History of Photography &amp; Taking Digital Photographs</div>
+    <div style="font-size: 12px; color: rgba(255,255,255,0.4);">&copy; Optima Academy Online &middot; An Education Experience Company. Artwork and photographs shown are in the public domain; see captions for sources.</div>
+</div>
+
+</div>
+
+<!-- ===== WIDGET RUNTIME — from optima-lesson-format template. One delegated listener drives every engine. ===== -->
+<script>
+(function () {
+  document.addEventListener('click', function (e) {
+    var reset = e.target.closest('.widget-reset');
+    if (reset) {
+      var w = reset.closest('.optima-widget');
+      w.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      w.querySelectorAll('.widget-feedback').forEach(function (f) { f.classList.remove('show'); f.textContent = ''; });
+      w.querySelectorAll('.row-feedback').forEach(function (f) { f.remove(); });
+      return;
+    }
+    var rBtn = e.target.closest('.ow-reflect .widget-options button');
+    if (rBtn) {
+      var rw = rBtn.closest('.optima-widget');
+      rw.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected'); });
+      rBtn.classList.add('selected');
+      var fb = rw.querySelector('.widget-feedback');
+      fb.textContent = rBtn.dataset.response || '';
+      fb.classList.add('show');
+      return;
+    }
+    var sBtn = e.target.closest('.ow-select .widget-row .widget-options button');
+    if (sBtn) {
+      var row = sBtn.closest('.widget-row');
+      var correct = row.dataset.correct;
+      row.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      var right = sBtn.dataset.choice === correct;
+      sBtn.classList.add(right ? 'correct' : 'incorrect');
+      var text = right ? (sBtn.dataset.fb || row.dataset.fb || 'Right.') : (sBtn.dataset.fb || row.dataset.hint || 'Not quite. Try again.');
+      var rf = row.querySelector('.row-feedback') || row.appendChild(document.createElement('div'));
+      rf.className = 'row-feedback ' + (right ? 'correct' : 'incorrect');
+      rf.textContent = text;
+      return;
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Digital Art Imaging &mdash; Week 6: Color Editing and Filters</title>
+<style>
+    body { margin: 0; padding: 0; font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #f4f6fa; }
+    .canvas-frame { max-width: 1100px; margin: 0 auto; background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+
+    /* ===== WIDGET CSS — from optima-lesson-format/assets/lesson-interactive-template.html (byte-consistent) ===== */
+    .optima-widget { background: linear-gradient(135deg, #E8F6FB 0%, #F4F9FC 100%); border: 1px solid #C5DCE5; border-left: 5px solid #2196D0; border-radius: 8px; padding: 18px 22px; margin: 18px 0; }
+    .widget-kicker { font-size: 11px; color: #1B6A94; margin-bottom: 10px; letter-spacing: 0.4px; }
+    .widget-question { font-size: 17px; color: #0E1C42; margin-bottom: 14px; line-height: 1.55; }
+    .widget-row { background: #FFFFFF; border: 1px solid #D0D9E8; border-radius: 6px; padding: 12px 14px; margin-bottom: 10px; }
+    .widget-row-prompt { font-size: 15px; color: #0E1C42; margin-bottom: 8px; line-height: 1.5; font-style: italic; }
+    .widget-options { display: flex; flex-wrap: wrap; gap: 8px; }
+    .widget-options button { background: #FFFFFF; border: 1.5px solid #D0D9E8; border-radius: 8px; padding: 8px 14px; font-size: 14px; color: #0E1C42; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+    .widget-options button:hover { background: #F4F6FA; border-color: #55C8E8; }
+    .widget-options button.selected { background: #0E1C42; color: #FFFFFF; border-color: #0E1C42; }
+    .widget-options button.correct { background: #D8F0DD; border-color: #2A9D5C; color: #1A6B3D; }
+    .widget-options button.incorrect { background: #FDECEC; border-color: #C0392B; color: #8A1F16; }
+    .widget-feedback { background: #FFFFFF; border-left: 3px solid #C7922C; padding: 10px 14px; font-size: 15px; color: #1a2340; line-height: 1.55; margin: 10px 0; display: none; border-radius: 4px; }
+    .widget-feedback.show { display: block; }
+    .row-feedback { padding: 8px 12px; margin-top: 8px; font-size: 14px; border-radius: 4px; line-height: 1.5; }
+    .row-feedback.correct { background: #D8F0DD; border-left: 3px solid #2A9D5C; color: #1A6B3D; }
+    .row-feedback.incorrect { background: #FDECEC; border-left: 3px solid #C0392B; color: #8A1F16; }
+    .widget-reset { background: transparent; border: 1px solid #C7922C; color: #C7922C; border-radius: 6px; padding: 6px 12px; font-size: 12px; cursor: pointer; font-family: inherit; margin-top: 6px; }
+    .widget-reset:hover { background: #FDF3E3; }
+
+    /* ===== Art-course components (layered on the brand; teal/coral are activity accents only) ===== */
+    .art-fig { margin: 14px 0; text-align: center; }
+    .art-fig img { max-width: 100%; height: auto; border-radius: 6px; border: 1px solid #D0D9E8; }
+    .art-fig figcaption { font-size: 13px; color: #666; margin-top: 8px; line-height: 1.5; }
+    .art-fig figcaption a { color: #1B6A94; }
+    .el-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin: 16px 0; }
+    .el-card { border: 1px solid #D0D9E8; border-radius: 8px; overflow: hidden; }
+    .el-demo { height: 80px; display: flex; align-items: center; justify-content: center; }
+    .el-text { padding: 10px 13px; }
+    .el-text strong { color: #167567; display: block; margin-bottom: 3px; font-size: 16px; }
+    .el-text span { font-size: 14px; color: #1a2340; }
+    .callout { border-radius: 6px; padding: 14px 20px; margin: 16px 0; }
+    .callout .ck { font-size: 11px; margin-bottom: 8px; letter-spacing: 0.5px; }
+    .callout .cb { font-size: 16px; line-height: 1.6; color: #0E1C42; }
+    .c-help { background: #E8F6FB; border-left: 5px solid #2196D0; border-top: 3px solid #55C8E8; }
+    .c-help .ck { color: #1B6A94; }
+    .c-warn { background: #FDECEC; border-left: 5px solid #C0392B; border-top: 3px solid #E74C3C; }
+    .c-warn .ck { color: #8A1F16; }
+    .c-art { background: #E6F4F1; border-left: 5px solid #1B8A7A; }
+    .c-art .ck { color: #167567; }
+    .next-item { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+    .next-item .num { min-width: 30px; height: 30px; border-radius: 50%; color: #fff; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .num.learn { background: #1B8A7A; }
+    .num.create { background: #D9583B; }
+    .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+    .vocab-card { background: #EEF1F8; border-radius: 6px; padding: 10px 13px; font-size: 14px; color: #1a2340; }
+    .vocab-card strong { color: #0E1C42; display: block; margin-bottom: 2px; }
+    details { background: #FFFFFF; border: 1px solid #D0D9E8; border-left: 4px solid #C7922C; border-radius: 6px; padding: 12px 18px; margin: 14px 0; }
+    details summary { font-size: 16px; color: #0E1C42; cursor: pointer; }
+    details .ac-body { font-size: 16px; color: #1a2340; margin-top: 10px; padding-top: 10px; border-top: 1px solid #EEF1F8; line-height: 1.6; }
+    /* Pixel vs. smooth concept visual */
+    .pix-wrap { display: flex; flex-wrap: wrap; gap: 22px; align-items: center; justify-content: center; margin: 16px 0 6px; }
+    .pix-panel { text-align: center; }
+    .pix-label { font-size: 12px; color: #6b7a99; margin-top: 8px; }
+    .rvv { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+    .rvv > div { border: 1px solid #D0D9E8; border-radius: 8px; padding: 14px 16px; }
+    .rvv h4 { margin: 0 0 6px 0; font-size: 16px; }
+    .rvv p { margin: 0; font-size: 14px; color: #1a2340; line-height: 1.55; }
+    @media (max-width: 560px){ .rvv { grid-template-columns: 1fr; } }
+    /* Week 6 concept visuals: hue wheel + blur-emphasis diagram */
+    .hue-wrap { display: flex; flex-wrap: wrap; gap: 26px; align-items: center; justify-content: center; margin: 16px 0 6px; }
+    .hue-ring { width: 170px; height: 170px; border-radius: 50%; background: conic-gradient(red, yellow, lime, cyan, blue, magenta, red); border: 3px solid #ffffff; box-shadow: 0 0 0 1px #D0D9E8; }
+    .blur-wrap { display: flex; justify-content: center; margin: 16px 0 6px; }
+    .blur-stage { position: relative; width: 320px; height: 200px; border-radius: 8px; overflow: hidden; background: linear-gradient(180deg, #cfe3ee 0%, #e7f0e0 60%, #cfe0c8 100%); border: 1px solid #D0D9E8; }
+    .blur-bg-shape { position: absolute; filter: blur(6px); opacity: 0.85; }
+    .blur-tree { width: 46px; height: 90px; bottom: 18px; }
+    .blur-tree .trunk { position: absolute; bottom: 0; left: 18px; width: 10px; height: 34px; background: #8a6a4a; }
+    .blur-tree .leaves { position: absolute; bottom: 28px; left: 0; width: 46px; height: 46px; border-radius: 50%; background: #4f8a57; }
+    .blur-cloud { width: 70px; height: 28px; top: 14px; background: #ffffff; border-radius: 20px; opacity: 0.9; }
+    .blur-rock { width: 34px; height: 20px; bottom: 10px; background: #9aa1a8; border-radius: 40% 40% 50% 50%; }
+    .blur-subject { position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%); width: 64px; height: 110px; z-index: 5; }
+    .blur-subject .head { width: 34px; height: 34px; border-radius: 50%; background: #e8b98a; margin: 0 auto; }
+    .blur-subject .body { width: 54px; height: 62px; border-radius: 16px 16px 6px 6px; background: #1B8A7A; margin: 4px auto 0; }
+    .blur-caption-row { display: flex; justify-content: space-between; max-width: 320px; margin: 6px auto 0; font-size: 12px; color: #6b7a99; }
+</style>
+</head>
+<body>
+<div class="canvas-frame">
+
+<!-- ===== HEADER ===== -->
+<div style="background: #0E1C42; border-bottom: 5px solid #55C8E8; padding: 22px 34px;">
+    <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 10px;">
+        <div style="width: 52px; height: 52px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><img src="https://raw.githubusercontent.com/optimaondemand/optima-assets/eeb0b335630058906d52f478028361d352253a93/images/Optima%20Final%20Circle%20-%20Owl%20Only.png" alt="Optima Academy" style="width: 50px; height: 40px; object-fit: contain;" /></div>
+        <div>
+            <div style="font-size: 28px; color: #ffffff; line-height: 1.2;">Optima Academy Online</div>
+            <div style="font-size: 12px; color: #55c8e8;">An Education Experience Company</div>
+        </div>
+    </div>
+    <div style="font-size: 36px; color: #ffffff; margin-bottom: 6px;">DIGITAL ART IMAGING</div>
+</div>
+
+<!-- ===== METADATA STRIP ===== -->
+<div style="background: #FFFFFF; border-bottom: 2px solid #D0D9E8; display: flex; flex-wrap: wrap;">
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Quarter / Week</div>
+        <div style="font-size: 17px; color: #0e1c42;">Q2 &middot; Module 2, Week 6</div>
+        <div style="font-size: 12px; color: #666;">Module 2: Capturing Light &amp; Editing</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Focus</div>
+        <div style="font-size: 17px; color: #0e1c42;">Color Editing and Filters</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">This Week's Project</div>
+        <div style="font-size: 17px; color: #0e1c42; font-style: italic;">Mini Lesson: Color Editing &amp; Filters</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Software</div>
+        <div style="font-size: 16px; color: #0e1c42;">Pixlr E (free, browser)</div>
+    </div>
+</div>
+
+<!-- ===== BODY WRAPPER ===== -->
+<div style="padding: 24px 34px;">
+
+    <!-- Lavender title strip -->
+    <div style="background: #EEF1F8; border-left: 5px solid #0E1C42; border-radius: 7px; padding: 18px 22px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #0e1c42; margin-bottom: 6px;">MODULE 2 &middot; WEEK 6</div>
+        <div style="font-size: 22px; color: #0e1c42; margin-bottom: 4px;">Color Editing and Filters</div>
+        <div style="font-size: 16px; color: #666;">Lesson</div>
+    </div>
+
+    <!-- Essential Question -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128214; ESSENTIAL QUESTION</div>
+        <div style="font-size: 20px; color: #0e1c42; font-style: italic; margin-bottom: 10px;">How far should you push color and filters before an edited photo stops looking believable?</div>
+        <div style="font-size: 18px; color: #1a2340; line-height: 1.65;">Last week you learned to fix exposure: getting the light in a photo right. Even a well-exposed photo can still feel flat, dull, or cluttered. This week you learn the tools that shape color and mood, and the single most useful filter trick in photo editing: blurring a background so your subject stands out. The tools are powerful. Used with restraint, they make a photo better. Used carelessly, they make it look fake.</div>
+    </div>
+
+    <!-- PART 1 · LOOK FIRST -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128064; PART 1 &middot; LOOK FIRST</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Color editing tools work by shifting where a color sits on the <strong>hue wheel</strong>, a circular map of every color your screen can display. Moving a color clockwise or counterclockwise around the wheel changes what color it is; moving toward the center changes how intense it looks.</p>
+
+        <div class="hue-wrap">
+            <div style="text-align: center;">
+                <div class="hue-ring"></div>
+                <div class="pix-label">The hue wheel: every color adjustment tool moves colors around or toward the center of this wheel.</div>
+            </div>
+        </div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 16px 0 10px 0;">Now look at a second concept: using a filter to control focus instead of color. In the scene below, the background shapes have a blur filter applied; the subject in front does not.</p>
+
+        <div class="blur-wrap">
+            <div class="blur-stage" role="img" aria-label="A simple outdoor scene where the background shapes, a cloud, tree, and rock, are blurred, while a single figure in front stays crisp and sharp.">
+                <div class="blur-bg-shape blur-cloud" style="left: 20px;"></div>
+                <div class="blur-bg-shape blur-cloud" style="left: 200px; top: 30px; width: 50px;"></div>
+                <div class="blur-bg-shape blur-tree" style="left: 24px;">
+                    <div class="leaves"></div>
+                    <div class="trunk"></div>
+                </div>
+                <div class="blur-bg-shape blur-tree" style="left: 250px;">
+                    <div class="leaves"></div>
+                    <div class="trunk"></div>
+                </div>
+                <div class="blur-bg-shape blur-rock" style="left: 150px;"></div>
+                <div class="blur-subject">
+                    <div class="head"></div>
+                    <div class="body"></div>
+                </div>
+            </div>
+        </div>
+        <div class="blur-caption-row">
+            <span>Background: blur filter applied</span>
+            <span>Subject: left sharp, on its own layer</span>
+        </div>
+        <p style="font-size: 14px; color: #6b7a99; margin: 10px 0 0 0;">Concept diagram. This is the same effect you get from a camera lens with a wide aperture, built instead with a selection, a second layer, and a blur filter.</p>
+
+        <div class="optima-widget ow-reflect">
+            <div class="widget-kicker">&#128173; QUICK CHECK-IN &middot; NO WRONG ANSWER</div>
+            <div class="widget-question">Think of a photo you have seen (yours or someone else's) where the background was blurry and the subject was sharp. What was the subject?</div>
+            <div class="widget-options">
+                <button data-response="Portraits are the classic case for this technique. A blurred background keeps the viewer's eye on the person's face.">A person or portrait</button>
+                <button data-response="Pet and animal photos benefit the same way; a busy yard or room disappears and the animal becomes the clear subject.">A pet or animal</button>
+                <button data-response="Product and food photos use this constantly. A clean, soft background makes the object look intentional and professional.">A product, food, or object photo</button>
+                <button data-response="If nothing comes to mind, look for it this week. Once you notice sharp-subject, blurry-background photos, you will see them everywhere in ads, portraits, and social media.">I can't think of one yet</button>
+            </div>
+            <div class="widget-feedback"></div>
+            <button class="widget-reset">Reset</button>
+        </div>
+    </div>
+
+    <!-- PART 2 · COLOR ADJUSTMENT TOOLS -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#127912; PART 2 &middot; COLOR ADJUSTMENT TOOLS</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Even a photo with correct exposure can look washed out, dull, or off in mood. Color adjustment tools let you tune saturation, vibrancy, and individual color tones to create a more polished, expressive image. In Pixlr E, you will find these under the <strong>Adjustment</strong> menu.</p>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 6px 0;">Picture a beach photo where too much sunlight washed out the sky and the colors in a shell look duller than they did in person. Before adjusting, duplicate your original layer in the Layers panel so you always keep an untouched copy, then experiment on the duplicate.</p>
+
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 16px 0 6px 0;">Color Balance</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Color Balance lets you shift the color in your <strong>shadows, midtones, and highlights</strong> separately, pushing each toward a different color. Pulling the shadows toward blue and the highlights toward warm orange, for example, can shift the entire mood of an image from flat to cinematic. Preview your changes in real time and watch what each slider actually does before committing to it.</p>
+
+        <figure class="art-fig">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Whitebalance4.jpg" alt="The same car photographed four times with four different color balance settings, each version carrying a distinct warm or cool overall color cast." style="max-width: 340px;" />
+            <figcaption>Thomas Steiner, <em>Whitebalance4</em>, Melk, Austria, 2005. Dual-licensed GFDL / CC BY-SA 3.0. Source: <a href="https://commons.wikimedia.org/wiki/File:Whitebalance4.jpg">commons.wikimedia.org</a></figcaption>
+        </figure>
+
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 16px 0 6px 0;">Hue, Saturation, and Lightness</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">This tool controls three separate things:</p>
+        <ul style="font-size: 17px; color: #1a2340; line-height: 1.7; margin: 0 0 12px 0; padding-left: 22px;">
+            <li><strong>Hue</strong> changes the actual color, sliding it around the hue wheel you saw in Part 1</li>
+            <li><strong>Saturation</strong> controls how intense or dull the colors appear</li>
+            <li><strong>Lightness</strong> adds or removes brightness across all colors at once</li>
+        </ul>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Hue/Saturation is useful both for correcting a photo (a sky that reads too green) and for stylizing one (shifting every color toward a single warm or cool family).</p>
+
+        <figure class="art-fig">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/0/07/Hue_shift_six_photoshop.jpg" alt="A harbor photograph shown in its original color in one corner, surrounded by six versions where the hue has been rotated to shift every color in the scene." style="max-width: 340px;" />
+            <figcaption>Roke, <em>Hue Shift, Six Versions</em>, 2006. Dual-licensed CC BY-SA 3.0 / GFDL. Source: <a href="https://commons.wikimedia.org/wiki/File:Hue_shift_six_photoshop.jpg">commons.wikimedia.org</a></figcaption>
+        </figure>
+
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 16px 0 6px 0;">Vibrance</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Vibrance boosts dull, muted colors while leaving colors that are already bright and intense mostly alone. That makes it the safer, more forgiving cousin of Saturation: raising Saturation pushes every color up equally, including ones that are already strong, and can quickly tip into an unnatural, overcooked look. Vibrance is a good first move on an outdoor photo that looks flat.</p>
+
+        <figure class="art-fig">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Field_of_Flowers_%28Unsplash%29.jpg" alt="A field of pink and white tulips with a mountain behind them, colors reading as rich and vivid without looking artificial." style="max-width: 320px;" />
+            <figcaption>Polychrome Creative, <em>Field of Flowers</em>, Vancouver. Public domain (CC0, Unsplash). Source: <a href="https://commons.wikimedia.org/wiki/File:Field_of_Flowers_(Unsplash).jpg">commons.wikimedia.org</a></figcaption>
+        </figure>
+
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 16px 0 6px 0;">Selective or targeted color adjustment</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Sometimes you want to change only <em>one</em> color family: deepen just the blues in a sky, warm up just the reds, or tone down an oversaturated yellow, without touching anything else in the frame. Pixlr E's Adjustments panel includes tools like these for targeting a specific color range. Work on a new layer when you try this so you can compare the change against your original at any time.</p>
+
+        <div class="callout c-help">
+            <div class="ck">&#128161; A WORKFLOW HABIT</div>
+            <div class="cb">Duplicate your layer before you touch any color adjustment, and give experimental layers a name you will recognize later. If an edit goes too far, you can always return to the untouched original underneath instead of undoing your way back through every step.</div>
+        </div>
+
+        <div class="optima-widget ow-select">
+            <div class="widget-kicker">&#9889; MATCH THE TOOL &middot; TRY IT</div>
+            <div class="widget-question">Read each situation and choose the best tool for the job, then check your answer.</div>
+            <div class="widget-row" data-correct="vibrance" data-hint="Think about which tool leaves already-bright colors alone. Try again.">
+                <div class="widget-row-prompt">A forest photo looks a little flat and dull, but the sky is already a strong, saturated blue that you don't want to overdo. Which tool boosts the dull greens without blowing out the sky?</div>
+                <div class="widget-options">
+                    <button data-choice="saturation">Saturation</button>
+                    <button data-choice="vibrance" data-fb="Correct. Vibrance boosts dull colors while leaving already-bright colors, like that saturated sky, mostly untouched.">Vibrance</button>
+                    <button data-choice="lightness">Lightness</button>
+                </div>
+            </div>
+            <div class="widget-row" data-correct="balance" data-hint="Think about which tool works separately on shadows, midtones, and highlights. Try again.">
+                <div class="widget-row-prompt">You want to push the shadows of a portrait toward cool blue while keeping the highlights warm, to build a specific mood. Which tool is built for that?</div>
+                <div class="widget-options">
+                    <button data-choice="hue">Hue/Saturation</button>
+                    <button data-choice="balance" data-fb="Right. Color Balance adjusts shadows, midtones, and highlights independently, which is exactly how you build a targeted mood shift.">Color Balance</button>
+                    <button data-choice="selective">Selective Color</button>
+                </div>
+            </div>
+            <button class="widget-reset">Reset</button>
+        </div>
+    </div>
+
+    <!-- PART 3 · FILTERS AND THE BLUR-BACKGROUND TECHNIQUE -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#127916; PART 3 &middot; FILTERS AND THE BLUR-BACKGROUND TECHNIQUE</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;"><strong>Filters</strong> are special effects you apply to an image to change its mood, style, or focus. Common categories include blur, sharpen, noise, glow, and color shifts. In Pixlr E you will find these under the <strong>Filter</strong> menu.</p>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">One of the most useful filter techniques is using blur to reduce a distracting background and make your subject stand out. A camera with a wide aperture can do this optically at the moment you shoot; when that is not possible, you can recreate the effect afterward.</p>
+
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 16px 0 6px 0;">Step 1: Duplicate and separate</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Open your photo in Pixlr E and duplicate the original layer in the Layers panel so your original stays untouched. You will end up naming one layer something like <em>Subject</em> and the other <em>Background</em>.</p>
+
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 16px 0 6px 0;">Step 2: Select the subject</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Use Pixlr E's selection tools to trace around your subject: the <strong>Marquee</strong> tool for simple geometric shapes, the <strong>Lasso</strong> tool to draw freehand around an irregular outline, or the <strong>Magic Wand</strong> tool to select based on color and edges. Do not worry about a perfect selection on the first pass; you can refine and clean up edges later.</p>
+
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 16px 0 6px 0;">Step 3: Put the subject on its own layer</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Once your selection outlines the subject, copy it onto a new layer. You should now have a Subject layer sitting on top of a full Background layer underneath it.</p>
+
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 16px 0 6px 0;">Step 4: Blur the background layer</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Select the Background layer only, open the <strong>Filter</strong> menu, and choose a blur filter such as <strong>Gaussian Blur</strong>. Increase the strength gradually and preview as you go: enough to quiet the background and pull focus to your subject, but not so much that the scene looks unnatural or the subject looks pasted on top of it.</p>
+
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 16px 0 6px 0;">Step 5: Clean up the edges</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Switch back to your Subject layer, zoom in, and clean up the edge where subject meets background using a soft eraser or a small brush to fix any stray pixels or color spill. This last step is what makes the blur read as a real depth-of-field effect instead of an obvious cutout.</p>
+
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 16px 0 6px 0;">Step 6: Export</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">When you are satisfied, export your image as a JPEG or PNG under a new file name so your original stays intact. This technique works with just a selection tool, a second layer, and a blur filter; no specialized camera equipment required.</p>
+
+        <div class="callout c-art">
+            <div class="ck">&#127912; USED TASTEFULLY</div>
+            <div class="cb">Every tool in this lesson can be overdone. A Color Balance push that is too strong turns skin tones orange or green. A Vibrance or Saturation slider pushed to its limit makes a photo look cartoonish instead of vivid. A background blur pushed too far, or applied with sloppy edges, looks like an obvious effect instead of a real photo. A strong edit still looks believable as a photograph unless looking unbelievable, a deliberately stylized image, is the actual goal. When in doubt, pull the slider back until the edit disappears into the image instead of announcing itself.</div>
+        </div>
+
+        <details>
+            <summary>Before you scroll on: in your notebook, write one sentence predicting what happens if you drag a Vibrance slider all the way to its maximum on a photo of green grass and blue sky. Then click to check your prediction.</summary>
+            <div class="ac-body">Pushed to its maximum, Vibrance starts behaving more like Saturation: the grass and sky are already fairly intense colors, so they get pushed into oversaturation too, and the photo can start to look artificial, almost like a cheap filter, instead of naturally vivid. Vibrance is more forgiving than Saturation, not immune to overuse.</div>
+        </details>
+    </div>
+
+    <!-- AI AWARENESS (factual) -->
+    <div class="callout c-warn">
+        <div class="ck">&#9888;&#65039; WORTH KNOWING &middot; AI ONE-CLICK ENHANCE TOOLS</div>
+        <div class="cb">Many photo apps include an AI "auto-enhance" or one-click filter button that adjusts color, contrast, and sharpness all at once based on an algorithm's guess about what looks good. It can produce a quick result, but it makes every decision at the same time and does not know which color shift or which blur strength fits your specific subject or intent. The tool-by-tool process in this lesson, adjusting Color Balance, Hue/Saturation, or Vibrance deliberately and applying a blur filter with a clean selection, is what this course grades: the choices you make and can explain, not a single automated pass.</div>
+    </div>
+
+    <!-- VOCABULARY -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128221; VOCABULARY</div>
+        <div class="vocab-grid">
+            <div class="vocab-card"><strong>Color Balance</strong>An adjustment tool that shifts color separately in shadows, midtones, and highlights.</div>
+            <div class="vocab-card"><strong>Hue</strong>The actual color itself, its position on the hue wheel.</div>
+            <div class="vocab-card"><strong>Saturation</strong>How intense or dull a color appears.</div>
+            <div class="vocab-card"><strong>Lightness</strong>Brightness added to or removed from all colors at once.</div>
+            <div class="vocab-card"><strong>Vibrance</strong>An adjustment that boosts dull colors while leaving already-bright colors mostly alone.</div>
+            <div class="vocab-card"><strong>Selective Color</strong>Adjusting one specific color family without affecting the rest of the image.</div>
+            <div class="vocab-card"><strong>Filter</strong>A special effect applied to an image to change its mood, style, or focus.</div>
+            <div class="vocab-card"><strong>Gaussian Blur</strong>A common blur filter used to soften a layer smoothly.</div>
+            <div class="vocab-card"><strong>Selection Tool</strong>A tool (Marquee, Lasso, Magic Wand) used to outline part of an image for editing.</div>
+            <div class="vocab-card"><strong>Depth of Field</strong>The effect of a sharp subject in front of a blurred background, usually from a camera lens, that a blur filter can imitate.</div>
+        </div>
+    </div>
+
+    <!-- WHAT YOU'LL DO NEXT -->
+    <div style="background: #FFFFFF; border-top: 3px solid #0E1C42; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 16px;">&#10145;&#65039; WHAT YOU'LL DO NEXT (IN CANVAS)</div>
+        <div class="next-item"><div class="num learn">1</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Quiz: Color Editing and Filters</strong> &middot; Week 6</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Auto-graded in Canvas.</div></div></div>
+        <div class="next-item"><div class="num learn">2</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Discussion: Tasteful or Too Much?</strong> &middot; Week 6</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Respond to a specific prompt about restraint in color editing and reply to a classmate.</div></div></div>
+        <div class="next-item"><div class="num create">3</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Mini Lesson: Color Editing &amp; Filters</strong> &middot; Week 6</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Apply a color adjustment and the subject-emphasis blur technique to a photo in Pixlr E and export the result. Your graded artwork this week.</div></div></div>
+    </div>
+
+    <!-- WRAP-UP -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128170; THE BIG IDEA</div>
+        <p style="font-size: 18px; color: #1a2340; line-height: 1.65; margin: 0;">Color Balance, Hue/Saturation, and Vibrance let you shape the mood of a photo; a blur filter, a good selection, and a second layer let you shape where the viewer looks. Both are powerful precisely because they are easy to overdo. The skill this week is not just knowing which slider does what. It is knowing when to stop.</p>
+    </div>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div style="background: #0E1C42; border-top: 3px solid #55C8E8; padding: 18px 34px; text-align: center;">
+    <div style="font-size: 18px; color: #ffffff; margin-bottom: 6px;"><span style="color: #55c8e8;">Optima Academy Online</span> &middot; DIGITAL ART IMAGING &middot; Quarter 2 &middot; Student Lesson Page</div>
+    <div style="font-size: 13px; color: rgba(255,255,255,0.65); margin-bottom: 4px;">Module 2 &middot; Week 6 &middot; Color Editing and Filters</div>
+    <div style="font-size: 12px; color: rgba(255,255,255,0.4);">&copy; Optima Academy Online &middot; An Education Experience Company. Concept diagrams are original CSS/SVG illustrations. Photographs are public domain or openly licensed; see each caption for source.</div>
+</div>
+
+</div>
+
+<!-- ===== WIDGET RUNTIME — from optima-lesson-format template. One delegated listener drives every engine. ===== -->
+<script>
+(function () {
+  document.addEventListener('click', function (e) {
+    var reset = e.target.closest('.widget-reset');
+    if (reset) {
+      var w = reset.closest('.optima-widget');
+      w.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      w.querySelectorAll('.widget-feedback').forEach(function (f) { f.classList.remove('show'); f.textContent = ''; });
+      w.querySelectorAll('.row-feedback').forEach(function (f) { f.remove(); });
+      return;
+    }
+    var rBtn = e.target.closest('.ow-reflect .widget-options button');
+    if (rBtn) {
+      var rw = rBtn.closest('.optima-widget');
+      rw.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected'); });
+      rBtn.classList.add('selected');
+      var fb = rw.querySelector('.widget-feedback');
+      fb.textContent = rBtn.dataset.response || '';
+      fb.classList.add('show');
+      return;
+    }
+    var sBtn = e.target.closest('.ow-select .widget-row .widget-options button');
+    if (sBtn) {
+      var row = sBtn.closest('.widget-row');
+      var correct = row.dataset.correct;
+      row.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      var right = sBtn.dataset.choice === correct;
+      sBtn.classList.add(right ? 'correct' : 'incorrect');
+      var text = right ? (sBtn.dataset.fb || row.dataset.fb || 'Right.') : (sBtn.dataset.fb || row.dataset.hint || 'Not quite. Try again.');
+      var rf = row.querySelector('.row-feedback') || row.appendChild(document.createElement('div'));
+      rf.className = 'row-feedback ' + (right ? 'correct' : 'incorrect');
+      rf.textContent = text;
+      return;
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

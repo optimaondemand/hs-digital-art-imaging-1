@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Digital Art Imaging &mdash; Week 5: Editing and Exposure</title>
+<style>
+    body { margin: 0; padding: 0; font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #f4f6fa; }
+    .canvas-frame { max-width: 1100px; margin: 0 auto; background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+
+    /* ===== WIDGET CSS — from optima-lesson-format/assets/lesson-interactive-template.html (byte-consistent) ===== */
+    .optima-widget { background: linear-gradient(135deg, #E8F6FB 0%, #F4F9FC 100%); border: 1px solid #C5DCE5; border-left: 5px solid #2196D0; border-radius: 8px; padding: 18px 22px; margin: 18px 0; }
+    .widget-kicker { font-size: 11px; color: #1B6A94; margin-bottom: 10px; letter-spacing: 0.4px; }
+    .widget-question { font-size: 17px; color: #0E1C42; margin-bottom: 14px; line-height: 1.55; }
+    .widget-row { background: #FFFFFF; border: 1px solid #D0D9E8; border-radius: 6px; padding: 12px 14px; margin-bottom: 10px; }
+    .widget-row-prompt { font-size: 15px; color: #0E1C42; margin-bottom: 8px; line-height: 1.5; font-style: italic; }
+    .widget-options { display: flex; flex-wrap: wrap; gap: 8px; }
+    .widget-options button { background: #FFFFFF; border: 1.5px solid #D0D9E8; border-radius: 8px; padding: 8px 14px; font-size: 14px; color: #0E1C42; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+    .widget-options button:hover { background: #F4F6FA; border-color: #55C8E8; }
+    .widget-options button.selected { background: #0E1C42; color: #FFFFFF; border-color: #0E1C42; }
+    .widget-options button.correct { background: #D8F0DD; border-color: #2A9D5C; color: #1A6B3D; }
+    .widget-options button.incorrect { background: #FDECEC; border-color: #C0392B; color: #8A1F16; }
+    .widget-feedback { background: #FFFFFF; border-left: 3px solid #C7922C; padding: 10px 14px; font-size: 15px; color: #1a2340; line-height: 1.55; margin: 10px 0; display: none; border-radius: 4px; }
+    .widget-feedback.show { display: block; }
+    .row-feedback { padding: 8px 12px; margin-top: 8px; font-size: 14px; border-radius: 4px; line-height: 1.5; }
+    .row-feedback.correct { background: #D8F0DD; border-left: 3px solid #2A9D5C; color: #1A6B3D; }
+    .row-feedback.incorrect { background: #FDECEC; border-left: 3px solid #C0392B; color: #8A1F16; }
+    .widget-reset { background: transparent; border: 1px solid #C7922C; color: #C7922C; border-radius: 6px; padding: 6px 12px; font-size: 12px; cursor: pointer; font-family: inherit; margin-top: 6px; }
+    .widget-reset:hover { background: #FDF3E3; }
+
+    /* ===== Art-course components (layered on the brand; teal/coral are activity accents only) ===== */
+    .art-fig { margin: 14px 0; text-align: center; }
+    .art-fig img { max-width: 100%; height: auto; border-radius: 6px; border: 1px solid #D0D9E8; }
+    .art-fig figcaption { font-size: 13px; color: #666; margin-top: 8px; line-height: 1.5; }
+    .art-fig figcaption a { color: #1B6A94; }
+    .el-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin: 16px 0; }
+    .el-card { border: 1px solid #D0D9E8; border-radius: 8px; overflow: hidden; }
+    .el-demo { height: 80px; display: flex; align-items: center; justify-content: center; }
+    .el-text { padding: 10px 13px; }
+    .el-text strong { color: #167567; display: block; margin-bottom: 3px; font-size: 16px; }
+    .el-text span { font-size: 14px; color: #1a2340; }
+    .callout { border-radius: 6px; padding: 14px 20px; margin: 16px 0; }
+    .callout .ck { font-size: 11px; margin-bottom: 8px; letter-spacing: 0.5px; }
+    .callout .cb { font-size: 16px; line-height: 1.6; color: #0E1C42; }
+    .c-help { background: #E8F6FB; border-left: 5px solid #2196D0; border-top: 3px solid #55C8E8; }
+    .c-help .ck { color: #1B6A94; }
+    .c-warn { background: #FDECEC; border-left: 5px solid #C0392B; border-top: 3px solid #E74C3C; }
+    .c-warn .ck { color: #8A1F16; }
+    .c-art { background: #E6F4F1; border-left: 5px solid #1B8A7A; }
+    .c-art .ck { color: #167567; }
+    .next-item { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+    .next-item .num { min-width: 30px; height: 30px; border-radius: 50%; color: #fff; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .num.learn { background: #1B8A7A; }
+    .num.create { background: #D9583B; }
+    .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+    .vocab-card { background: #EEF1F8; border-radius: 6px; padding: 10px 13px; font-size: 14px; color: #1a2340; }
+    .vocab-card strong { color: #0E1C42; display: block; margin-bottom: 2px; }
+    details { background: #FFFFFF; border: 1px solid #D0D9E8; border-left: 4px solid #C7922C; border-radius: 6px; padding: 12px 18px; margin: 14px 0; }
+    details summary { font-size: 16px; color: #0E1C42; cursor: pointer; }
+    details .ac-body { font-size: 16px; color: #1a2340; margin-top: 10px; padding-top: 10px; border-top: 1px solid #EEF1F8; line-height: 1.6; }
+    /* Pixel vs. smooth concept visual */
+    .pix-wrap { display: flex; flex-wrap: wrap; gap: 22px; align-items: center; justify-content: center; margin: 16px 0 6px; }
+    .pix-panel { text-align: center; }
+    .pix-label { font-size: 12px; color: #6b7a99; margin-top: 8px; }
+    .rvv { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+    .rvv > div { border: 1px solid #D0D9E8; border-radius: 8px; padding: 14px 16px; }
+    .rvv h4 { margin: 0 0 6px 0; font-size: 16px; }
+    .rvv p { margin: 0; font-size: 14px; color: #1a2340; line-height: 1.55; }
+    @media (max-width: 560px){ .rvv { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="canvas-frame">
+
+<!-- ===== HEADER ===== -->
+<div style="background: #0E1C42; border-bottom: 5px solid #55C8E8; padding: 22px 34px;">
+    <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 10px;">
+        <div style="width: 52px; height: 52px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><img src="https://raw.githubusercontent.com/optimaondemand/optima-assets/eeb0b335630058906d52f478028361d352253a93/images/Optima%20Final%20Circle%20-%20Owl%20Only.png" alt="Optima Academy" style="width: 50px; height: 40px; object-fit: contain;" /></div>
+        <div>
+            <div style="font-size: 28px; color: #ffffff; line-height: 1.2;">Optima Academy Online</div>
+            <div style="font-size: 12px; color: #55c8e8;">An Education Experience Company</div>
+        </div>
+    </div>
+    <div style="font-size: 36px; color: #ffffff; margin-bottom: 6px;">DIGITAL ART IMAGING</div>
+</div>
+
+<!-- ===== METADATA STRIP ===== -->
+<div style="background: #FFFFFF; border-bottom: 2px solid #D0D9E8; display: flex; flex-wrap: wrap;">
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Quarter / Week</div>
+        <div style="font-size: 17px; color: #0e1c42;">Q2 &middot; Module 2, Week 5</div>
+        <div style="font-size: 12px; color: #666;">Module 2: Capturing Light &amp; Editing</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Focus</div>
+        <div style="font-size: 17px; color: #0e1c42;">Editing and Exposure</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">This Week's Project</div>
+        <div style="font-size: 17px; color: #0e1c42; font-style: italic;">Mini Lesson (Editing &amp; Exposure)</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Software</div>
+        <div style="font-size: 16px; color: #0e1c42;">Pixlr E (free, browser)</div>
+    </div>
+</div>
+
+<!-- ===== BODY WRAPPER ===== -->
+<div style="padding: 24px 34px;">
+
+    <!-- Lavender title strip -->
+    <div style="background: #EEF1F8; border-left: 5px solid #0E1C42; border-radius: 7px; padding: 18px 22px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #0e1c42; margin-bottom: 6px;">MODULE 2 &middot; WEEK 5</div>
+        <div style="font-size: 22px; color: #0e1c42; margin-bottom: 4px;">Editing and Exposure</div>
+        <div style="font-size: 16px; color: #666;">Lesson</div>
+    </div>
+
+    <!-- Essential Question -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128214; ESSENTIAL QUESTION</div>
+        <div style="font-size: 20px; color: #0e1c42; font-style: italic; margin-bottom: 10px;">How can an artist correct a photo's exposure and composition after the shutter has already closed, without destroying the original?</div>
+        <div style="font-size: 18px; color: #1a2340; line-height: 1.65;">For the past four weeks you have worked on getting the shot right in camera: composition, light, and exposure. Even a well-planned photo sometimes comes out darker or lighter than you wanted. This week you stop shooting and start editing. You will learn the habits that keep your original photo safe, then use Pixlr E's Crop tool and exposure tools to rescue an underexposed image.</div>
+    </div>
+
+    <!-- PART 1 · LOOK FIRST -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128064; PART 1 &middot; LOOK FIRST</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Here is the same scene twice. The photo on the left is <strong>underexposed</strong>: too little light reached the sensor, so the whole image sits too dark even though the colors underneath are rich. The version on the right has been corrected with exposure tools, no new photo needed.</p>
+
+        <div class="pix-wrap">
+            <div class="pix-panel">
+                <svg width="200" height="150" viewBox="0 0 200 150" role="img" aria-label="An underexposed landscape: a dark sun, dark hills, and a dark sky, all shaded far too low to see clearly.">
+                    <defs>
+                        <linearGradient id="skyDark" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#1a2f52"/>
+                            <stop offset="100%" stop-color="#2c2244"/>
+                        </linearGradient>
+                    </defs>
+                    <rect width="200" height="150" fill="url(#skyDark)"/>
+                    <circle cx="100" cy="80" r="26" fill="#4a3a1a"/>
+                    <path d="M0 130 L40 95 L75 120 L110 85 L150 118 L200 100 L200 150 L0 150 Z" fill="#131d33"/>
+                    <path d="M0 150 L45 128 L90 142 L140 122 L200 138 L200 150 Z" fill="#0c1424"/>
+                </svg>
+                <div class="pix-label">Underexposed original</div>
+            </div>
+            <div style="font-size: 26px; color: #6b7a99;">&#8594;</div>
+            <div class="pix-panel">
+                <svg width="200" height="150" viewBox="0 0 200 150" role="img" aria-label="The same landscape corrected: a bright yellow sun, clearly lit hills in green and teal, and a light blue sky.">
+                    <defs>
+                        <linearGradient id="skyLight" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#8FD8EF"/>
+                            <stop offset="100%" stop-color="#EAF6FB"/>
+                        </linearGradient>
+                    </defs>
+                    <rect width="200" height="150" fill="url(#skyLight)"/>
+                    <circle cx="100" cy="80" r="26" fill="#F5C542"/>
+                    <path d="M0 130 L40 95 L75 120 L110 85 L150 118 L200 100 L200 150 L0 150 Z" fill="#1B8A7A"/>
+                    <path d="M0 150 L45 128 L90 142 L140 122 L200 138 L200 150 Z" fill="#167567"/>
+                </svg>
+                <div class="pix-label">Corrected with exposure tools</div>
+            </div>
+        </div>
+        <p style="font-size: 14px; color: #6b7a99; margin: 0;">Concept diagram. Nothing about the scene changed, only how much light and contrast the image shows. The correction below used Brightness &amp; Contrast, Exposure, and Shadows &amp; Highlights, the three tools you will learn this week.</p>
+
+        <div class="optima-widget ow-reflect">
+            <div class="widget-kicker">&#128173; QUICK CHECK-IN &middot; NO WRONG ANSWER</div>
+            <div class="widget-question">Think about a photo you have taken that came out too dark or too light. What did you do about it, if anything?</div>
+            <div class="widget-options">
+                <button data-response="Retaking the shot works, but it is not always possible. This week you will learn how to fix exposure after the fact instead.">I retook the photo</button>
+                <button data-response="A one-tap filter is fast, but it adjusts everything at once with no control. This week you will learn the individual tools filters are built from.">I used a filter or auto-fix</button>
+                <button data-response="That instinct is exactly right. A photo that is off in exposure can often be rescued rather than thrown out.">I kept it anyway and did nothing</button>
+                <button data-response="Good, you have already started this week's habit. Editing tools give you control over exactly how much to adjust.">I tried adjusting brightness in an app</button>
+            </div>
+            <div class="widget-feedback"></div>
+            <button class="widget-reset">Reset</button>
+        </div>
+    </div>
+
+    <!-- PART 2 · BEFORE YOU EDIT: NON-DESTRUCTIVE HABITS -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128218; PART 2 &middot; BEFORE YOU EDIT: NON-DESTRUCTIVE HABITS</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Editing lets you adjust, improve, and experiment with an image after it has been taken. Small changes can have a big impact, but only if you edit thoughtfully and protect your original along the way. Build these four habits before you touch a single tool.</p>
+
+        <ul style="font-size: 17px; color: #1a2340; line-height: 1.7; margin: 0 0 12px 0; padding-left: 22px;">
+            <li><strong>Keep your original safe.</strong> In Pixlr E, use <strong>Layer &gt; Duplicate Layer</strong> before you adjust anything. Edit the duplicate, not the bottom layer.</li>
+            <li><strong>Don't overedit.</strong> Pushing a tool too far makes an image look unnatural: blown-out highlights, crushed shadows, or colors that no longer look real.</li>
+            <li><strong>Work in layers.</strong> Give each adjustment its own layer in the Layers panel so you can compare, tweak, or remove any single change without redoing the rest.</li>
+            <li><strong>Export with a new file name.</strong> When you finish, use <strong>File &gt; Export</strong> and save the result under a new name so your original photo file is never overwritten.</li>
+        </ul>
+
+        <div class="callout c-help">
+            <div class="ck">&#128161; NON-DESTRUCTIVE ADJUSTMENT LAYERS</div>
+            <div class="cb">In Pixlr E, an adjustment applied to a duplicated layer sits on top of your original pixels instead of replacing them. The layer below stays untouched in the Layers panel the whole time. That means every edit is reversible: you can hide a layer, lower its opacity, or delete it and the original image underneath is still there, exactly as you shot it.</div>
+        </div>
+
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 16px 0 6px 0;">Step one: start with a strong original</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Begin with a photo you are proud of. Even a photo that already follows the rule of thirds usually has room to improve its composition. That is where the <strong>Crop tool</strong> comes in, one of the simplest and most powerful tools in Pixlr E.</p>
+    </div>
+
+    <!-- PART 3 · CROP AND CORRECT EXPOSURE IN PIXLR E -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128269; PART 3 &middot; CROP AND CORRECT EXPOSURE IN PIXLR E</div>
+
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 0 0 6px 0;">The Crop tool</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Find <strong>Crop</strong> in the left toolbar. It lets you cut out parts of the image you do not want and change the balance and focus of your composition. Pixlr E's Crop tool includes:</p>
+        <ul style="font-size: 17px; color: #1a2340; line-height: 1.7; margin: 0 0 12px 0; padding-left: 22px;">
+            <li>Built-in <strong>aspect ratios</strong> (such as 1:1, 4:5, or 16:9) for standard sizes.</li>
+            <li>A <strong>straighten</strong> control if the horizon or a vertical line in your photo is slightly tilted.</li>
+            <li>A draggable rectangle over your image; pull the edges or corners to keep only what strengthens your subject.</li>
+        </ul>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">When you are happy with the crop, click <strong>Apply</strong>. Try more than one aspect ratio before you commit; a square crop and a wide crop can highlight a subject very differently.</p>
+
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 16px 0 6px 0;">Correcting exposure</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Even with strong technique, some photos still need help after the shot. Find these tools under Pixlr E's <strong>Adjustment</strong> menu. Duplicate your layer first, then try each tool on the copy.</p>
+
+        <div class="rvv">
+            <div style="border-top: 3px solid #1B8A7A;">
+                <h4 style="color:#167567;">Brightness &amp; Contrast</h4>
+                <p><strong>Brightness</strong> adjusts the highlights, the lightest areas of the image. <strong>Contrast</strong> adjusts the difference between the darkest and lightest parts. Raising brightness lifts dark areas; adjusting contrast fixes an image that looks too flat or too harsh.</p>
+            </div>
+            <div style="border-top: 3px solid #1B8A7A;">
+                <h4 style="color:#167567;">Exposure</h4>
+                <p>Exposure changes the overall light across the whole image at once. If a photo is underexposed, raising Exposure is often the fastest way to bring details back into view.</p>
+            </div>
+        </div>
+        <div class="rvv" style="margin-top: 0;">
+            <div style="border-top: 3px solid #1B8A7A; grid-column: 1 / -1;">
+                <h4 style="color:#167567;">Shadows &amp; Highlights</h4>
+                <p>Unlike Exposure, this tool targets only the dark or light pixels instead of brightening everything. Increase <strong>Shadows</strong> to bring hidden detail out of dark areas. Reduce <strong>Highlights</strong> to recover detail in bright areas that look washed out. This is the most precise of the three tools.</p>
+            </div>
+        </div>
+
+        <div class="pix-wrap">
+            <figure class="art-fig">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/be/Photo_editing_contrast_correction.jpg" alt="A photo split down the middle: the left half unedited and flat, the right half with brightness and contrast corrected so tones separate clearly." style="max-width: 280px;" />
+                <figcaption>Toniht, <em>Photo Editing Contrast Correction</em>. Public domain. Source: <a href="https://commons.wikimedia.org/wiki/File:Photo_editing_contrast_correction.jpg">commons.wikimedia.org</a></figcaption>
+            </figure>
+            <figure class="art-fig">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a3/Photo_of_a_tree_as_overexposed_-_normal_-_underexposed.jpg" alt="The same tree photographed three times: overexposed and washed out, normally exposed with balanced detail, and underexposed and too dark." style="max-width: 200px;" />
+                <figcaption>W.carter, <em>Overexposed, Normal, Underexposed</em>, 2018. Public domain (CC0). Source: <a href="https://commons.wikimedia.org/wiki/File:Photo_of_a_tree_as_overexposed_-_normal_-_underexposed.jpg">commons.wikimedia.org</a></figcaption>
+            </figure>
+            <figure class="art-fig">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/Billiards_Room_at_the_Mark_Twain_Home_%2813829769114%29.jpg" alt="An interior room where both the dim furniture in the shadows and the bright window are visible with clear detail at the same time." style="max-width: 280px;" />
+                <figcaption>John Hoey, <em>Billiards Room at the Mark Twain Home</em>. Licensed CC BY 2.0. Source: <a href="https://commons.wikimedia.org/wiki/File:Billiards_Room_at_the_Mark_Twain_Home_(13829769114).jpg">commons.wikimedia.org</a></figcaption>
+            </figure>
+        </div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 14px 0 10px 0;">Picture a photo that is slightly underexposed: the colors underneath look rich, but the overall image is too dark. Here is one order to try in Pixlr E:</p>
+        <ol style="font-size: 17px; color: #1a2340; line-height: 1.7; margin: 0 0 12px 0; padding-left: 22px;">
+            <li>Open the photo in Pixlr E and duplicate the layer.</li>
+            <li>On the duplicate, open <strong>Adjustment &gt; Exposure</strong> and raise it until details become visible.</li>
+            <li>Open <strong>Adjustment &gt; Shadows &amp; Highlights</strong> and increase Shadows to pull detail out of the darkest corners without touching the rest of the image.</li>
+            <li>Finish with <strong>Adjustment &gt; Brightness &amp; Contrast</strong> to fine-tune, since a big exposure jump can flatten contrast.</li>
+            <li>Compare the adjusted layer against the original layer in the Layers panel. Keep only what improves the photo.</li>
+        </ol>
+
+        <div class="optima-widget ow-select">
+            <div class="widget-kicker">&#9889; TRY IT &middot; WHICH TOOL FIXES IT?</div>
+            <div class="widget-question">Read each situation, choose a tool, then check your answer.</div>
+            <div class="widget-row" data-correct="shadows" data-hint="Think about which tool targets only the dark or light pixels instead of the whole image. Try again.">
+                <div class="widget-row-prompt">A photo is well-lit overall, but a person's face is lost in shadow under a hat brim. Which tool targets just that dark area without brightening the whole photo?</div>
+                <div class="widget-options">
+                    <button data-choice="exposure">Exposure</button>
+                    <button data-choice="shadows" data-fb="Correct. Shadows &amp; Highlights targets only the dark or light pixels, so you can lift the shaded face without washing out the rest of the image.">Shadows &amp; Highlights</button>
+                    <button data-choice="crop">Crop</button>
+                </div>
+            </div>
+            <div class="widget-row" data-correct="exposure" data-hint="The whole image is affected here, not just one part. Try again.">
+                <div class="widget-row-prompt">An entire photo came out uniformly too dark, top to bottom, because the camera let in too little light. Which tool is the fastest first move?</div>
+                <div class="widget-options">
+                    <button data-choice="crop">Crop</button>
+                    <button data-choice="highlights">Reducing Highlights only</button>
+                    <button data-choice="exposure" data-fb="Right. Exposure changes the overall light across the whole image at once, which matches a uniformly dark photo.">Exposure</button>
+                </div>
+            </div>
+            <button class="widget-reset">Reset</button>
+        </div>
+
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 18px 0 6px 0;">Saving your edited image</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Before you export, check your work: Are the details clearer? Did the crop balance the composition? Compare the edited layer against the original layer, still sitting safely underneath. Decide whether the adjustments improved the photo or whether the shot needs to be retaken next time; both are useful conclusions. When you are satisfied, export as a <strong>PNG</strong> or <strong>JPEG</strong> under a new file name so both versions exist.</p>
+
+        <details>
+            <summary>Before you look: in your notebook, write down which of the three exposure tools (Brightness &amp; Contrast, Exposure, Shadows &amp; Highlights) you would try first on a photo that is dark everywhere except one overexposed bright window. Then click to compare.</summary>
+            <div class="ac-body">A bright, blown-out window next to dark surroundings is exactly the case Shadows &amp; Highlights is built for: reduce Highlights to pull detail back into the window without darkening the rest of the room. Exposure would darken the whole image, including the parts that already look fine.</div>
+        </details>
+    </div>
+
+    <!-- STUDIO HABIT -->
+    <div class="callout c-art">
+        <div class="ck">&#127912; STUDIO HABIT: EDIT IN PASSES, NOT ALL AT ONCE</div>
+        <div class="cb">Professional editors rarely fix everything with one slider. They duplicate a layer, adjust exposure, check it, duplicate again, adjust shadows and highlights, check it, then crop last so they are judging the final composition with corrected light. Working this way, one adjustment at a time on its own layer, is what makes an edit reversible and keeps you from overediting without noticing.</div>
+    </div>
+
+    <!-- AI AWARENESS (factual) -->
+    <div class="callout c-warn">
+        <div class="ck">&#9888;&#65039; WORTH KNOWING &middot; AI AUTO-ENHANCE AND ONE-CLICK FILTERS</div>
+        <div class="cb">Many photo apps include an AI "auto-enhance" or one-tap filter that adjusts exposure, contrast, and color all at once. It can be a fast starting point, but it makes every decision for you in a single step and gives you no separate control over Exposure versus Shadows &amp; Highlights versus Brightness &amp; Contrast. This week's assignment asks you to make each adjustment yourself, tool by tool, so you can see and control exactly what each one changes. That tool-by-tool judgment is what is graded.</div>
+    </div>
+
+    <!-- VOCABULARY -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128221; VOCABULARY</div>
+        <div class="vocab-grid">
+            <div class="vocab-card"><strong>Non-Destructive Editing</strong>Editing a duplicate or separate layer so the original pixels stay intact and every change can be undone.</div>
+            <div class="vocab-card"><strong>Underexposed</strong>A photo that received too little light, so it looks too dark overall even though its colors are intact.</div>
+            <div class="vocab-card"><strong>Crop Tool</strong>The tool used to cut out unwanted parts of an image and change its composition or aspect ratio.</div>
+            <div class="vocab-card"><strong>Aspect Ratio</strong>The proportion between an image's width and height, such as 1:1 or 16:9.</div>
+            <div class="vocab-card"><strong>Brightness &amp; Contrast</strong>Adjustment tools controlling highlight level (brightness) and the range between darkest and lightest areas (contrast).</div>
+            <div class="vocab-card"><strong>Exposure (adjustment)</strong>An editing tool that raises or lowers the overall light level across the entire image.</div>
+            <div class="vocab-card"><strong>Shadows &amp; Highlights</strong>An adjustment tool that targets only dark pixels (shadows) or only light pixels (highlights), rather than the whole image.</div>
+            <div class="vocab-card"><strong>Duplicate Layer</strong>A copy of an image layer in the Layers panel, used so edits can be made without touching the original.</div>
+        </div>
+    </div>
+
+    <!-- WHAT YOU'LL DO NEXT -->
+    <div style="background: #FFFFFF; border-top: 3px solid #0E1C42; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 16px;">&#10145;&#65039; WHAT YOU'LL DO NEXT (IN CANVAS)</div>
+        <div class="next-item"><div class="num learn">1</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Quiz: Editing and Exposure</strong> &middot; Week 5</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Auto-graded in Canvas, covers non-destructive habits, the Crop tool, and the three exposure tools.</div></div></div>
+        <div class="next-item"><div class="num learn">2</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Discussion: Fixing the Exposure</strong> &middot; Week 5</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Identify which exposure tool you would reach for first in a specific lighting scenario, and reply to a classmate.</div></div></div>
+        <div class="next-item"><div class="num create">3</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Mini Lesson (Editing &amp; Exposure)</strong> &middot; Week 5</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Correct the exposure on a photo in Pixlr E using at least two adjustment tools plus a crop, and export both versions. Your graded artwork this week.</div></div></div>
+    </div>
+
+    <!-- WRAP-UP -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128170; THE BIG IDEA</div>
+        <p style="font-size: 18px; color: #1a2340; line-height: 1.65; margin: 0;">A photo that comes out too dark is not a finished decision, it is a starting point. Non-destructive editing means you can duplicate, adjust, compare, and undo without ever risking the original shot. This week you learned three ways to correct exposure and one way to recompose with the Crop tool. The habit that ties them together matters more than any single slider: protect your original, work in layers, and export under a new name.</p>
+    </div>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div style="background: #0E1C42; border-top: 3px solid #55C8E8; padding: 18px 34px; text-align: center;">
+    <div style="font-size: 18px; color: #ffffff; margin-bottom: 6px;"><span style="color: #55c8e8;">Optima Academy Online</span> &middot; DIGITAL ART IMAGING &middot; Quarter 2 &middot; Student Lesson Page</div>
+    <div style="font-size: 13px; color: rgba(255,255,255,0.65); margin-bottom: 4px;">Module 2 &middot; Week 5 &middot; Editing and Exposure</div>
+    <div style="font-size: 12px; color: rgba(255,255,255,0.4);">&copy; Optima Academy Online &middot; An Education Experience Company. Concept diagrams are original CSS/SVG illustrations. Photographs are public domain or openly licensed; see each caption for source.</div>
+</div>
+
+</div>
+
+<!-- ===== WIDGET RUNTIME — from optima-lesson-format template. One delegated listener drives every engine. ===== -->
+<script>
+(function () {
+  document.addEventListener('click', function (e) {
+    var reset = e.target.closest('.widget-reset');
+    if (reset) {
+      var w = reset.closest('.optima-widget');
+      w.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      w.querySelectorAll('.widget-feedback').forEach(function (f) { f.classList.remove('show'); f.textContent = ''; });
+      w.querySelectorAll('.row-feedback').forEach(function (f) { f.remove(); });
+      return;
+    }
+    var rBtn = e.target.closest('.ow-reflect .widget-options button');
+    if (rBtn) {
+      var rw = rBtn.closest('.optima-widget');
+      rw.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected'); });
+      rBtn.classList.add('selected');
+      var fb = rw.querySelector('.widget-feedback');
+      fb.textContent = rBtn.dataset.response || '';
+      fb.classList.add('show');
+      return;
+    }
+    var sBtn = e.target.closest('.ow-select .widget-row .widget-options button');
+    if (sBtn) {
+      var row = sBtn.closest('.widget-row');
+      var correct = row.dataset.correct;
+      row.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      var right = sBtn.dataset.choice === correct;
+      sBtn.classList.add(right ? 'correct' : 'incorrect');
+      var text = right ? (sBtn.dataset.fb || row.dataset.fb || 'Right.') : (sBtn.dataset.fb || row.dataset.hint || 'Not quite. Try again.');
+      var rf = row.querySelector('.row-feedback') || row.appendChild(document.createElement('div'));
+      rf.className = 'row-feedback ' + (right ? 'correct' : 'incorrect');
+      rf.textContent = text;
+      return;
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

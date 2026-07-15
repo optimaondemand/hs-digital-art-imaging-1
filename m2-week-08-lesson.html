@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Digital Art Imaging &mdash; Week 8: Semester 1 Review</title>
+<style>
+    body { margin: 0; padding: 0; font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #f4f6fa; }
+    .canvas-frame { max-width: 1100px; margin: 0 auto; background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+
+    /* ===== WIDGET CSS — from optima-lesson-format/assets/lesson-interactive-template.html (byte-consistent) ===== */
+    .optima-widget { background: linear-gradient(135deg, #E8F6FB 0%, #F4F9FC 100%); border: 1px solid #C5DCE5; border-left: 5px solid #2196D0; border-radius: 8px; padding: 18px 22px; margin: 18px 0; }
+    .widget-kicker { font-size: 11px; color: #1B6A94; margin-bottom: 10px; letter-spacing: 0.4px; }
+    .widget-question { font-size: 17px; color: #0E1C42; margin-bottom: 14px; line-height: 1.55; }
+    .widget-row { background: #FFFFFF; border: 1px solid #D0D9E8; border-radius: 6px; padding: 12px 14px; margin-bottom: 10px; }
+    .widget-row-prompt { font-size: 15px; color: #0E1C42; margin-bottom: 8px; line-height: 1.5; font-style: italic; }
+    .widget-options { display: flex; flex-wrap: wrap; gap: 8px; }
+    .widget-options button { background: #FFFFFF; border: 1.5px solid #D0D9E8; border-radius: 8px; padding: 8px 14px; font-size: 14px; color: #0E1C42; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+    .widget-options button:hover { background: #F4F6FA; border-color: #55C8E8; }
+    .widget-options button.selected { background: #0E1C42; color: #FFFFFF; border-color: #0E1C42; }
+    .widget-options button.correct { background: #D8F0DD; border-color: #2A9D5C; color: #1A6B3D; }
+    .widget-options button.incorrect { background: #FDECEC; border-color: #C0392B; color: #8A1F16; }
+    .widget-feedback { background: #FFFFFF; border-left: 3px solid #C7922C; padding: 10px 14px; font-size: 15px; color: #1a2340; line-height: 1.55; margin: 10px 0; display: none; border-radius: 4px; }
+    .widget-feedback.show { display: block; }
+    .row-feedback { padding: 8px 12px; margin-top: 8px; font-size: 14px; border-radius: 4px; line-height: 1.5; }
+    .row-feedback.correct { background: #D8F0DD; border-left: 3px solid #2A9D5C; color: #1A6B3D; }
+    .row-feedback.incorrect { background: #FDECEC; border-left: 3px solid #C0392B; color: #8A1F16; }
+    .widget-reset { background: transparent; border: 1px solid #C7922C; color: #C7922C; border-radius: 6px; padding: 6px 12px; font-size: 12px; cursor: pointer; font-family: inherit; margin-top: 6px; }
+    .widget-reset:hover { background: #FDF3E3; }
+
+    /* ===== Art-course components (layered on the brand; teal/coral are activity accents only) ===== */
+    .art-fig { margin: 14px 0; text-align: center; }
+    .art-fig img { max-width: 100%; height: auto; border-radius: 6px; border: 1px solid #D0D9E8; }
+    .art-fig figcaption { font-size: 13px; color: #666; margin-top: 8px; line-height: 1.5; }
+    .art-fig figcaption a { color: #1B6A94; }
+    .el-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin: 16px 0; }
+    .el-card { border: 1px solid #D0D9E8; border-radius: 8px; overflow: hidden; }
+    .el-demo { height: 80px; display: flex; align-items: center; justify-content: center; }
+    .el-text { padding: 10px 13px; }
+    .el-text strong { color: #167567; display: block; margin-bottom: 3px; font-size: 16px; }
+    .el-text span { font-size: 14px; color: #1a2340; }
+    .callout { border-radius: 6px; padding: 14px 20px; margin: 16px 0; }
+    .callout .ck { font-size: 11px; margin-bottom: 8px; letter-spacing: 0.5px; }
+    .callout .cb { font-size: 16px; line-height: 1.6; color: #0E1C42; }
+    .c-help { background: #E8F6FB; border-left: 5px solid #2196D0; border-top: 3px solid #55C8E8; }
+    .c-help .ck { color: #1B6A94; }
+    .c-warn { background: #FDECEC; border-left: 5px solid #C0392B; border-top: 3px solid #E74C3C; }
+    .c-warn .ck { color: #8A1F16; }
+    .c-art { background: #E6F4F1; border-left: 5px solid #1B8A7A; }
+    .c-art .ck { color: #167567; }
+    .next-item { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+    .next-item .num { min-width: 30px; height: 30px; border-radius: 50%; color: #fff; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .num.learn { background: #1B8A7A; }
+    .num.create { background: #D9583B; }
+    .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+    .vocab-card { background: #EEF1F8; border-radius: 6px; padding: 10px 13px; font-size: 14px; color: #1a2340; }
+    .vocab-card strong { color: #0E1C42; display: block; margin-bottom: 2px; }
+    details { background: #FFFFFF; border: 1px solid #D0D9E8; border-left: 4px solid #C7922C; border-radius: 6px; padding: 12px 18px; margin: 14px 0; }
+    details summary { font-size: 16px; color: #0E1C42; cursor: pointer; }
+    details .ac-body { font-size: 16px; color: #1a2340; margin-top: 10px; padding-top: 10px; border-top: 1px solid #EEF1F8; line-height: 1.6; }
+    /* Pixel vs. smooth concept visual */
+    .pix-wrap { display: flex; flex-wrap: wrap; gap: 22px; align-items: center; justify-content: center; margin: 16px 0 6px; }
+    .pix-panel { text-align: center; }
+    .pix-label { font-size: 12px; color: #6b7a99; margin-top: 8px; }
+    .rvv { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+    .rvv > div { border: 1px solid #D0D9E8; border-radius: 8px; padding: 14px 16px; }
+    .rvv h4 { margin: 0 0 6px 0; font-size: 16px; }
+    .rvv p { margin: 0; font-size: 14px; color: #1a2340; line-height: 1.55; }
+    @media (max-width: 560px){ .rvv { grid-template-columns: 1fr; } }
+    /* Semester journey map */
+    .journey-wrap { display: flex; flex-wrap: wrap; align-items: stretch; justify-content: center; gap: 6px; margin: 16px 0 8px; }
+    .journey-stop { width: 190px; border: 1px solid #D0D9E8; border-top: 4px solid #0E1C42; border-radius: 8px; padding: 12px 14px; background: #FFFFFF; }
+    .journey-stop .js-q { font-size: 11px; color: #6b7a99; margin-bottom: 4px; }
+    .journey-stop .js-t { font-size: 15px; color: #0e1c42; margin-bottom: 6px; }
+    .journey-stop .js-d { font-size: 13px; color: #1a2340; line-height: 1.5; }
+    .journey-arrow { display: flex; align-items: center; font-size: 22px; color: #6b7a99; padding: 0 2px; }
+    @media (max-width: 700px){ .journey-arrow { display: none; } }
+</style>
+</head>
+<body>
+<div class="canvas-frame">
+
+<!-- ===== HEADER ===== -->
+<div style="background: #0E1C42; border-bottom: 5px solid #55C8E8; padding: 22px 34px;">
+    <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 10px;">
+        <div style="width: 52px; height: 52px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><img src="https://raw.githubusercontent.com/optimaondemand/optima-assets/eeb0b335630058906d52f478028361d352253a93/images/Optima%20Final%20Circle%20-%20Owl%20Only.png" alt="Optima Academy" style="width: 50px; height: 40px; object-fit: contain;" /></div>
+        <div>
+            <div style="font-size: 28px; color: #ffffff; line-height: 1.2;">Optima Academy Online</div>
+            <div style="font-size: 12px; color: #55c8e8;">An Education Experience Company</div>
+        </div>
+    </div>
+    <div style="font-size: 36px; color: #ffffff; margin-bottom: 6px;">DIGITAL ART IMAGING</div>
+</div>
+
+<!-- ===== METADATA STRIP ===== -->
+<div style="background: #FFFFFF; border-bottom: 2px solid #D0D9E8; display: flex; flex-wrap: wrap;">
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Quarter / Week</div>
+        <div style="font-size: 17px; color: #0e1c42;">Q2 &middot; Module 2, Week 8</div>
+        <div style="font-size: 12px; color: #666;">Module 2: Capturing Light &amp; Editing</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Focus</div>
+        <div style="font-size: 17px; color: #0e1c42;">Semester Review</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">This Week's Project</div>
+        <div style="font-size: 17px; color: #0e1c42; font-style: italic;">Comprehensive Quiz + Reflection</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Software</div>
+        <div style="font-size: 16px; color: #0e1c42;">Pixlr E (free, browser)</div>
+    </div>
+</div>
+
+<!-- ===== BODY WRAPPER ===== -->
+<div style="padding: 24px 34px;">
+
+    <!-- Lavender title strip -->
+    <div style="background: #EEF1F8; border-left: 5px solid #0E1C42; border-radius: 7px; padding: 18px 22px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #0e1c42; margin-bottom: 6px;">MODULE 2 &middot; WEEK 8</div>
+        <div style="font-size: 22px; color: #0e1c42; margin-bottom: 4px;">Semester 1 Review</div>
+        <div style="font-size: 16px; color: #666;">Lesson</div>
+    </div>
+
+    <!-- Essential Question -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128214; ESSENTIAL QUESTION</div>
+        <div style="font-size: 20px; color: #0e1c42; font-style: italic; margin-bottom: 10px;">What have you learned about how technology and deliberate choices work together to make an image, from foundations through editing?</div>
+        <div style="font-size: 18px; color: #1a2340; line-height: 1.65;">Fifteen weeks ago you started with pixels and a color wheel. Since then you have composed photographs, studied real photographers, and learned to edit with intention instead of guesswork. This week you do not learn anything new. You look back at the whole first semester, find the through-line, and prove what you know on the comprehensive quiz.</div>
+    </div>
+
+    <!-- PART 1 · LOOK FIRST -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128064; PART 1 &middot; LOOK FIRST</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Every skill this semester built on the one before it. You cannot compose a strong photo without understanding the Elements of Art. You cannot edit a photo well without first capturing it with intention. The map below shows the four stages of that journey in order.</p>
+
+        <div class="journey-wrap">
+            <div class="journey-stop">
+                <div class="js-q">STAGE 1</div>
+                <div class="js-t" style="color:#167567;">Foundations</div>
+                <div class="js-d">Digital art vs. imaging, pixels and resolution, raster vs. vector.</div>
+            </div>
+            <div class="journey-arrow">&#8594;</div>
+            <div class="journey-stop">
+                <div class="js-q">STAGE 2</div>
+                <div class="js-t" style="color:#167567;">Composition &amp; Color</div>
+                <div class="js-d">Elements of Art, Principles of Design, the color wheel, shape and pen tools.</div>
+            </div>
+            <div class="journey-arrow">&#8594;</div>
+            <div class="journey-stop">
+                <div class="js-q">STAGE 3</div>
+                <div class="js-t" style="color:#167567;">Photography</div>
+                <div class="js-d">Line and space, the history of the camera, taking a strong photo, studying photographers.</div>
+            </div>
+            <div class="journey-arrow">&#8594;</div>
+            <div class="journey-stop">
+                <div class="js-q">STAGE 4</div>
+                <div class="js-t" style="color:#167567;">Editing</div>
+                <div class="js-d">Lighting and photo series, non-destructive workflow, exposure, color, filters.</div>
+            </div>
+        </div>
+        <p style="font-size: 14px; color: #6b7a99; margin: 0;">Concept diagram. Each stage is a skill you still use every time you make an image, not a unit you finished and left behind.</p>
+
+        <div class="optima-widget ow-reflect">
+            <div class="widget-kicker">&#128173; QUICK CHECK-IN &middot; NO WRONG ANSWER</div>
+            <div class="widget-question">Looking at the four stages above, which one do you feel strongest in, and which one do you still want to practice?</div>
+            <div class="widget-options">
+                <button data-response="Foundations gave you the vocabulary everything else depends on: pixels, resolution, raster and vector. If editing still feels shaky, that is normal; it is the newest skill you have.">Strongest: Foundations</button>
+                <button data-response="Composition and color are the decisions you make before you ever pick up a camera. If photography itself feels shaky, try applying one composition rule on purpose the next time you shoot.">Strongest: Composition &amp; Color</button>
+                <button data-response="Photography is where you put the earlier stages into practice with a real camera. If editing still feels shaky, remember it only works on a photo you already composed well.">Strongest: Photography</button>
+                <button data-response="Editing is the newest and most technical stage, so feeling strongest here already is a good sign. If foundations feel shaky, a quick reread of pixels versus vectors will anchor the rest.">Strongest: Editing</button>
+            </div>
+            <div class="widget-feedback"></div>
+            <button class="widget-reset">Reset</button>
+        </div>
+    </div>
+
+    <!-- PART 2 · Q1 FOUNDATIONS RECAP -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128218; PART 2 &middot; QUARTER 1 RECAP: FOUNDATIONS &amp; PHOTOGRAPHY</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Quarter 1 gave you the vocabulary and the eye you needed before you ever touched an editing tool. In brief:</p>
+        <ul style="font-size: 17px; color: #1a2340; line-height: 1.7; margin: 0 0 12px 0; padding-left: 22px;">
+            <li><strong>Digital art vs. digital imaging.</strong> Digital art uses technology at any stage; digital imaging is art made to be viewed on a screen.</li>
+            <li><strong>Pixels, resolution, raster vs. vector.</strong> Pixels are the tiny squares that build a screen image; resolution is how many you have. Raster images (photos, Pixlr E files) are pixel grids; vector images are math-defined lines that stay crisp at any size.</li>
+            <li><strong>Elements of Art &amp; Principles of Design.</strong> The visual vocabulary, line, shape, color, texture, space, and how they get arranged, balance, emphasis, movement, rhythm, that describes every image you make or study.</li>
+            <li><strong>The color wheel.</strong> Warm, cool, neutral, monochromatic, and polychromatic color schemes, plus how to build color deliberately on a digital canvas.</li>
+            <li><strong>Shape and pen tools.</strong> Building and combining shapes as the foundation of digital drawing.</li>
+            <li><strong>Line and space in photography.</strong> How line and space guide a viewer's eye through a composed photograph.</li>
+            <li><strong>History of photography and taking a strong photo.</strong> From the camera obscura to phones, plus the habits, framing, focus, lighting, that make a photo intentional instead of accidental.</li>
+            <li><strong>Studying photographers.</strong> Looking closely at real photographers' choices and building your own shot list before you shoot.</li>
+        </ul>
+    </div>
+
+    <div class="optima-widget ow-select">
+        <div class="widget-kicker">&#9889; REVIEW &middot; QUARTER 1 CHECK</div>
+        <div class="widget-question">Read each item, choose your answer, then check it.</div>
+        <div class="widget-row" data-correct="vector" data-hint="Think about which format is built from math-defined lines rather than a pixel grid. Try again.">
+            <div class="widget-row-prompt">A company logo needs to print sharp on a tiny business card and a giant billboard without ever looking blocky. Which format should it be built in?</div>
+            <div class="widget-options">
+                <button data-choice="vector" data-fb="Correct. Vector images are made of math-defined lines and shapes, so they stay crisp at any size.">Vector</button>
+                <button data-choice="raster">Raster</button>
+            </div>
+        </div>
+        <div class="widget-row" data-correct="b" data-hint="Think about which term names the visual vocabulary itself, not how it is arranged. Try again.">
+            <div class="widget-row-prompt">Line, shape, color, texture, and space are examples of which term?</div>
+            <div class="widget-options">
+                <button data-choice="a">Principles of Design</button>
+                <button data-choice="b" data-fb="Right. These are the Elements of Art, the raw visual vocabulary. The Principles of Design describe how those elements get arranged.">Elements of Art</button>
+                <button data-choice="c">Color schemes</button>
+            </div>
+        </div>
+        <div class="widget-row" data-correct="true" data-hint="Think about what a shot list is for before you press the shutter. Try again.">
+            <div class="widget-row-prompt">True or false: building a shot list before you shoot is a way of applying composition and lighting choices on purpose, instead of hoping a good photo happens by accident.</div>
+            <div class="widget-options">
+                <button data-choice="true" data-fb="True. A shot list turns what you studied about composition, line, and light into a plan you can actually shoot.">True</button>
+                <button data-choice="false">False</button>
+            </div>
+        </div>
+        <button class="widget-reset">Reset</button>
+    </div>
+
+    <!-- PART 3 · Q2 EDITING RECAP -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128269; PART 3 &middot; QUARTER 2 RECAP: CAPTURING LIGHT &amp; EDITING</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Quarter 2 moved from taking the photo to editing it with control. In brief:</p>
+        <ul style="font-size: 17px; color: #1a2340; line-height: 1.7; margin: 0 0 12px 0; padding-left: 22px;">
+            <li><strong>Lighting techniques and photo series.</strong> Using lighting (backlighting, side lighting, diffused light) and building a photo series with a unifying theme: subject, compositional technique, movement, texture, or color.</li>
+            <li><strong>Non-destructive editing workflow.</strong> Always duplicate your original layer before editing, and do not overedit; extreme adjustments make an image look unnatural. Layers let you experiment without losing your original.</li>
+            <li><strong>The Crop tool.</strong> Cutting out unwanted parts of an image, changing the balance and focus of the composition, and choosing an aspect ratio that suits the final use.</li>
+            <li><strong>Exposure correction.</strong> Brightness/Contrast adjusts highlights and the light-to-dark range; Exposure changes the overall light; Shadows/Highlights targets only the darkest or brightest pixels instead of the whole image.</li>
+            <li><strong>Color adjustment.</strong> Hue/Saturation changes color, intensity, and lightness; Color Balance shifts shadows, midtones, and highlights; Vibrance boosts dull colors without blowing out ones that are already bright.</li>
+            <li><strong>Filters.</strong> Using a blur filter, such as Gaussian blur, on a separated background layer to emphasize your subject, the digital version of a wide-aperture blur.</li>
+            <li><strong>The photo series capstone.</strong> Bringing lighting, composition, and editing together into one finished, intentional series.</li>
+        </ul>
+
+        <div class="callout c-help">
+            <div class="ck">&#128161; STUDY TIP</div>
+            <div class="cb">For the quiz, do not just reread definitions. Open Pixlr E and find each tool as you review it: Crop, Brightness/Contrast, Exposure, Shadows/Highlights, Hue/Saturation, Color Balance, Vibrance, and a blur filter. Naming a tool while you look at it sticks better than reading its name on a page.</div>
+        </div>
+    </div>
+
+    <div class="optima-widget ow-select">
+        <div class="widget-kicker">&#9889; REVIEW &middot; QUARTER 2 CHECK</div>
+        <div class="widget-question">Read each item, choose your answer, then check it.</div>
+        <div class="widget-row" data-correct="c" data-hint="Think about which tool targets only the darkest or brightest pixels, not the whole image. Try again.">
+            <div class="widget-row-prompt">A photo has washed-out clouds and a face lost in shadow. Which tool targets only those dark and light pixels instead of brightening or darkening the whole image?</div>
+            <div class="widget-options">
+                <button data-choice="a">Vibrance</button>
+                <button data-choice="b">Color Balance</button>
+                <button data-choice="c" data-fb="Correct. Shadows/Highlights targets only the darkest or brightest pixels, so you can bring back detail in the sky and the shadowed face separately.">Shadows/Highlights</button>
+            </div>
+        </div>
+        <div class="widget-row" data-correct="false" data-hint="Think about what happens the first time you open a photo you plan to edit. Try again.">
+            <div class="widget-row-prompt">True or false: it is fine to edit directly on your original photo layer as long as you remember what the picture looked like before.</div>
+            <div class="widget-options">
+                <button data-choice="true">True</button>
+                <button data-choice="false" data-fb="False. Always duplicate the original layer first. Non-destructive editing means your untouched original is always recoverable, memory is not a safe backup.">False</button>
+            </div>
+        </div>
+        <div class="widget-row" data-correct="blur" data-hint="Think about what technique fakes the look of a wide-aperture shot after the photo is already taken. Try again.">
+            <div class="widget-row-prompt">You want your pet to stand out from a messy background, but you already took the photo without a wide aperture. Which filter, applied to a separated background layer, mimics that effect?</div>
+            <div class="widget-options">
+                <button data-choice="blur" data-fb="Right. A Gaussian or similar blur filter on the background layer softens distractions and pushes the viewer's eye to the sharp subject.">Blur</button>
+                <button data-choice="sharpen">Sharpen</button>
+                <button data-choice="noise">Noise</button>
+            </div>
+        </div>
+        <button class="widget-reset">Reset</button>
+    </div>
+
+    <!-- AI AWARENESS (factual) -->
+    <div class="callout c-warn">
+        <div class="ck">&#9888;&#65039; WORTH KNOWING &middot; AI IMAGE TOOLS</div>
+        <div class="cb">An AI tool can guess a crop or auto-adjust exposure and color in one click. It cannot tell you why a photographer chose to leave shadows dark on purpose, or which crop actually serves your composition's balance and emphasis. Those judgment calls, the ones this semester trained you to make, are what the quiz and discussion this week are checking.</div>
+    </div>
+
+    <!-- VOCABULARY -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128221; VOCABULARY &middot; SEMESTER 1</div>
+        <div class="vocab-grid">
+            <div class="vocab-card"><strong>Pixel</strong>One of the tiny colored squares that make up a screen image.</div>
+            <div class="vocab-card"><strong>Raster Image</strong>An image built from a fixed grid of pixels, like a photograph.</div>
+            <div class="vocab-card"><strong>Vector Image</strong>An image built from math-defined lines and shapes; stays crisp at any size.</div>
+            <div class="vocab-card"><strong>Elements of Art</strong>The visual vocabulary of art: line, shape, color, texture, space, form, value.</div>
+            <div class="vocab-card"><strong>Color Wheel</strong>The circular map of color relationships used to build warm, cool, neutral, monochromatic, and polychromatic schemes.</div>
+            <div class="vocab-card"><strong>Non-Destructive Editing</strong>Editing on a duplicate layer so your original photo is never permanently changed.</div>
+            <div class="vocab-card"><strong>Exposure</strong>The overall amount of light captured or shown in an image.</div>
+            <div class="vocab-card"><strong>Shadows/Highlights</strong>An adjustment tool that targets only the darkest or brightest pixels in a photo.</div>
+            <div class="vocab-card"><strong>Vibrance</strong>An adjustment that boosts dull colors without over-saturating colors that are already bright.</div>
+            <div class="vocab-card"><strong>Photo Series</strong>A set of images connected by a shared theme, subject, technique, or color.</div>
+        </div>
+    </div>
+
+    <!-- WHAT YOU'LL DO NEXT -->
+    <div style="background: #FFFFFF; border-top: 3px solid #0E1C42; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 16px;">&#10145;&#65039; WHAT YOU'LL DO NEXT (IN CANVAS)</div>
+        <div class="next-item"><div class="num learn">1</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Quiz: Semester 1 Comprehensive Quiz</strong> &middot; Week 8</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">12 questions spanning Quarter 1 and Quarter 2, auto-graded in Canvas.</div></div></div>
+        <div class="next-item"><div class="num learn">2</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Discussion: Semester 1 Reflection</strong> &middot; Week 8</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Name one skill from this semester that changed how you see photos or images, with a specific example from your own work, and reply to a classmate.</div></div></div>
+    </div>
+
+    <!-- WRAP-UP -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128170; THE BIG IDEA</div>
+        <p style="font-size: 18px; color: #1a2340; line-height: 1.65; margin: 0;">Foundations, composition, photography, and editing are not four separate units, they are one skill practiced in stages. You learned what an image is made of, how to arrange it, how to capture it with a camera, and how to refine it afterward with intention instead of guesswork. Every stage still lives inside every image you make from here. Prove what you know this week, then carry all four stages into Quarter 3.</p>
+    </div>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div style="background: #0E1C42; border-top: 3px solid #55C8E8; padding: 18px 34px; text-align: center;">
+    <div style="font-size: 18px; color: #ffffff; margin-bottom: 6px;"><span style="color: #55c8e8;">Optima Academy Online</span> &middot; DIGITAL ART IMAGING &middot; Quarter 2 &middot; Student Lesson Page</div>
+    <div style="font-size: 13px; color: rgba(255,255,255,0.65); margin-bottom: 4px;">Module 2 &middot; Week 8 &middot; Semester 1 Review</div>
+    <div style="font-size: 12px; color: rgba(255,255,255,0.4);">&copy; Optima Academy Online &middot; An Education Experience Company. Diagrams are original CSS/SVG concept illustrations.</div>
+</div>
+
+</div>
+
+<!-- ===== WIDGET RUNTIME — from optima-lesson-format template. One delegated listener drives every engine. ===== -->
+<script>
+(function () {
+  document.addEventListener('click', function (e) {
+    var reset = e.target.closest('.widget-reset');
+    if (reset) {
+      var w = reset.closest('.optima-widget');
+      w.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      w.querySelectorAll('.widget-feedback').forEach(function (f) { f.classList.remove('show'); f.textContent = ''; });
+      w.querySelectorAll('.row-feedback').forEach(function (f) { f.remove(); });
+      return;
+    }
+    var rBtn = e.target.closest('.ow-reflect .widget-options button');
+    if (rBtn) {
+      var rw = rBtn.closest('.optima-widget');
+      rw.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected'); });
+      rBtn.classList.add('selected');
+      var fb = rw.querySelector('.widget-feedback');
+      fb.textContent = rBtn.dataset.response || '';
+      fb.classList.add('show');
+      return;
+    }
+    var sBtn = e.target.closest('.ow-select .widget-row .widget-options button');
+    if (sBtn) {
+      var row = sBtn.closest('.widget-row');
+      var correct = row.dataset.correct;
+      row.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      var right = sBtn.dataset.choice === correct;
+      sBtn.classList.add(right ? 'correct' : 'incorrect');
+      var text = right ? (sBtn.dataset.fb || row.dataset.fb || 'Right.') : (sBtn.dataset.fb || row.dataset.hint || 'Not quite. Try again.');
+      var rf = row.querySelector('.row-feedback') || row.appendChild(document.createElement('div'));
+      rf.className = 'row-feedback ' + (right ? 'correct' : 'incorrect');
+      rf.textContent = text;
+      return;
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

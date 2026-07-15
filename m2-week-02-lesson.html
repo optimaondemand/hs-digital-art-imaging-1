@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Digital Art Imaging &mdash; Week 2: Digital Photography Techniques &amp; Perspective</title>
+<style>
+    body { margin: 0; padding: 0; font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #f4f6fa; }
+    .canvas-frame { max-width: 1100px; margin: 0 auto; background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+
+    /* ===== WIDGET CSS — from optima-lesson-format/assets/lesson-interactive-template.html (byte-consistent) ===== */
+    .optima-widget { background: linear-gradient(135deg, #E8F6FB 0%, #F4F9FC 100%); border: 1px solid #C5DCE5; border-left: 5px solid #2196D0; border-radius: 8px; padding: 18px 22px; margin: 18px 0; }
+    .widget-kicker { font-size: 11px; color: #1B6A94; margin-bottom: 10px; letter-spacing: 0.4px; }
+    .widget-question { font-size: 17px; color: #0E1C42; margin-bottom: 14px; line-height: 1.55; }
+    .widget-row { background: #FFFFFF; border: 1px solid #D0D9E8; border-radius: 6px; padding: 12px 14px; margin-bottom: 10px; }
+    .widget-row-prompt { font-size: 15px; color: #0E1C42; margin-bottom: 8px; line-height: 1.5; font-style: italic; }
+    .widget-options { display: flex; flex-wrap: wrap; gap: 8px; }
+    .widget-options button { background: #FFFFFF; border: 1.5px solid #D0D9E8; border-radius: 8px; padding: 8px 14px; font-size: 14px; color: #0E1C42; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+    .widget-options button:hover { background: #F4F6FA; border-color: #55C8E8; }
+    .widget-options button.selected { background: #0E1C42; color: #FFFFFF; border-color: #0E1C42; }
+    .widget-options button.correct { background: #D8F0DD; border-color: #2A9D5C; color: #1A6B3D; }
+    .widget-options button.incorrect { background: #FDECEC; border-color: #C0392B; color: #8A1F16; }
+    .widget-feedback { background: #FFFFFF; border-left: 3px solid #C7922C; padding: 10px 14px; font-size: 15px; color: #1a2340; line-height: 1.55; margin: 10px 0; display: none; border-radius: 4px; }
+    .widget-feedback.show { display: block; }
+    .row-feedback { padding: 8px 12px; margin-top: 8px; font-size: 14px; border-radius: 4px; line-height: 1.5; }
+    .row-feedback.correct { background: #D8F0DD; border-left: 3px solid #2A9D5C; color: #1A6B3D; }
+    .row-feedback.incorrect { background: #FDECEC; border-left: 3px solid #C0392B; color: #8A1F16; }
+    .widget-reset { background: transparent; border: 1px solid #C7922C; color: #C7922C; border-radius: 6px; padding: 6px 12px; font-size: 12px; cursor: pointer; font-family: inherit; margin-top: 6px; }
+    .widget-reset:hover { background: #FDF3E3; }
+
+    /* ===== Art-course components (layered on the brand; teal/coral are activity accents only) ===== */
+    .art-fig { margin: 14px 0; text-align: center; }
+    .art-fig img { max-width: 100%; height: auto; border-radius: 6px; border: 1px solid #D0D9E8; }
+    .art-fig figcaption { font-size: 13px; color: #666; margin-top: 8px; line-height: 1.5; }
+    .art-fig figcaption a { color: #1B6A94; }
+    .el-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin: 16px 0; }
+    .el-card { border: 1px solid #D0D9E8; border-radius: 8px; overflow: hidden; }
+    .el-demo { height: 80px; display: flex; align-items: center; justify-content: center; }
+    .el-text { padding: 10px 13px; }
+    .el-text strong { color: #167567; display: block; margin-bottom: 3px; font-size: 16px; }
+    .el-text span { font-size: 14px; color: #1a2340; }
+    .callout { border-radius: 6px; padding: 14px 20px; margin: 16px 0; }
+    .callout .ck { font-size: 11px; margin-bottom: 8px; letter-spacing: 0.5px; }
+    .callout .cb { font-size: 16px; line-height: 1.6; color: #0E1C42; }
+    .c-help { background: #E8F6FB; border-left: 5px solid #2196D0; border-top: 3px solid #55C8E8; }
+    .c-help .ck { color: #1B6A94; }
+    .c-warn { background: #FDECEC; border-left: 5px solid #C0392B; border-top: 3px solid #E74C3C; }
+    .c-warn .ck { color: #8A1F16; }
+    .c-art { background: #E6F4F1; border-left: 5px solid #1B8A7A; }
+    .c-art .ck { color: #167567; }
+    .next-item { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+    .next-item .num { min-width: 30px; height: 30px; border-radius: 50%; color: #fff; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .num.learn { background: #1B8A7A; }
+    .num.create { background: #D9583B; }
+    .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+    .vocab-card { background: #EEF1F8; border-radius: 6px; padding: 10px 13px; font-size: 14px; color: #1a2340; }
+    .vocab-card strong { color: #0E1C42; display: block; margin-bottom: 2px; }
+    details { background: #FFFFFF; border: 1px solid #D0D9E8; border-left: 4px solid #C7922C; border-radius: 6px; padding: 12px 18px; margin: 14px 0; }
+    details summary { font-size: 16px; color: #0E1C42; cursor: pointer; }
+    details .ac-body { font-size: 16px; color: #1a2340; margin-top: 10px; padding-top: 10px; border-top: 1px solid #EEF1F8; line-height: 1.6; }
+    /* Pixel vs. smooth concept visual */
+    .pix-wrap { display: flex; flex-wrap: wrap; gap: 22px; align-items: center; justify-content: center; margin: 16px 0 6px; }
+    .pix-panel { text-align: center; }
+    .pix-label { font-size: 12px; color: #6b7a99; margin-top: 8px; }
+    .rvv { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+    .rvv > div { border: 1px solid #D0D9E8; border-radius: 8px; padding: 14px 16px; }
+    .rvv h4 { margin: 0 0 6px 0; font-size: 16px; }
+    .rvv p { margin: 0; font-size: 14px; color: #1a2340; line-height: 1.55; }
+    @media (max-width: 560px){ .rvv { grid-template-columns: 1fr; } }
+    /* Lighting direction diagram */
+    .light-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; margin: 14px 0; }
+    .light-tile { text-align: center; }
+    .light-label { font-size: 13px; color: #0e1c42; margin-top: 6px; }
+    /* Perspective diagram */
+    .persp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin: 14px 0; }
+    .persp-tile { text-align: center; border: 1px solid #D0D9E8; border-radius: 8px; padding: 10px; }
+    .persp-label { font-size: 14px; color: #0e1c42; margin-top: 8px; font-weight: normal; }
+</style>
+</head>
+<body>
+<div class="canvas-frame">
+
+<!-- ===== HEADER ===== -->
+<div style="background: #0E1C42; border-bottom: 5px solid #55C8E8; padding: 22px 34px;">
+    <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 10px;">
+        <div style="width: 52px; height: 52px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><img src="https://raw.githubusercontent.com/optimaondemand/optima-assets/eeb0b335630058906d52f478028361d352253a93/images/Optima%20Final%20Circle%20-%20Owl%20Only.png" alt="Optima Academy" style="width: 50px; height: 40px; object-fit: contain;" /></div>
+        <div>
+            <div style="font-size: 28px; color: #ffffff; line-height: 1.2;">Optima Academy Online</div>
+            <div style="font-size: 12px; color: #55c8e8;">An Education Experience Company</div>
+        </div>
+    </div>
+    <div style="font-size: 36px; color: #ffffff; margin-bottom: 6px;">DIGITAL ART IMAGING</div>
+</div>
+
+<!-- ===== METADATA STRIP ===== -->
+<div style="background: #FFFFFF; border-bottom: 2px solid #D0D9E8; display: flex; flex-wrap: wrap;">
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Quarter / Week</div>
+        <div style="font-size: 17px; color: #0e1c42;">Q2 &middot; Module 2, Week 2</div>
+        <div style="font-size: 12px; color: #666;">Module 2: Capturing Light &amp; Editing</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Focus</div>
+        <div style="font-size: 17px; color: #0e1c42;">Digital Photography Techniques &amp; Perspective</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">This Week's Project</div>
+        <div style="font-size: 17px; color: #0e1c42; font-style: italic;">Art Lesson &amp; Reflection</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Software</div>
+        <div style="font-size: 16px; color: #0e1c42;">Pixlr E (free, browser)</div>
+    </div>
+</div>
+
+<!-- ===== BODY WRAPPER ===== -->
+<div style="padding: 24px 34px;">
+
+    <!-- Lavender title strip -->
+    <div style="background: #EEF1F8; border-left: 5px solid #0E1C42; border-radius: 7px; padding: 18px 22px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #0e1c42; margin-bottom: 6px;">MODULE 2 &middot; WEEK 2</div>
+        <div style="font-size: 22px; color: #0e1c42; margin-bottom: 4px;">Digital Photography Techniques &amp; Perspective</div>
+        <div style="font-size: 16px; color: #666;">Lesson</div>
+    </div>
+
+    <!-- Essential Question -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128214; ESSENTIAL QUESTION</div>
+        <div style="font-size: 20px; color: #0e1c42; font-style: italic; margin-bottom: 10px;">How do the direction of light and the angle of the camera change what a photo says about its subject?</div>
+        <div style="font-size: 18px; color: #1a2340; line-height: 1.65;">The word "photography" literally means "drawing with light." Before you press the shutter, two decisions matter more than almost anything else: where the light is coming from, and where you are standing. This week you learn to control both on purpose.</div>
+    </div>
+
+    <!-- PART 1 · LOOK FIRST -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128064; PART 1 &middot; LOOK FIRST</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">A <strong>light source</strong> is where the light in a photo is coming from: the sun, a lamp, a window. Sometimes it is obvious in the photo; sometimes you have to look at the shadows to find it. The same subject, lit from three different directions, produces three very different photos.</p>
+
+        <div class="light-grid">
+            <div class="light-tile">
+                <svg width="100%" height="120" viewBox="0 0 150 120" role="img" aria-label="Front lighting diagram: a light bulb directly in front of a circle subject, casting almost no visible shadow behind it.">
+                    <rect width="150" height="120" fill="#f4f6fa"/>
+                    <circle cx="75" cy="65" r="26" fill="#c9a877"/>
+                    <ellipse cx="75" cy="95" rx="24" ry="6" fill="#d0d9e8"/>
+                    <circle cx="75" cy="16" r="9" fill="#f0c34a"/>
+                    <line x1="75" y1="25" x2="75" y2="40" stroke="#f0c34a" stroke-width="2"/>
+                </svg>
+                <div class="light-label">Front lighting</div>
+            </div>
+            <div class="light-tile">
+                <svg width="100%" height="120" viewBox="0 0 150 120" role="img" aria-label="Side lighting diagram: a light bulb to the left of a circle subject, casting a visible shadow toward the right.">
+                    <rect width="150" height="120" fill="#f4f6fa"/>
+                    <circle cx="80" cy="65" r="26" fill="#c9a877"/>
+                    <ellipse cx="92" cy="95" rx="26" ry="6" fill="#a9b4c9"/>
+                    <circle cx="16" cy="60" r="9" fill="#f0c34a"/>
+                    <line x1="25" y1="60" x2="54" y2="62" stroke="#f0c34a" stroke-width="2"/>
+                </svg>
+                <div class="light-label">Side lighting</div>
+            </div>
+            <div class="light-tile">
+                <svg width="100%" height="120" viewBox="0 0 150 120" role="img" aria-label="Back lighting diagram: a light bulb directly behind a circle subject, which appears as a dark silhouette.">
+                    <rect width="150" height="120" fill="#f4f6fa"/>
+                    <circle cx="75" cy="65" r="9" fill="#f0c34a"/>
+                    <circle cx="75" cy="65" r="26" fill="#2a2f45"/>
+                    <ellipse cx="75" cy="95" rx="24" ry="6" fill="#d0d9e8"/>
+                </svg>
+                <div class="light-label">Back lighting</div>
+            </div>
+        </div>
+        <p style="font-size: 14px; color: #6b7a99; margin: 0;">Concept diagrams. Front lighting reduces shadows but can look flat. Side lighting adds depth. Back lighting can create a silhouette.</p>
+
+        <div class="optima-widget ow-reflect">
+            <div class="widget-kicker">&#128173; QUICK CHECK-IN &middot; NO WRONG ANSWER</div>
+            <div class="widget-question">If you wanted to photograph a friend's face with visible detail and no squinting, which lighting direction would you try first, and why?</div>
+            <div class="widget-options">
+                <button data-response="Front lighting reduces shadows and shows detail clearly, though it can look flat and may cause squinting if the sun is the source.">Front lighting</button>
+                <button data-response="Side lighting adds dimension and depth, which works well for portraits, though it does create shadows on one side.">Side lighting</button>
+                <button data-response="Back lighting can create a dramatic silhouette, but it would hide facial detail rather than show it, so it is a riskier choice here.">Back lighting</button>
+            </div>
+            <div class="widget-feedback"></div>
+            <button class="widget-reset">Reset</button>
+        </div>
+    </div>
+
+    <!-- PART 2 · LIGHTING TECHNIQUE -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128248; PART 2 &middot; LIGHTING IN PHOTOGRAPHY</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Poor lighting can make even the best subject look dull or unclear, so learning to read and use light is one of the most valuable skills in photography. Two things to always notice: the <strong>type</strong> of light (natural or artificial) and its <strong>direction</strong>.</p>
+
+        <div class="rvv">
+            <div style="border-top: 3px solid #1B8A7A;">
+                <h4 style="color:#167567;">Front lighting</h4>
+                <p>Light comes from in front of the subject. Highlights the subject and reduces shadows, but can look flat and is not always best for landscapes or scenes that need depth. If the sun is the source, your subject might squint.</p>
+            </div>
+            <div style="border-top: 3px solid #D9583B;">
+                <h4 style="color:#c0472e;">Side lighting</h4>
+                <p>Light hits the subject from the side, creating shadows on the opposite side. Adds dimension and depth, which is great for portraits and animals.</p>
+            </div>
+        </div>
+
+        <figure class="art-fig">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c4/High_Key_portrait.jpg" alt="A portrait lit evenly from the front, producing bright, minimal shadow on the face." style="max-width: 260px;" />
+            <figcaption>Sagadeev Vladimir, <em>High Key Portrait</em>, 2011. Licensed CC BY-SA 4.0. Source: <a href="https://commons.wikimedia.org/wiki/File:High_Key_portrait.jpg">commons.wikimedia.org</a></figcaption>
+        </figure>
+        <figure class="art-fig">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Face_portrait_%28Unsplash%29.jpg" alt="A portrait lit strongly from one side, with the other side of the face falling into deep shadow." style="max-width: 260px;" />
+            <figcaption>William Stitt, <em>Face Portrait</em>. Public domain (CC0, Unsplash). Source: <a href="https://commons.wikimedia.org/wiki/File:Face_portrait_(Unsplash).jpg">commons.wikimedia.org</a></figcaption>
+        </figure>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 10px 0 10px 0;"><strong>Back lighting</strong> comes from behind the subject and can create silhouettes if the subject blocks the light. Details may be hard to see, but the effect can be dramatic.</p>
+
+        <figure class="art-fig">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Ocean_Sunset_Silhouettes_%28Unsplash%29.jpg" alt="A person silhouetted in dark outline against a bright ocean sunset, backlit so no facial detail is visible." />
+            <figcaption>Thomas Kelley, <em>Ocean Sunset Silhouette</em>, Waik&#299;k&#299;. Public domain (CC0, Unsplash). Source: <a href="https://commons.wikimedia.org/wiki/File:Ocean_Sunset_Silhouettes_(Unsplash).jpg">commons.wikimedia.org</a></figcaption>
+        </figure>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 14px 0 8px 0;">Time of day changes light dramatically. During <strong>golden hour</strong> (the hour after sunrise or before sunset), the sun sits low and produces soft, golden light with vibrant colors and gentle shadows. During <strong>blue hour</strong> (the hour before sunrise or after sunset), the sun is below the horizon and gives a cool, bluish light well suited to moody, atmospheric photos.</p>
+
+        <figure class="art-fig">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Desert_textures_at_golden_hour_%2851005202791%29.jpg" alt="Desert sand dunes lit low and warm during golden hour, their ripples cast in soft gold light and long gentle shadows." />
+            <figcaption>Karon Elliott Edleson, <em>Desert Textures at Golden Hour</em>. Licensed CC BY-SA 2.0. Source: <a href="https://commons.wikimedia.org/wiki/File:Desert_textures_at_golden_hour_(51005202791).jpg">commons.wikimedia.org</a></figcaption>
+        </figure>
+        <figure class="art-fig">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Blue_Hour_over_Tokyo_%2811753289395%29.jpg" alt="Tokyo's skyline glowing under deep blue twilight sky during blue hour, city lights contrasting against the cool tone." />
+            <figcaption>Balint F&ouml;ldesi, <em>Blue Hour over Tokyo</em>, 2013. Licensed CC BY 2.0. Source: <a href="https://commons.wikimedia.org/wiki/File:Blue_Hour_over_Tokyo_(11753289395).jpg">commons.wikimedia.org</a></figcaption>
+        </figure>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Weather matters too: cloudy skies give soft, even light with fewer harsh shadows; sunny days give bright, strong light with high contrast; rain or fog adds mood through reflections and muted color; snow reflects light and can brighten a scene with a crisp, clean look.</p>
+
+        <div class="callout c-help">
+            <div class="ck">&#128161; BEFORE YOU SHOOT</div>
+            <div class="cb">Walk around your subject before you take the photo. Notice where the light is coming from and how the shadows fall from each angle. Pick the direction that matches what you want the photo to say, calm and even, dramatic and deep, or mysterious and dark.</div>
+        </div>
+    </div>
+
+    <!-- PART 3 · PERSPECTIVE -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128205; PART 3 &middot; PERSPECTIVE</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Most photos are taken from eye level. Simply changing your position, or the angle of your device, can completely transform an image. Perspective is your other major tool alongside light.</p>
+
+        <div class="persp-grid">
+            <div class="persp-tile">
+                <svg width="100%" height="110" viewBox="0 0 150 110" role="img" aria-label="Bird's-eye view diagram: a small circle subject viewed from directly above, with a downward-pointing camera icon at the top of the frame.">
+                    <rect width="150" height="110" fill="#f4f6fa"/>
+                    <polygon points="60,10 90,10 78,26 72,26" fill="#0e1c42"/>
+                    <line x1="75" y1="26" x2="75" y2="70" stroke="#6b7a99" stroke-width="1.5" stroke-dasharray="3,3"/>
+                    <circle cx="75" cy="85" r="16" fill="#1B8A7A"/>
+                </svg>
+                <div class="persp-label">Bird's-eye view (from above)</div>
+            </div>
+            <div class="persp-tile">
+                <svg width="100%" height="110" viewBox="0 0 150 110" role="img" aria-label="Worm's-eye view diagram: a subject shown large and towering, viewed from below with an upward-pointing camera icon at the bottom of the frame.">
+                    <rect width="150" height="110" fill="#f4f6fa"/>
+                    <polygon points="60,95 90,95 78,79 72,79" fill="#0e1c42"/>
+                    <line x1="75" y1="79" x2="75" y2="35" stroke="#6b7a99" stroke-width="1.5" stroke-dasharray="3,3"/>
+                    <path d="M55 35 L60 8 L90 8 L95 35 Z" fill="#D9583B"/>
+                </svg>
+                <div class="persp-label">Worm's-eye view (from below)</div>
+            </div>
+            <div class="persp-tile">
+                <svg width="100%" height="110" viewBox="0 0 150 110" role="img" aria-label="One-point perspective diagram: lines converging from the edges of the frame toward a single vanishing point in the center.">
+                    <rect width="150" height="110" fill="#f4f6fa"/>
+                    <circle cx="75" cy="55" r="3" fill="#0e1c42"/>
+                    <line x1="5" y1="5" x2="75" y2="55" stroke="#6b7a99" stroke-width="1.5"/>
+                    <line x1="145" y1="5" x2="75" y2="55" stroke="#6b7a99" stroke-width="1.5"/>
+                    <line x1="5" y1="105" x2="75" y2="55" stroke="#6b7a99" stroke-width="1.5"/>
+                    <line x1="145" y1="105" x2="75" y2="55" stroke="#6b7a99" stroke-width="1.5"/>
+                    <rect x="5" y="5" width="140" height="100" fill="none" stroke="#0e1c42" stroke-width="1.5"/>
+                </svg>
+                <div class="persp-label">One-point perspective</div>
+            </div>
+        </div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 12px 0 10px 0;">A <strong>bird's-eye view</strong> photographs the subject from above, as if looking down from the sky. You can create this from a balcony, a staircase, a ladder, or a safe high point, or with a drone. Always prioritize safety and secure your device with a strap or case.</p>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">A <strong>worm's-eye view</strong> is the opposite: you photograph from below, looking up as if you were on the ground. Try lying down, sitting or kneeling, or lowering your device close to the ground. This viewpoint makes the subject appear larger, more dramatic, and sometimes heroic.</p>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;"><strong>One-point perspective</strong> happens when lines in a scene, like a road, hallway, or row of trees, appear to converge toward a single point in the distance. Shooting straight down a long, symmetrical space is the easiest way to find it.</p>
+
+        <details>
+            <summary>Before you look: which perspective (bird's-eye or worm's-eye) would make a skateboarder mid-jump look most heroic? Decide your answer, then click to check.</summary>
+            <div class="ac-body">Worm's-eye view. Shooting from low, looking up, makes the skateboarder appear larger and more dramatic against the sky, which is why sports and action photographers use this angle so often.</div>
+        </details>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 14px 0 10px 0;"><strong>Forced perspective</strong> is a creative technique that intentionally tricks the viewer's eye into thinking objects are bigger, smaller, closer, or farther than they really are, for example lining up a foreground object and a background object so they appear on the same plane, like someone "holding" the moon. It takes planning and experimentation but can produce unforgettable images.</p>
+
+        <div class="optima-widget ow-select">
+            <div class="widget-kicker">&#9889; TRY IT &middot; LIGHT OR PERSPECTIVE?</div>
+            <div class="widget-question">Read each photo setup, decide what is being used, then check your answer.</div>
+            <div class="widget-row" data-correct="perspective" data-hint="Think about where the camera is standing, not where the light is coming from. Try again.">
+                <div class="widget-row-prompt">A photographer lies flat on the sidewalk to make a small dog look like a giant standing over the city skyline.</div>
+                <div class="widget-options">
+                    <button data-choice="light">Lighting</button>
+                    <button data-choice="perspective" data-fb="Right. This is a worm's-eye view combined with forced perspective, using camera position rather than light direction.">Perspective</button>
+                </div>
+            </div>
+            <div class="widget-row" data-correct="light" data-hint="Think about where the sun is relative to the subject, not where the camera is standing. Try again.">
+                <div class="widget-row-prompt">A photographer waits until sunset is directly behind a subject, turning them into a dark silhouette.</div>
+                <div class="widget-options">
+                    <button data-choice="light" data-fb="Right. This is back lighting, a lighting direction choice, since the light source sits directly behind the subject.">Lighting</button>
+                    <button data-choice="perspective">Perspective</button>
+                </div>
+            </div>
+            <button class="widget-reset">Reset</button>
+        </div>
+    </div>
+
+    <!-- AI AWARENESS (factual) -->
+    <div class="callout c-warn">
+        <div class="ck">&#9888;&#65039; WORTH KNOWING &middot; AI IMAGE TOOLS</div>
+        <div class="cb">An AI image generator can produce a picture that looks like a bird's-eye view or a golden-hour photo from a text prompt. It cannot climb the staircase, lie down on the sidewalk, or wait for the actual sun to drop to the right angle. Those physical decisions, made with your own camera, are what this week's project grades.</div>
+    </div>
+
+    <!-- VOCABULARY -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128221; VOCABULARY</div>
+        <div class="vocab-grid">
+            <div class="vocab-card"><strong>Light Source</strong>Where the light in a photo is coming from.</div>
+            <div class="vocab-card"><strong>Front Lighting</strong>Light from in front of the subject; reduces shadows, can look flat.</div>
+            <div class="vocab-card"><strong>Side Lighting</strong>Light from the side; adds dimension and depth.</div>
+            <div class="vocab-card"><strong>Back Lighting</strong>Light from behind the subject; can create a silhouette.</div>
+            <div class="vocab-card"><strong>Golden Hour</strong>The hour after sunrise or before sunset; soft, warm light.</div>
+            <div class="vocab-card"><strong>Blue Hour</strong>The hour before sunrise or after sunset; cool, bluish light.</div>
+            <div class="vocab-card"><strong>Bird's-Eye View</strong>A photo taken from above, looking down.</div>
+            <div class="vocab-card"><strong>Worm's-Eye View</strong>A photo taken from below, looking up.</div>
+            <div class="vocab-card"><strong>One-Point Perspective</strong>Lines in a scene appearing to converge at a single point.</div>
+            <div class="vocab-card"><strong>Forced Perspective</strong>A technique that tricks the eye about size or distance.</div>
+        </div>
+    </div>
+
+    <!-- WHAT YOU'LL DO NEXT -->
+    <div style="background: #FFFFFF; border-top: 3px solid #0E1C42; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 16px;">&#10145;&#65039; WHAT YOU'LL DO NEXT (IN CANVAS)</div>
+        <div class="next-item"><div class="num learn">1</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Light Direction Scavenger Hunt</strong> &middot; Week 2</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Find and photograph one example each of front, side, and back lighting. Completion grade.</div></div></div>
+        <div class="next-item"><div class="num learn">2</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Discussion: Perspective Choices</strong> &middot; Week 2</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Name a subject and the perspective that would make it most dramatic, and respond to a classmate.</div></div></div>
+        <div class="next-item"><div class="num learn">3</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Quiz: Lighting &amp; Perspective</strong> &middot; Week 2</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">8 questions, auto-graded in Canvas.</div></div></div>
+        <div class="next-item"><div class="num create">4</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Art Lesson &amp; Reflection</strong> &middot; Week 2</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Photograph the same subject from two different perspectives and reflect on the effect. Your graded artwork this week.</div></div></div>
+    </div>
+
+    <!-- WRAP-UP -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128170; THE BIG IDEA</div>
+        <p style="font-size: 18px; color: #1a2340; line-height: 1.65; margin: 0;">Light and position are the two decisions you make before you ever touch an editing tool. Where the light falls decides the mood; where you stand decides the story. Master both and half your photo is already finished before you open Pixlr E.</p>
+    </div>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div style="background: #0E1C42; border-top: 3px solid #55C8E8; padding: 18px 34px; text-align: center;">
+    <div style="font-size: 18px; color: #ffffff; margin-bottom: 6px;"><span style="color: #55c8e8;">Optima Academy Online</span> &middot; DIGITAL ART IMAGING &middot; Quarter 2 &middot; Student Lesson Page</div>
+    <div style="font-size: 13px; color: rgba(255,255,255,0.65); margin-bottom: 4px;">Module 2 &middot; Week 2 &middot; Digital Photography Techniques &amp; Perspective</div>
+    <div style="font-size: 12px; color: rgba(255,255,255,0.4);">&copy; Optima Academy Online &middot; An Education Experience Company. Diagrams are original CSS/SVG concept illustrations. Photographs are public domain or openly licensed; see each caption for source.</div>
+</div>
+
+</div>
+
+<!-- ===== WIDGET RUNTIME — from optima-lesson-format template. One delegated listener drives every engine. ===== -->
+<script>
+(function () {
+  document.addEventListener('click', function (e) {
+    var reset = e.target.closest('.widget-reset');
+    if (reset) {
+      var w = reset.closest('.optima-widget');
+      w.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      w.querySelectorAll('.widget-feedback').forEach(function (f) { f.classList.remove('show'); f.textContent = ''; });
+      w.querySelectorAll('.row-feedback').forEach(function (f) { f.remove(); });
+      return;
+    }
+    var rBtn = e.target.closest('.ow-reflect .widget-options button');
+    if (rBtn) {
+      var rw = rBtn.closest('.optima-widget');
+      rw.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected'); });
+      rBtn.classList.add('selected');
+      var fb = rw.querySelector('.widget-feedback');
+      fb.textContent = rBtn.dataset.response || '';
+      fb.classList.add('show');
+      return;
+    }
+    var sBtn = e.target.closest('.ow-select .widget-row .widget-options button');
+    if (sBtn) {
+      var row = sBtn.closest('.widget-row');
+      var correct = row.dataset.correct;
+      row.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      var right = sBtn.dataset.choice === correct;
+      sBtn.classList.add(right ? 'correct' : 'incorrect');
+      var text = right ? (sBtn.dataset.fb || row.dataset.fb || 'Right.') : (sBtn.dataset.fb || row.dataset.hint || 'Not quite. Try again.');
+      var rf = row.querySelector('.row-feedback') || row.appendChild(document.createElement('div'));
+      rf.className = 'row-feedback ' + (right ? 'correct' : 'incorrect');
+      rf.textContent = text;
+      return;
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
