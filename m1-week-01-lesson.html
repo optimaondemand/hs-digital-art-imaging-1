@@ -328,33 +328,23 @@
     <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
         <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128064; PART 1 &middot; LOOK FIRST</div>
 
-        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Every image on a screen is built from a grid of tiny colored squares called <strong>pixels</strong>. From a normal distance your eye blends them into a smooth picture. Zoom in far enough and the grid appears. Look at the same simple image below at two zoom levels.</p>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Every image on a screen is built from a grid of tiny colored squares called <strong>pixels</strong>. From a normal distance your eye blends them into a smooth picture. Zoom in far enough and the grid appears. Below is one photograph at two zoom levels. The right-hand panel is a piece of the left-hand photograph about the size of this letter o, enlarged until you can count its pixels.</p>
 
-        <div class="pix-wrap">
-            <div class="pix-panel">
-                <svg width="150" height="150" viewBox="0 0 150 150" role="img" aria-label="A smooth teal heart shape as your eye normally sees it on screen.">
-                    <rect width="150" height="150" fill="#EEF1F8"/>
-                    <path d="M75 128 C 20 86, 28 40, 60 40 C 72 40, 75 52, 75 56 C 75 52, 78 40, 90 40 C 122 40, 130 86, 75 128 Z" fill="#1B8A7A"/>
-                </svg>
-                <div class="pix-label">What your eye sees</div>
+        <figure class="art-fig">
+            <div class="pix-wrap">
+                <div class="pix-panel">
+                    <img src="images/zebra-photo-normal.jpg" alt="A photograph of a plains zebra standing in green scrub, its black and white stripes reading as smooth, continuous bands." style="width: 330px; max-width: 100%;" />
+                    <div class="pix-label">What your eye sees</div>
+                </div>
+                <div style="font-size: 26px; color: #6b7a99;">&#8594;</div>
+                <div class="pix-panel">
+                    <img src="images/zebra-pixels-zoomed.jpg" alt="A small square of the same zebra photograph enlarged so far that the edge of one stripe becomes a staircase of individual white, grey, and black squares." style="width: 250px; max-width: 100%;" />
+                    <div class="pix-label">Zoomed in: the pixel grid</div>
+                </div>
             </div>
-            <div style="font-size: 26px; color: #6b7a99;">&#8594;</div>
-            <div class="pix-panel">
-                <svg width="150" height="150" viewBox="0 0 10 10" shape-rendering="crispEdges" role="img" aria-label="The same heart shown as a coarse 10 by 10 grid of pixels.">
-                    <rect width="10" height="10" fill="#EEF1F8"/>
-                    <g fill="#1B8A7A">
-                        <rect x="2" y="2" width="1" height="1"/><rect x="3" y="2" width="1" height="1"/><rect x="6" y="2" width="1" height="1"/><rect x="7" y="2" width="1" height="1"/>
-                        <rect x="1" y="3" width="1" height="1"/><rect x="2" y="3" width="1" height="1"/><rect x="3" y="3" width="1" height="1"/><rect x="4" y="3" width="1" height="1"/><rect x="5" y="3" width="1" height="1"/><rect x="6" y="3" width="1" height="1"/><rect x="7" y="3" width="1" height="1"/><rect x="8" y="3" width="1" height="1"/>
-                        <rect x="1" y="4" width="1" height="1"/><rect x="2" y="4" width="1" height="1"/><rect x="3" y="4" width="1" height="1"/><rect x="4" y="4" width="1" height="1"/><rect x="5" y="4" width="1" height="1"/><rect x="6" y="4" width="1" height="1"/><rect x="7" y="4" width="1" height="1"/><rect x="8" y="4" width="1" height="1"/>
-                        <rect x="2" y="5" width="1" height="1"/><rect x="3" y="5" width="1" height="1"/><rect x="4" y="5" width="1" height="1"/><rect x="5" y="5" width="1" height="1"/><rect x="6" y="5" width="1" height="1"/><rect x="7" y="5" width="1" height="1"/>
-                        <rect x="3" y="6" width="1" height="1"/><rect x="4" y="6" width="1" height="1"/><rect x="5" y="6" width="1" height="1"/><rect x="6" y="6" width="1" height="1"/>
-                        <rect x="4" y="7" width="1" height="1"/><rect x="5" y="7" width="1" height="1"/>
-                    </g>
-                </svg>
-                <div class="pix-label">Zoomed in: the pixel grid</div>
-            </div>
-        </div>
-        <p style="font-size: 14px; color: #6b7a99; margin: 0;">Concept diagram. The number of pixels in an image is its <strong>resolution</strong>. More pixels mean a sharper, more detailed image.</p>
+            <figcaption>Both panels are the same file: Jean &amp; Nathalie, <em>Plains zebra, Karongwe Private Game Reserve, South Africa</em>, 2010. CC BY 2.0. Source: <a href="https://commons.wikimedia.org/wiki/File:Common_zebra.jpg">commons.wikimedia.org/wiki/File:Common_zebra.jpg</a></figcaption>
+        </figure>
+        <p style="font-size: 14px; color: #6b7a99; margin: 0;">Notice what happens at the edge of a stripe. What looked like a clean curve turns out to be a staircase of squares, some black, some white, some a grey in between. The number of pixels in an image is its <strong>resolution</strong>. More pixels mean a sharper, more detailed image.</p>
 
         <div class="optima-widget ow-reflect">
             <div class="widget-kicker">&#128173; QUICK CHECK-IN &middot; NO WRONG ANSWER</div>
@@ -410,23 +400,23 @@
         <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Museums scan and photograph fragile paintings to detect damage early and plan restorations. Digital records also let you study a masterpiece up close from anywhere. The image below is a public-domain scan released by the Art Institute of Chicago.</p>
 
         <figure class="art-fig">
-            <img src="https://www.artic.edu/iiif/2/6644829f-f292-c5c4-a73c-0356a6fdbf0d/full/843,/0/default.jpg" alt="The Bedroom by Vincent van Gogh: a small room with a wooden bed, two chairs, a window, and framed pictures on a blue wall." />
+            <img src="images/van-gogh-the-bedroom.jpg" alt="The Bedroom by Vincent van Gogh: a small room with a wooden bed, two chairs, a window, and framed pictures on a blue wall." />
             <figcaption>Vincent van Gogh (Dutch, 1853&ndash;1890), <em>The Bedroom</em>, 1889. Oil on canvas. Art Institute of Chicago, Helen Birch Bartlett Memorial Collection. Public domain. Source: <a href="https://www.artic.edu/artworks/28560">artic.edu/artworks/28560</a></figcaption>
         </figure>
 
         <h3 style="font-size: 18px; color: #0e1c42; margin: 16px 0 6px 0;">2. Pushing creative boundaries</h3>
-        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Some artists build their work around a new technology. Andy Warhol used <strong>screen printing</strong>, a process that begins with a photograph, to repeat the same image in different colors and explore fame and mass production. You can view his <em>Marilyn Diptych</em> on the museum's own site: <a href="https://www.tate.org.uk/art/artworks/warhol-marilyn-diptych-t03093">Tate &middot; Warhol, Marilyn Diptych</a>.</p>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Some artists build their work around a new technology. Andy Warhol used <strong>screen printing</strong>, a process that starts from a photograph and pushes ink through a stencil, to print the same portrait of Marilyn Monroe over and over in different colors. Repeating one face until it reads like packaging was the point: he was asking what fame and mass production do to an image. Warhol's work is still under copyright, so it is not reproduced on this page. View it on the museum's own site: <a href="https://www.tate.org.uk/art/artworks/warhol-marilyn-diptych-t03093">Tate &middot; Andy Warhol, <em>Marilyn Diptych</em>, 1962</a>. Count how many times the same face appears, then look for what changes from one copy to the next.</p>
 
-        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Warhol was not the first artist to build a career on a repeatable printing process. Decades earlier, Henri de Toulouse-Lautrec used <strong>lithography</strong>, printing from a flat stone or plate, to produce the same poster image by the thousands for the streets of Paris.</p>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Warhol was not the first artist to build a career on a repeatable printing process. Four hundred years earlier, Albrecht D&uuml;rer cut his drawings into blocks of wood, inked the raised surface, and pressed sheet after sheet, so a single image could travel across a continent.</p>
 
         <figure class="art-fig">
-            <img src="https://www.artic.edu/iiif/2/1d82da66-d99e-f4f6-d5fc-56b22b6678ba/full/843,/0/default.jpg" alt="Moulin Rouge, La Goulue by Toulouse-Lautrec: a color lithograph poster showing a dancer in silhouette in the foreground and a crowd watching a high-kicking cancan dancer under gaslight, printed in flat bold shapes of black, red, and yellow." />
-            <figcaption>Henri de Toulouse-Lautrec (French, 1864&ndash;1901), <em>Moulin Rouge, La Goulue</em>, 1891. Color lithograph, printed in about 3,000 copies to advertise a Paris dance hall. Art Institute of Chicago. Public domain. Source: <a href="https://www.artic.edu/artworks/82287/moulin-rouge-la-goulue">artic.edu/artworks/82287</a></figcaption>
+            <img src="images/durer-the-rhinoceros.jpg" alt="The Rhinoceros by Albrecht Durer: a woodcut of a heavily armored rhinoceros standing in profile, its hide drawn as overlapping plates, scales, and rivets, with a block of handwritten text and a small horn on its shoulder." />
+            <figcaption>Albrecht D&uuml;rer (German, 1471&ndash;1528), <em>The Rhinoceros</em>, 1515. Woodcut. The Metropolitan Museum of Art, Gift of Junius Spencer Morgan, 1919. Public domain. Source: <a href="https://www.metmuseum.org/art/collection/search/356497">metmuseum.org/art/collection/search/356497</a></figcaption>
         </figure>
-        <p style="font-size: 14px; color: #6b7a99; margin: 0 0 10px 0;">Lithography let Toulouse-Lautrec print the same striking image over and over, the same repeatable-imagery idea Warhol later pushed further with screen printing.</p>
+        <p style="font-size: 14px; color: #6b7a99; margin: 0 0 10px 0;">D&uuml;rer never saw the animal. He worked from a written description and a sketch of a rhinoceros that had arrived in Lisbon, which is why the hide looks like riveted armor. Because the woodblock could print thousands of copies, his version became the rhinoceros most of Europe pictured for the next three hundred years. One repeatable image, printed over and over, shaped what people believed they were looking at. That is the same power Warhol was pointing at with screen printing.</p>
 
         <h3 style="font-size: 18px; color: #0e1c42; margin: 16px 0 6px 0;">3. Creating immersive experiences</h3>
-        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Technology also changes how we <em>experience</em> art. The collective teamLab builds room-sized digital installations you can walk through, where projected flowers bloom and fade around you. Explore their work here: <a href="https://www.teamlab.art/">teamlab.art</a>. Later this year you will make and share art inside a virtual space of your own.</p>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Technology also changes how we <em>experience</em> art. Some museums now project images across an entire room, floor to ceiling, so visitors walk through the artwork instead of standing in front of it. Others publish scans so detailed you can zoom in on a single brushstroke, closer than you would ever be allowed to stand in the gallery. In both cases the artwork itself did not change. What changed is where the viewer is allowed to stand.</p>
 
         <h3 style="font-size: 18px; color: #0e1c42; margin: 16px 0 6px 0;">4. Art in the digital world</h3>
         <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Digital art can be edited, erased, and redone endlessly, which frees artists to take risks and experiment. Because a file can be copied and shared instantly, questions of ownership and permission matter more than ever, which leads to the guidelines below.</p>
@@ -500,7 +490,7 @@
 <div style="background: #0E1C42; border-top: 3px solid #55C8E8; padding: 18px 34px; text-align: center;">
     <div style="font-size: 18px; color: #ffffff; margin-bottom: 6px;"><span style="color: #55c8e8;">Optima Academy Online</span> &middot; DIGITAL ART IMAGING &middot; Quarter 1 &middot; Student Lesson Page</div>
     <div style="font-size: 13px; color: rgba(255,255,255,0.65); margin-bottom: 4px;">Module 1 &middot; Week 1 &middot; What Is Digital Art?</div>
-    <div style="font-size: 12px; color: rgba(255,255,255,0.4);">&copy; Optima Academy Online &middot; An Education Experience Company. Artwork shown is in the public domain; see caption for source.</div>
+    <div style="font-size: 12px; color: rgba(255,255,255,0.4);">&copy; Optima Academy Online &middot; An Education Experience Company. Artwork shown is public domain or Creative Commons licensed; see captions for source and license.</div>
 </div>
 
 </div>
