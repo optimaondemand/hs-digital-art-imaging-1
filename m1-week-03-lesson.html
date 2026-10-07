@@ -30,10 +30,10 @@
 
     /* ===== Art-course components (layered on the brand; teal/coral are activity accents only) ===== */
     .art-fig { margin: 14px 0; text-align: center; }
-    .art-fig img { max-width: 100%; height: auto; border-radius: 6px; border: 1px solid #D0D9E8; }
+    .art-fig img { max-width: 100%; max-height: 720px; height: auto; border-radius: 6px; border: 1px solid #D0D9E8; }
     .art-fig figcaption { font-size: 13px; color: #666; margin-top: 8px; line-height: 1.5; }
     .art-fig figcaption a { color: #1B6A94; }
-    .el-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin: 16px 0; }
+    .el-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; margin: 16px 0; }
     .el-card { border: 1px solid #D0D9E8; border-radius: 8px; overflow: hidden; }
     .el-demo { height: 80px; display: flex; align-items: center; justify-content: center; }
     .el-text { padding: 10px 13px; }
@@ -336,7 +336,7 @@
         <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">The <strong>color wheel</strong> organizes every visible hue by how colors relate to one another: primary, secondary, and tertiary. Study the wheel below before you read further.</p>
 
         <figure class="art-fig">
-            <img src="images/natural-dye-colour-wheel.jpg" alt="A real color wheel made of yarn dyed with natural dyes, the strands arranged in a circle so the hues form a continuous spectrum around it." style="max-width:320px;" />
+            <img src="images/natural-dye-colour-wheel.jpg" alt="A real color wheel made of yarn dyed with natural dyes, the strands arranged in a circle so the hues form a continuous spectrum around it." style="max-width:640px;" />
             <figcaption>Roued, <em>Natural Dye Colour Wheel</em>, 2011. CC BY-SA 2.0. Source: <a href="https://commons.wikimedia.org/wiki/File:Natural_dye_colour_wheel.jpg">commons.wikimedia.org/wiki/File:Natural_dye_colour_wheel.jpg</a></figcaption>
         </figure>
         <p style="font-size: 14px; color: #6b7a99; margin: 0 0 10px 0; text-align:center;">A real color wheel, arranged the same way an artist's color wheel is: red, yellow, and blue (primary) spaced evenly around the circle, with orange, green, and violet (secondary) and tertiary mixes filling the hues between them.</p>
@@ -363,15 +363,15 @@
 
         <div class="el-grid">
             <div class="el-card">
-                <div class="el-demo" style="background: #F4F6FA; height:auto;"><img src="images/giza-pyramids.jpg" alt="An aerial photograph of the Giza pyramids, their precise triangular faces standing out sharply against the flat desert plateau." style="width:100%; height:110px; object-fit:cover;" /></div>
+                <div class="el-demo" style="background: #F4F6FA; height:auto;"><img src="images/giza-pyramids.jpg" alt="An aerial photograph of the Giza pyramids, their precise triangular faces standing out sharply against the flat desert plateau." style="width:100%; height:260px; object-fit:contain; display:block;" /></div>
                 <div class="el-text"><strong>Geometric</strong><span>Precise and structured: circles, triangles, rectangles, polygons. Common for symmetry, logos, patterns, and modern designs. Robster1983, aerial photograph of the Giza pyramid complex, Egypt, 2008. CC0.</span></div>
             </div>
             <div class="el-card">
-                <div class="el-demo" style="background: #F4F6FA; height:auto;"><img src="images/leaf-monochromatic-greens.jpg" alt="A close-up photograph of a single frangipani leaf, its outline curving and irregular rather than following a straight geometric edge." style="width:100%; height:110px; object-fit:cover;" /></div>
+                <div class="el-demo" style="background: #F4F6FA; height:auto;"><img src="images/leaf-monochromatic-greens.jpg" alt="A close-up photograph of a single frangipani leaf, its outline curving and irregular rather than following a straight geometric edge." style="width:100%; height:260px; object-fit:contain; display:block;" /></div>
                 <div class="el-text"><strong>Organic</strong><span>Natural, flowing, irregular: leaves, clouds, waves. Makes a composition feel dynamic and lifelike, and contrasts well against clean geometric shapes. GlenMoret, photograph of a frangipani leaf, 2010. CC BY-SA 3.0.</span></div>
             </div>
             <div class="el-card">
-                <div class="el-demo" style="background: #F4F6FA; height:auto;"><img src="images/met-dp278357.jpg" alt="A Cycladic marble female figure reduced to simple flat, abstracted geometric forms, with only a ridge for a nose and folded arms suggested by a single incised line." style="width:100%; height:110px; object-fit:cover;" /></div>
+                <div class="el-demo" style="background: #F4F6FA; height:auto;"><img src="images/met-dp278357.jpg" alt="A Cycladic marble female figure reduced to simple flat, abstracted geometric forms, with only a ridge for a nose and folded arms suggested by a single incised line." style="width:100%; height:260px; object-fit:contain; display:block;" /></div>
                 <div class="el-text"><strong>Abstract</strong><span>A simplified or stylized version of a real object or idea. Cycladic, marble female figure, ca. 2700&ndash;2500 BCE, reduces the human form to a few flat, simplified shapes. Metropolitan Museum of Art, public domain.</span></div>
             </div>
         </div>
@@ -444,7 +444,7 @@
         </div>
         <p style="font-size: 16px; color: #1a2340; line-height: 1.6; margin: 0 0 12px 0;"><strong>Warm colors</strong>, like red, orange, and yellow, remind us of sunlight, heat, and energy. Photographers and digital artists often use warm tones to express happiness, excitement, or warmth.</p>
         <figure class="art-fig">
-            <img src="images/nasa-south-atlantic-sunset.jpg" alt="A sunset photographed from the International Space Station: layers of Earth's atmosphere glowing in deep orange, red, and yellow along the curved horizon, fading into the dark blue of space." style="max-width:420px;" />
+            <img src="images/nasa-south-atlantic-sunset.jpg" alt="A sunset photographed from the International Space Station: layers of Earth's atmosphere glowing in deep orange, red, and yellow along the curved horizon, fading into the dark blue of space." style="max-width:640px;" />
             <figcaption>NASA, <em>Fiery South Atlantic Sunset</em>, photographed by an Expedition 49 crew member aboard the International Space Station, October 27, 2016. Public domain (U.S. government work). Source: <a href="https://science.nasa.gov/earth/earth-observatory/fiery-south-atlantic-sunset-89168/">science.nasa.gov</a></figcaption>
         </figure>
 
@@ -454,7 +454,7 @@
         </div>
         <p style="font-size: 16px; color: #1a2340; line-height: 1.6; margin: 0 0 12px 0;"><strong>Cool colors</strong>, like blue, green, and violet, suggest calmness, distance, or even sadness. A cool palette can make a scene feel calm or emotionally distant.</p>
         <figure class="art-fig">
-            <img src="images/nasa-icebridge-blues.jpg" alt="An aerial photograph of Antarctic ice: white snow interrupted by pale and deep blue patches of exposed ice and refrozen meltwater across the Transantarctic Mountains." style="max-width:420px;" />
+            <img src="images/nasa-icebridge-blues.jpg" alt="An aerial photograph of Antarctic ice: white snow interrupted by pale and deep blue patches of exposed ice and refrozen meltwater across the Transantarctic Mountains." style="max-width:640px;" />
             <figcaption>NASA Operation IceBridge, photograph by Chris Larsen, <em>IceBridge Blues</em>, Transantarctic Mountains, November 30, 2017. Public domain (U.S. government work). Source: <a href="https://science.nasa.gov/earth/earth-observatory/icebridge-blues-91396/">science.nasa.gov</a></figcaption>
         </figure>
 

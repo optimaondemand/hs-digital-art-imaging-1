@@ -30,10 +30,10 @@
 
     /* ===== Art-course components (layered on the brand; teal/coral are activity accents only) ===== */
     .art-fig { margin: 14px 0; text-align: center; }
-    .art-fig img { max-width: 100%; height: auto; border-radius: 6px; border: 1px solid #D0D9E8; }
+    .art-fig img { max-width: 100%; max-height: 720px; height: auto; border-radius: 6px; border: 1px solid #D0D9E8; }
     .art-fig figcaption { font-size: 13px; color: #666; margin-top: 8px; line-height: 1.5; }
     .art-fig figcaption a { color: #1B6A94; }
-    .el-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin: 16px 0; }
+    .el-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; margin: 16px 0; }
     .el-card { border: 1px solid #D0D9E8; border-radius: 8px; overflow: hidden; }
     .el-demo { height: 80px; display: flex; align-items: center; justify-content: center; }
     .el-text { padding: 10px 13px; }
@@ -68,7 +68,7 @@
     .rvv p { margin: 0; font-size: 14px; color: #1a2340; line-height: 1.55; }
     @media (max-width: 560px){ .rvv { grid-template-columns: 1fr; } }
     /* Balance type visuals */
-    .bal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin: 16px 0 6px; }
+    .bal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin: 16px 0 6px; }
     .bal-card { text-align: center; }
     .bal-label { font-size: 13px; color: #0e1c42; margin-top: 8px; font-weight: 600; }
     .bal-sub { font-size: 12px; color: #6b7a99; margin-top: 2px; }
@@ -342,7 +342,7 @@
         <div class="bal-grid">
             <div class="bal-card">
                 <figure class="art-fig" style="margin:0;">
-                    <img src="images/Swallowtail_butterfly_2.JPG" alt="A western tiger swallowtail butterfly viewed from directly above, its two wings mirrored in shape, pattern, and color on either side of its body." style="width:160px; height:140px; object-fit:cover;" />
+                    <img src="images/Swallowtail_butterfly_2.JPG" alt="A western tiger swallowtail butterfly viewed from directly above, its two wings mirrored in shape, pattern, and color on either side of its body." style="width:100%; height:260px; object-fit:contain;" />
                     <figcaption style="font-size:11px;">Mila Zinkova, <em>Western Tiger Swallowtail</em>, 2007. CC BY-SA 3.0. <a href="https://commons.wikimedia.org/wiki/File:Swallowtail_butterfly_2.JPG">Wikimedia Commons</a></figcaption>
                 </figure>
                 <div class="bal-label">Symmetrical</div>
@@ -350,7 +350,7 @@
             </div>
             <div class="bal-card">
                 <figure class="art-fig" style="margin:0;">
-                    <img src="images/The_Great_Wave_off_Kanagawa.jpg" alt="A towering, cresting wave fills the left side of the composition while a small Mount Fuji sits far in the distance on the right, two very differently sized shapes balancing each other." style="width:160px; height:140px; object-fit:cover;" />
+                    <img src="images/The_Great_Wave_off_Kanagawa.jpg" alt="A towering, cresting wave fills the left side of the composition while a small Mount Fuji sits far in the distance on the right, two very differently sized shapes balancing each other." style="width:100%; height:260px; object-fit:contain;" />
                     <figcaption style="font-size:11px;">Katsushika Hokusai, <em>The Great Wave off Kanagawa</em>, ca. 1831. Public domain (published before 1931). <a href="https://commons.wikimedia.org/wiki/File:The_Great_Wave_off_Kanagawa.jpg">Wikimedia Commons</a></figcaption>
                 </figure>
                 <div class="bal-label">Asymmetrical</div>
@@ -358,7 +358,7 @@
             </div>
             <div class="bal-card">
                 <figure class="art-fig" style="margin:0;">
-                    <img src="images/Whirlpool_Galaxy_M51.jpg" alt="A spiral galaxy with curving arms of stars and dust winding evenly outward from a bright central core." style="width:160px; height:140px; object-fit:cover;" />
+                    <img src="images/Whirlpool_Galaxy_M51.jpg" alt="A spiral galaxy with curving arms of stars and dust winding evenly outward from a bright central core." style="width:100%; height:260px; object-fit:contain;" />
                     <figcaption style="font-size:11px;">NASA, ESA, and the Hubble Heritage Team, <em>Whirlpool Galaxy (M51)</em>. Public domain (NASA/ESA Hubble material). <a href="https://commons.wikimedia.org/wiki/File:Whirlpool_Galaxy_(M51)-_A_Classic_Beauty_(A_spiral_galaxy_31_million_light_years_from_Earth.)_(2941504714).jpg">Wikimedia Commons</a></figcaption>
                 </figure>
                 <div class="bal-label">Radial</div>

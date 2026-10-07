@@ -30,10 +30,10 @@
 
     /* ===== Art-course components (layered on the brand; teal/coral are activity accents only) ===== */
     .art-fig { margin: 14px 0; text-align: center; }
-    .art-fig img { max-width: 100%; height: auto; border-radius: 6px; border: 1px solid #D0D9E8; }
+    .art-fig img { max-width: 100%; max-height: 720px; height: auto; border-radius: 6px; border: 1px solid #D0D9E8; }
     .art-fig figcaption { font-size: 13px; color: #666; margin-top: 8px; line-height: 1.5; }
     .art-fig figcaption a { color: #1B6A94; }
-    .el-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin: 16px 0; }
+    .el-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; margin: 16px 0; }
     .el-card { border: 1px solid #D0D9E8; border-radius: 8px; overflow: hidden; }
     .el-demo { height: 80px; display: flex; align-items: center; justify-content: center; }
     .el-text { padding: 10px 13px; }
@@ -334,7 +334,7 @@
         <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Two plain shapes on their own are not very interesting. Combine and edit them and you get something new. Look at the real object below and notice the two plain shapes it is built from.</p>
 
         <figure class="art-fig">
-            <img src="images/nyc-fire-hydrant.jpg" alt="A real fire hydrant: a rounded dome-shaped cap sitting on top of a cylindrical body, two plain shapes that together read instantly as one recognizable object." style="max-width:220px;" />
+            <img src="images/nyc-fire-hydrant.jpg" alt="A real fire hydrant: a rounded dome-shaped cap sitting on top of a cylindrical body, two plain shapes that together read instantly as one recognizable object." style="max-width:640px;" />
             <figcaption>Andy C, fire hydrant, South Street Seaport, Manhattan, 2008. CC BY-SA 3.0. Source: <a href="https://commons.wikimedia.org/wiki/File:NYC_Fire_Hydrant.JPG">commons.wikimedia.org/wiki/File:NYC_Fire_Hydrant.JPG</a></figcaption>
         </figure>
         <p style="font-size: 14px; color: #6b7a99; margin: 0;">A real-world example: a rounded cap shape and a cylindrical body, two plain forms on their own, combine into one instantly recognizable new object.</p>
@@ -373,12 +373,12 @@
         <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 14px 0 6px 0;">Here is the same idea shown two ways: a real photograph (raster) beside a real flag design (vector-style): flat, simple shapes with clean edges.</p>
         <div class="pix-wrap">
             <div class="pix-panel">
-                <img src="images/adams-tetons-snake-river.jpg" alt="The Tetons and the Snake River by Ansel Adams: a black-and-white photograph of a mountain range with the Snake River curving through a forested valley below." style="width:180px; height:auto; border-radius:6px; border:1px solid #D0D9E8;" />
+                <img src="images/adams-tetons-snake-river.jpg" alt="The Tetons and the Snake River by Ansel Adams: a black-and-white photograph of a mountain range with the Snake River curving through a forested valley below." style="width:420px; max-width:100%; height:auto; border-radius:6px; border:1px solid #D0D9E8;" />
                 <div class="pix-label">Raster: a real photograph, built from a fixed grid of pixels</div>
             </div>
             <div style="font-size: 26px; color: #6b7a99;">vs</div>
             <div class="pix-panel">
-                <img src="images/flag-of-japan.jpg" alt="The flag of Japan: a simple red circle centered on a plain white field, the kind of clean flat-shape design that stays crisp at any size." style="width:160px; height:auto; border-radius:6px; border:1px solid #D0D9E8;" />
+                <img src="images/flag-of-japan.jpg" alt="The flag of Japan: a simple red circle centered on a plain white field, the kind of clean flat-shape design that stays crisp at any size." style="width:420px; max-width:100%; height:auto; border-radius:6px; border:1px solid #D0D9E8;" />
                 <div class="pix-label">Vector-style: a flat, simple design that stays crisp at any size</div>
             </div>
         </div>

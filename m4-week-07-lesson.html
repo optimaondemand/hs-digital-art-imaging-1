@@ -30,10 +30,10 @@
 
     /* ===== Art-course components (layered on the brand; teal/coral are activity accents only) ===== */
     .art-fig { margin: 14px 0; text-align: center; }
-    .art-fig img { max-width: 100%; height: auto; border-radius: 6px; border: 1px solid #D0D9E8; }
+    .art-fig img { max-width: 100%; max-height: 720px; height: auto; border-radius: 6px; border: 1px solid #D0D9E8; }
     .art-fig figcaption { font-size: 13px; color: #666; margin-top: 8px; line-height: 1.5; }
     .art-fig figcaption a { color: #1B6A94; }
-    .el-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin: 16px 0; }
+    .el-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; margin: 16px 0; }
     .el-card { border: 1px solid #D0D9E8; border-radius: 8px; overflow: hidden; }
     .el-demo { height: 80px; display: flex; align-items: center; justify-content: center; }
     .el-text { padding: 10px 13px; }
@@ -68,9 +68,9 @@
     .rvv p { margin: 0; font-size: 14px; color: #1a2340; line-height: 1.55; }
     @media (max-width: 560px){ .rvv { grid-template-columns: 1fr; } }
     /* Medium-choice menu visual */
-    .medium-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; margin: 18px 0 8px; }
+    .medium-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin: 18px 0 8px; }
     .medium-card { border: 1px solid #D0D9E8; border-radius: 10px; overflow: hidden; text-align: center; }
-    .medium-icon { height: 90px; display: flex; align-items: center; justify-content: center; }
+    .medium-icon { height: 220px; display: flex; align-items: center; justify-content: center; }
     .medium-text { padding: 12px 10px 14px; }
     .medium-text strong { display: block; font-size: 15px; color: #0e1c42; margin-bottom: 3px; }
     .medium-text span { font-size: 13px; color: #6b7a99; }
@@ -340,7 +340,7 @@
         <div class="medium-grid">
             <div class="medium-card">
                 <div class="medium-icon" style="background: #E6F4F1;">
-                    <img src="images/Pillars_of_creation_2014_HST_WFC3-UVIS_full-res.jpg" alt="The Pillars of Creation, a Hubble Space Telescope photograph assembled and color-adjusted from multiple separate exposures." style="width: 100%; height: 90px; object-fit: cover;" />
+                    <img src="images/Pillars_of_creation_2014_HST_WFC3-UVIS_full-res.jpg" alt="The Pillars of Creation, a Hubble Space Telescope photograph assembled and color-adjusted from multiple separate exposures." style="width: 100%; height: 220px; object-fit: contain;" />
                 </div>
                 <div class="medium-text"><strong>Photo Edit</strong><span>Adjustments, blend modes, retouching</span>
                     <div style="font-size: 10px; color: #8a93ab; margin-top: 5px; line-height: 1.4;">NASA, ESA, Hubble Heritage Team, <em>Pillars of Creation</em>, 2014. Public domain. <a href="https://commons.wikimedia.org/wiki/File:Pillars_of_creation_2014_HST_WFC3-UVIS_full-res.jpg">Source</a></div>
@@ -348,7 +348,7 @@
             </div>
             <div class="medium-card">
                 <div class="medium-icon" style="background: #FDF0EC;">
-                    <img src="images/Mary-georgiana-caroline-lady-filmer-untitled-loose-page-from-the-filmer-album-mid-1860s.jpg" alt="A Victorian photocollage by Lady Filmer, combining cut photographic portraits with a painted watercolor setting." style="width: 100%; height: 90px; object-fit: cover;" />
+                    <img src="images/Mary-georgiana-caroline-lady-filmer-untitled-loose-page-from-the-filmer-album-mid-1860s.jpg" alt="A Victorian photocollage by Lady Filmer, combining cut photographic portraits with a painted watercolor setting." style="width: 100%; height: 220px; object-fit: contain;" />
                 </div>
                 <div class="medium-text"><strong>Collage</strong><span>Cut-out, photomontage, surrealism, Dada</span>
                     <div style="font-size: 10px; color: #8a93ab; margin-top: 5px; line-height: 1.4;">Mary Georgiana Caroline, Lady Filmer, untitled album page, mid-1860s. Public domain. <a href="https://commons.wikimedia.org/wiki/File:Mary-georgiana-caroline-lady-filmer-untitled-loose-page-from-the-filmer-album-mid-1860s.jpg">Source</a></div>
@@ -356,7 +356,7 @@
             </div>
             <div class="medium-card">
                 <div class="medium-icon" style="background: #E6F4F1;">
-                    <img src="images/WPA-Work-Pays-America-Poster.jpg" alt="A WPA Federal Art Project poster with the bold lettered slogan Work Pays America across the design." style="width: 100%; height: 90px; object-fit: cover;" />
+                    <img src="images/WPA-Work-Pays-America-Poster.jpg" alt="A WPA Federal Art Project poster with the bold lettered slogan Work Pays America across the design." style="width: 100%; height: 220px; object-fit: contain;" />
                 </div>
                 <div class="medium-text"><strong>Typography Poster</strong><span>Type as image, hierarchy, layout</span>
                     <div style="font-size: 10px; color: #8a93ab; margin-top: 5px; line-height: 1.4;">Vera Bock, <em>Work Pays America! Prosperity</em>, WPA Federal Art Project, 1936&ndash;1941. Public domain (U.S. federal work). <a href="https://commons.wikimedia.org/wiki/File:WPA-Work-Pays-America-Poster.jpg">Source</a></div>
@@ -364,7 +364,7 @@
             </div>
             <div class="medium-card">
                 <div class="medium-icon" style="background: #FDF0EC;">
-                    <img src="images/Albrecht_D_rer_-_Draughtsman_Drawing_a_Recumbent_Woman_-_WGA7261.jpg" alt="Durer's woodcut of a draughtsman using a perspective device to draw a reclining figure, viewed through a grid." style="width: 100%; height: 90px; object-fit: cover;" />
+                    <img src="images/Albrecht_D_rer_-_Draughtsman_Drawing_a_Recumbent_Woman_-_WGA7261.jpg" alt="Durer's woodcut of a draughtsman using a perspective device to draw a reclining figure, viewed through a grid." style="width: 100%; height: 220px; object-fit: contain;" />
                 </div>
                 <div class="medium-text"><strong>Drawing</strong><span>Perspective, mosaic, notan</span>
                     <div style="font-size: 10px; color: #8a93ab; margin-top: 5px; line-height: 1.4;">Albrecht D&uuml;rer, <em>Draughtsman Drawing a Recumbent Woman</em>, 1525. Woodcut. Public domain. <a href="https://commons.wikimedia.org/wiki/File:Albrecht_D%C3%BCrer_-_Draughtsman_Drawing_a_Recumbent_Woman_-_WGA7261.jpg">Source</a></div>
@@ -372,7 +372,7 @@
             </div>
             <div class="medium-card">
                 <div class="medium-icon" style="background: #E6F4F1;">
-                    <img src="images/The_Horse_in_Motion_high_res.jpg" alt="Muybridge's sequential motion photographs of a galloping horse, an early real example of frame-based motion capture." style="width: 100%; height: 90px; object-fit: cover;" />
+                    <img src="images/The_Horse_in_Motion_high_res.jpg" alt="Muybridge's sequential motion photographs of a galloping horse, an early real example of frame-based motion capture." style="width: 100%; height: 220px; object-fit: contain;" />
                 </div>
                 <div class="medium-text"><strong>Animation</strong><span>Frames in Pixlr E, assembled into a GIF</span>
                     <div style="font-size: 10px; color: #8a93ab; margin-top: 5px; line-height: 1.4;">Eadweard Muybridge, <em>The Horse in Motion</em>, 1878. Public domain. <a href="https://commons.wikimedia.org/wiki/File:The_Horse_in_Motion_high_res.jpg">Source</a></div>

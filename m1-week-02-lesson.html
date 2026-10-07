@@ -30,10 +30,10 @@
 
     /* ===== Art-course components (layered on the brand; teal/coral are activity accents only) ===== */
     .art-fig { margin: 14px 0; text-align: center; }
-    .art-fig img { max-width: 100%; height: auto; border-radius: 6px; border: 1px solid #D0D9E8; }
+    .art-fig img { max-width: 100%; max-height: 720px; height: auto; border-radius: 6px; border: 1px solid #D0D9E8; }
     .art-fig figcaption { font-size: 13px; color: #666; margin-top: 8px; line-height: 1.5; }
     .art-fig figcaption a { color: #1B6A94; }
-    .el-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin: 16px 0; }
+    .el-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; margin: 16px 0; }
     .el-card { border: 1px solid #D0D9E8; border-radius: 8px; overflow: hidden; }
     .el-demo { height: 80px; display: flex; align-items: center; justify-content: center; }
     .el-text { padding: 10px 13px; }
@@ -331,7 +331,7 @@
         <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;"><strong>Elements of Art</strong> are the basic visual ingredients artists use to build an artwork: think of them as the tools you use, like shape, color, and line. <strong>Principles of Design</strong> are the rules or guidelines for using those tools well. They help artists organize the elements so a piece feels balanced, interesting, and complete. Look at the real example below of one principle of design in action: balance.</p>
 
         <figure class="art-fig">
-            <img src="images/monarch-butterfly-closeup.jpg" alt="A close-up photograph of a monarch butterfly with its wings spread, showing the same pattern of black, orange, and white repeated on both sides around the body." style="max-width:360px;" />
+            <img src="images/monarch-butterfly-closeup.jpg" alt="A close-up photograph of a monarch butterfly with its wings spread, showing the same pattern of black, orange, and white repeated on both sides around the body." style="max-width:640px;" />
             <figcaption>Charles Patrick Ewing, <em>Monarch Butterfly Closeup</em>, 2015. CC BY 2.0. Source: <a href="https://commons.wikimedia.org/wiki/File:Monarch_Butterfly_Closeup.jpg">commons.wikimedia.org/wiki/File:Monarch_Butterfly_Closeup.jpg</a></figcaption>
         </figure>
         <p style="font-size: 14px; color: #6b7a99; margin: 0;">A real-world example of a principle of design: symmetrical balance. Each wing repeats the same shapes and colors as a mirror image of the other, so the whole insect reads as one balanced, complete visual.</p>
@@ -358,31 +358,31 @@
 
         <div class="el-grid">
             <div class="el-card">
-                <div class="el-demo" style="background: #F4F6FA; height:auto;"><img src="images/hokusai-great-wave.jpg" alt="Under the Wave off Kanagawa by Hokusai: a great curling wave with claw-like foam, dwarfing boats below it, Mount Fuji visible in the distance." style="width:100%; height:110px; object-fit:cover;" /></div>
+                <div class="el-demo" style="background: #F4F6FA; height:auto;"><img src="images/hokusai-great-wave.jpg" alt="Under the Wave off Kanagawa by Hokusai: a great curling wave with claw-like foam, dwarfing boats below it, Mount Fuji visible in the distance." style="width:100%; height:260px; object-fit:contain; display:block;" /></div>
                 <div class="el-text"><strong>Line</strong><span>A path created by a moving point. Lines show direction, create movement, or define shapes. Katsushika Hokusai, <em>Under the Wave off Kanagawa (The Great Wave)</em>, ca. 1830&ndash;32, woodblock print. Metropolitan Museum of Art, public domain.</span></div>
             </div>
             <div class="el-card">
-                <div class="el-demo" style="background: #F4F6FA; height:auto;"><img src="images/greek-geometric-amphora.jpg" alt="A Greek Geometric terracotta neck-amphora decorated with painted bands of triangles, circles, and meander patterns." style="width:100%; height:110px; object-fit:cover;" /></div>
+                <div class="el-demo" style="background: #F4F6FA; height:auto;"><img src="images/greek-geometric-amphora.jpg" alt="A Greek Geometric terracotta neck-amphora decorated with painted bands of triangles, circles, and meander patterns." style="width:100%; height:260px; object-fit:contain; display:block;" /></div>
                 <div class="el-text"><strong>Shape</strong><span>A flat, enclosed area made when lines connect. Shapes can be geometric or organic. Greek, Attic, terracotta neck-amphora, ca. 710 BCE. Metropolitan Museum of Art, public domain.</span></div>
             </div>
             <div class="el-card">
-                <div class="el-demo" style="background: #F4F6FA; height:auto;"><img src="images/van-gogh-wheat-field-cypresses.jpg" alt="Wheat Field with Cypresses by Van Gogh: bold blocks of gold wheat, green cypress, and blue sky and mountains." style="width:100%; height:110px; object-fit:cover;" /></div>
+                <div class="el-demo" style="background: #F4F6FA; height:auto;"><img src="images/van-gogh-wheat-field-cypresses.jpg" alt="Wheat Field with Cypresses by Van Gogh: bold blocks of gold wheat, green cypress, and blue sky and mountains." style="width:100%; height:260px; object-fit:contain; display:block;" /></div>
                 <div class="el-text"><strong>Color</strong><span>The visual quality produced by light reflection. Color has hue, value, and intensity. Vincent van Gogh, <em>Wheat Field with Cypresses</em>, 1889, oil on canvas. Metropolitan Museum of Art, public domain.</span></div>
             </div>
             <div class="el-card">
-                <div class="el-demo" style="background: #F4F6FA; height:auto;"><img src="images/rembrandt-self-portrait.jpg" alt="Rembrandt's Self-Portrait Etching at a Window: dramatic contrast between the lit face and the deep black shadow surrounding it." style="width:100%; height:110px; object-fit:cover;" /></div>
+                <div class="el-demo" style="background: #F4F6FA; height:auto;"><img src="images/rembrandt-self-portrait.jpg" alt="Rembrandt's Self-Portrait Etching at a Window: dramatic contrast between the lit face and the deep black shadow surrounding it." style="width:100%; height:260px; object-fit:contain; display:block;" /></div>
                 <div class="el-text"><strong>Value</strong><span>How light or dark something appears. Value creates contrast, depth, and mood. Rembrandt van Rijn, <em>Self-Portrait Etching at a Window</em>, 1648, etching. Metropolitan Museum of Art, public domain.</span></div>
             </div>
             <div class="el-card">
-                <div class="el-demo" style="background: #F4F6FA; height:auto;"><img src="images/greek-marble-statue.jpg" alt="A Greek marble statue of a crouching lion, carved fully in the round to show its three-dimensional form." style="width:100%; height:110px; object-fit:cover;" /></div>
+                <div class="el-demo" style="background: #F4F6FA; height:auto;"><img src="images/greek-marble-statue.jpg" alt="A Greek marble statue of a crouching lion, carved fully in the round to show its three-dimensional form." style="width:100%; height:260px; object-fit:contain; display:block;" /></div>
                 <div class="el-text"><strong>Form</strong><span>A 3D version of a shape with height, width, and depth. Form can be real or implied by shading. Greek, marble statue of a lion, ca. 400&ndash;390 BCE. Metropolitan Museum of Art, public domain.</span></div>
             </div>
             <div class="el-card">
-                <div class="el-demo" style="background: #F4F6FA; height:auto;"><img src="images/nasa-lunar-surface-texture.jpg" alt="A close-up photograph of an astronaut's bootprint pressed into the fine, grainy texture of lunar soil." style="width:100%; height:110px; object-fit:cover;" /></div>
+                <div class="el-demo" style="background: #F4F6FA; height:auto;"><img src="images/nasa-lunar-surface-texture.jpg" alt="A close-up photograph of an astronaut's bootprint pressed into the fine, grainy texture of lunar soil." style="width:100%; height:260px; object-fit:contain; display:block;" /></div>
                 <div class="el-text"><strong>Texture</strong><span>How something looks or feels. Texture can be actual (touchable) or visual (only looks rough or smooth). NASA, Apollo 11 astronaut bootprint in lunar soil, July 20, 1969. Public domain.</span></div>
             </div>
             <div class="el-card">
-                <div class="el-demo" style="background: #F4F6FA; height:auto;"><img src="images/cole-the-oxbow.jpg" alt="The Oxbow by Thomas Cole: a storm-darkened foreground on the left and a sunlit river valley stretching into the distance on the right, separated by wide open sky." style="width:100%; height:110px; object-fit:cover;" /></div>
+                <div class="el-demo" style="background: #F4F6FA; height:auto;"><img src="images/cole-the-oxbow.jpg" alt="The Oxbow by Thomas Cole: a storm-darkened foreground on the left and a sunlit river valley stretching into the distance on the right, separated by wide open sky." style="width:100%; height:260px; object-fit:contain; display:block;" /></div>
                 <div class="el-text"><strong>Space</strong><span>The area around, between, and within objects. Space creates foreground, middle ground, and background. Thomas Cole, <em>The Oxbow</em>, 1836, oil on canvas. Metropolitan Museum of Art, public domain.</span></div>
             </div>
         </div>

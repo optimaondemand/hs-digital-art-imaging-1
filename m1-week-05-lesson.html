@@ -30,10 +30,10 @@
 
     /* ===== Art-course components (layered on the brand; teal/coral are activity accents only) ===== */
     .art-fig { margin: 14px 0; text-align: center; }
-    .art-fig img { max-width: 100%; height: auto; border-radius: 6px; border: 1px solid #D0D9E8; }
+    .art-fig img { max-width: 100%; max-height: 720px; height: auto; border-radius: 6px; border: 1px solid #D0D9E8; }
     .art-fig figcaption { font-size: 13px; color: #666; margin-top: 8px; line-height: 1.5; }
     .art-fig figcaption a { color: #1B6A94; }
-    .el-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin: 16px 0; }
+    .el-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; margin: 16px 0; }
     .el-card { border: 1px solid #D0D9E8; border-radius: 8px; overflow: hidden; }
     .el-demo { height: 80px; display: flex; align-items: center; justify-content: center; }
     .el-text { padding: 10px 13px; }
@@ -68,12 +68,12 @@
     .rvv p { margin: 0; font-size: 14px; color: #1a2340; line-height: 1.55; }
     @media (max-width: 560px){ .rvv { grid-template-columns: 1fr; } }
     /* Line-type diagram grid (week 5 only, reuses el-grid pattern) */
-    .line-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin: 16px 0; }
+    .line-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin: 16px 0; }
     .line-card { border: 1px solid #D0D9E8; border-radius: 8px; padding: 10px; text-align: center; background: #FAFBFD; }
     .line-card .line-label { font-size: 13px; color: #167567; margin-top: 8px; }
     /* Rule of thirds grid overlay */
     .thirds-wrap { display: flex; justify-content: center; margin: 16px 0 6px; }
-    .thirds-photo { position: relative; display: inline-block; max-width: 340px; margin: 4px auto; }
+    .thirds-photo { position: relative; display: inline-block; max-width: 640px; margin: 4px auto; }
     .thirds-photo img { display: block; width: 100%; height: auto; border-radius: 6px; border: 1px solid #D0D9E8; }
     .thirds-photo svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 </style>
@@ -341,27 +341,27 @@
 
         <div class="line-grid">
             <div class="line-card">
-                <img src="images/california-redwoods-looking-up.jpg" alt="Looking straight up at several tall, straight redwood tree trunks rising in parallel vertical lines toward the canopy." style="width:100%; height:90px; object-fit:cover; border-radius:4px;" />
+                <img src="images/california-redwoods-looking-up.jpg" alt="Looking straight up at several tall, straight redwood tree trunks rising in parallel vertical lines toward the canopy." style="width:100%; height:220px; object-fit:contain; border-radius:4px;" />
                 <div class="line-label">Vertical: redwood tree trunks</div>
             </div>
             <div class="line-card">
-                <img src="images/nasa-iss023-e-57948.jpg" alt="A photograph from the International Space Station showing Earth's curved horizon as a horizontal band of color dividing the dark planet below from space above." style="width:100%; height:90px; object-fit:cover; border-radius:4px;" />
+                <img src="images/nasa-iss023-e-57948.jpg" alt="A photograph from the International Space Station showing Earth's curved horizon as a horizontal band of color dividing the dark planet below from space above." style="width:100%; height:220px; object-fit:contain; border-radius:4px;" />
                 <div class="line-label">Horizontal: Earth's horizon from orbit</div>
             </div>
             <div class="line-card">
-                <img src="images/adams-tetons-snake-river.jpg" alt="The Snake River cutting a strong diagonal line across a mountain valley below the Tetons." style="width:100%; height:90px; object-fit:cover; border-radius:4px;" />
+                <img src="images/adams-tetons-snake-river.jpg" alt="The Snake River cutting a strong diagonal line across a mountain valley below the Tetons." style="width:100%; height:220px; object-fit:contain; border-radius:4px;" />
                 <div class="line-label">Diagonal: the Snake River valley</div>
             </div>
             <div class="line-card">
-                <img src="images/nasa-iss062e121160.jpg" alt="An astronaut photograph of the Mississippi River winding in tight curves and oxbow bends across its floodplain." style="width:100%; height:90px; object-fit:cover; border-radius:4px;" />
+                <img src="images/nasa-iss062e121160.jpg" alt="An astronaut photograph of the Mississippi River winding in tight curves and oxbow bends across its floodplain." style="width:100%; height:220px; object-fit:contain; border-radius:4px;" />
                 <div class="line-label">Curved: the meandering Mississippi River</div>
             </div>
             <div class="line-card">
-                <img src="images/lightning-bolt-iowa.jpg" alt="A single lightning bolt striking the ground, its jagged path a sharp zigzag line against the dark sky." style="width:100%; height:90px; object-fit:cover; border-radius:4px;" />
+                <img src="images/lightning-bolt-iowa.jpg" alt="A single lightning bolt striking the ground, its jagged path a sharp zigzag line against the dark sky." style="width:100%; height:220px; object-fit:contain; border-radius:4px;" />
                 <div class="line-label">Zigzag: a lightning bolt</div>
             </div>
             <div class="line-card">
-                <img src="images/nasa-iss024-e-012920.jpg" alt="A satellite photograph of Hurricane Earl, its bands of cloud spiraling tightly around a central eye." style="width:100%; height:90px; object-fit:cover; border-radius:4px;" />
+                <img src="images/nasa-iss024-e-012920.jpg" alt="A satellite photograph of Hurricane Earl, its bands of cloud spiraling tightly around a central eye." style="width:100%; height:220px; object-fit:contain; border-radius:4px;" />
                 <div class="line-label">Spiral: Hurricane Earl from the ISS</div>
             </div>
         </div>
@@ -420,7 +420,7 @@
         </div>
 
         <figure class="art-fig">
-            <img src="images/bare-branches-twilight-silhouette.jpg" alt="Bare tree branches in dark silhouette, spreading across a twilight sky colored in pink and purple clouds." style="max-width:340px;" />
+            <img src="images/bare-branches-twilight-silhouette.jpg" alt="Bare tree branches in dark silhouette, spreading across a twilight sky colored in pink and purple clouds." style="max-width:640px;" />
             <figcaption>Yitzilitt, <em>Silhouette of Bare Tree Branches Under Twilight Sky</em>, 2021. CC BY-SA 4.0. Source: <a href="https://commons.wikimedia.org/wiki/File:Silhouette_of_bare_tree_branches_under_twilight_sky.jpg">commons.wikimedia.org/wiki/File:Silhouette_of_bare_tree_branches_under_twilight_sky.jpg</a>. The dark branches are the positive space; the colorful sky around them is the negative space.</figcaption>
         </figure>
 
@@ -429,7 +429,7 @@
         <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 14px 0 10px 0;">Photographers can also create the illusion of depth using <strong>one-point perspective</strong>, which makes a flat image feel three-dimensional. The tool that does most of the work is the <strong>leading line</strong>: a line that guides the viewer's eye, often into the distance. A path stretching away from the camera, its edges narrowing toward a single point, can make you feel like you could walk right into the picture.</p>
 
         <div class="art-fig">
-            <img src="images/railroad-tracks-perspective.jpg" alt="A pair of railroad tracks stretching away from the camera, their parallel rails appearing to converge toward a single vanishing point in the distance." style="max-width:340px;" />
+            <img src="images/railroad-tracks-perspective.jpg" alt="A pair of railroad tracks stretching away from the camera, their parallel rails appearing to converge toward a single vanishing point in the distance." style="max-width:640px;" />
             <figcaption>MikeMalak, railroad tracks in one-point perspective, 2006. Public domain. Source: <a href="https://commons.wikimedia.org/wiki/File:Railroad-Tracks-Perspective.jpg">commons.wikimedia.org/wiki/File:Railroad-Tracks-Perspective.jpg</a>. The two rails are the leading lines; the point where they appear to meet is the vanishing point.</figcaption>
         </div>
 
